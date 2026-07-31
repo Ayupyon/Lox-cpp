@@ -32,7 +32,23 @@ IDENTIFIER -> ALPHA (ALPHA | DIGIT)*
 
 == 字面量
 
-- 数字：十进制整数或浮点数，`INTEGER -> DIGIT^+`、`FLOAT -> DIGIT^+ "." DIGIT^+`
+- 数字：整数支持十进制、十六进制（`0x`/`0X`）、八进制（`0o`/`0O`）、二进制（`0b`/`0B`），
+  浮点数为十进制、可带指数（无小数点的 `1e10` 也为浮点）。数字字面量中#strong[不允许下划线]——
+  任何数字与下划线的组合（如 `1_000`、`0x_FF`、`1._5`、`1.5e10_`）均为词法错误：
+
+  ```lox-grammar
+  DIGIT      -> "0"–"9"
+  HEX_DIGIT  -> DIGIT | "a"–"f" | "A"–"F"
+  OCTAL_DIGIT -> "0"–"7"
+  BIN_DIGIT  -> "0" | "1"
+  INTEGER    -> DIGIT^+
+              | ("0x" | "0X") HEX_DIGIT^+
+              | ("0o" | "0O") OCTAL_DIGIT^+
+              | ("0b" | "0B") BIN_DIGIT^+
+  FLOAT      -> DIGIT^+ "." DIGIT^+ EXPONENT?
+              | DIGIT^+ EXPONENT
+  EXPONENT   -> ("e" | "E") ("+" | "-")? DIGIT^+
+  ```
 - 字符串：双引号包裹，支持转义。转义序列：`\n`（换行）、`\r`（回车）、`\t`（制表）、`\\`（反斜杠）、`\"`（双引号）、`\0`（空字符）、`\xNN`（单字节十六进制）、`\uNNNN`（4位十六进制
   BMP 码点）、`\u{...}`（变长十六进制全 Unicode
   码点）。`STRING -> "\"" <any char except "\"">* "\""`
