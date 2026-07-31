@@ -401,17 +401,33 @@ VM 操作数栈上统一存储 `Value`，按 tag 区分类型。
 - `String`：驻留字符串的指针（见字符串驻留节）
 - `Function`：编译产出的纯代码对象——字节码序列、常量池、形参数量、函数名
 - `Closure`：`GcPtr<Function>` +
-  `Vec<GcPtr<Upvalue>>`。每次函数字面量求值时创建新的 `Closure`
+  `llvm::SmallVector<GcPtr<Upvalue>, kUpvalueInlineSize>`。每次函数字面量求值时创建新的
+  `Closure`
 - `Upvalue`：对外层变量槽位的间接引用。内层函数与外层栈帧通过同一个 `Upvalue`
   共享变量 ——外层仍在执行时 `Upvalue` 指向栈槽；外层返回后 `Upvalue`
   将值搬移到自身的堆存储中
 - `Class`：类名、`GcPtr<Class>`
-  父类（可选）、`HashMap<GcPtr<String>, GcPtr<Closure>>` 方法表
-- `Instance`：`GcPtr<Class>` 所属类 + `HashMap<GcPtr<String>, Value>` 字段表
+  父类（可选）、`llvm::SmallDenseMap<GcPtr<String>, GcPtr<Closure>, kMethodTableInlineSize>`
+  方法表
+- `Instance`：`GcPtr<Class>` 所属类 +
+  `llvm::SmallDenseMap<GcPtr<String>, Value, kFieldTableInlineSize>` 字段表
 - `BoundMethod`：`GcPtr<Instance>` 接收者 + `GcPtr<Closure>` 方法。`obj.method`
   求值时创建
-- `Native`：函数指针 + 函数名。由外部库注册的内建函数载体；核心语言不预置任何内建函数
-- `List`：`Vec<Value>` 定长元素数组 + 长度。创建后长度不可变，元素可读写
+- `Native`：函数指针 +
+  函数名。由外部库注册的内建函数载体；核心语言不预置任何内建函数
+- `List`：`llvm::SmallVector<Value, 0>` 定长元素数组 +
+  长度。创建后长度不可变，元素可读写
+
+上述 `llvm::SmallVector` 与 `llvm::SmallDenseMap` 的内联容量参数为实现期可调的 `constexpr`
+常量，当前暂定值如下：
+
+#table(
+  columns: (auto, auto, auto),
+  [*常量名*], [*暂定值*], [*用途*],
+  [`kUpvalueInlineSize`], [`4`], [`Closure` upvalue 内联容量],
+  [`kMethodTableInlineSize`], [`8`], [`Class` 方法表内联容量],
+  [`kFieldTableInlineSize`], [`4`], [`Instance` 字段表内联容量],
+)
 
 === 引用关系图
 
@@ -419,28 +435,30 @@ Closure ──→ Function（代码） └──→ Upvalue[]（捕获的变量�
 
 Instance ──→ Class └──→ fields（字段值表）
 
-Class ──→ superclass（父类） └──→ methods: HashMap\<String → Closure\>
+Class ──-> superclass（父类） └──-> methods: llvm::SmallDenseMap\<GcPtr\<String\>,
+GcPtr\<Closure\>, kMethodTableInlineSize\>
 
 BoundMethod ──→ Instance (this) └──→ Closure (method)
 
-List ──→ elements: Vec<Value>（定长，创建后不可变）
+List ──-> elements: llvm::SmallVector\<Value, 0\>（定长，创建后不可变）
 
 == 字符串驻留
 
 
-所有运行时创建的字符串写入全局驻留表（`HashSet<GcPtr<String>>`）。相同内容的
+所有运行时创建的字符串写入全局驻留表（`llvm::StringMap<GcPtr<String>>`）。相同内容的
 字符串共享同一份 `GcPtr<String>` 存储：
 
 - 字符串字面量在编译阶段驻留
 - 运行时字符串拼接、`toString()` 等产生的新字符串也经驻留表去重
 - 驻留使 `==` / `!=` 对字符串的比较退化为指针比较
-- 方法名、字段名作为驻留字符串存储，`Class` 方法表的 `HashMap` 键比较退化为
-  指针比较
+- 方法名、字段名作为驻留字符串存储，`Class` 方法表的 `llvm::SmallDenseMap`
+  键比较退化为 指针比较
 - 驻留表是 GC 根集的一部分，驻留字符串永不被回收
 
 == 方法分发
 
-每个 `Class` 对象持有一个 `HashMap<GcPtr<String>, GcPtr<Closure>>` 方法表。
+每个 `Class` 对象持有一个
+`llvm::SmallDenseMap<GcPtr<String>, GcPtr<Closure>, kMethodTableInlineSize>` 方法表。
 方法调用 `obj.method(args)` 的执行路径：
 
 . 从 `obj` 取出 `Instance.class` . 以 `"method"`（驻留字符串）为键查找方法表 .
@@ -455,7 +473,7 @@ List ──→ elements: Vec<Value>（定长，创建后不可变）
 `import "path" as alias;` 的执行流程：
 
 . 按入口脚本的相对路径解析 `"path"` → 文件系统路径（尝试 `.lox` 后缀和目录） .
-查全局模块缓存 `HashMap<String, ModuleObject>`：
+查全局模块缓存 `llvm::StringMap<ModuleObject>`：
 - 命中 → 跳到步骤 6
 - 缓存中标记为 *加载中* → 循环导入，返回当前部分缓存（防止无限递归）
 . 未命中：创建模块缓存条目（标记为加载中），启动模块编译流水线 . 创建独立的 VM
@@ -479,13 +497,19 @@ lox-cpp 的 VM 是基于栈的字节码解释器：
 
 == 运行时错误
 
-lox-cpp 的运行时错误采用 `Result<T, RuntimeError>` 传播机制，不使用 panic：
+lox-cpp 的运行时错误采用 `llvm::Expected<T>` / `llvm::Error`
+传播机制，不使用异常：
 
-- VM 执行循环中每条指令返回 `Result<(), RuntimeError>`
+- VM 执行循环中每条指令返回 `llvm::Error`
 - 任何操作失败（类型不匹配、栈溢出、除零等）立即生成 `RuntimeError` 并返回
 - 错误沿调用栈向上传播：每层调用帧检测到错误后立即退出，将错误传递给上一层
 
-`throw` 语句映射为 `Err(RuntimeError)`，其中包含抛出时栈上的实际值。
+`RuntimeError` 继承自 `llvm::ErrorInfo<RuntimeError>`，通过
+`llvm::make_error<RuntimeError>(...)` 构造，封装于 `llvm::Error` / `llvm::Expected<T>`
+中传播。`llvm::Error` 为类型擦除的错误载体，可持有任意 `llvm::ErrorInfo` 子类；VM 中仅产生
+`RuntimeError`，可通过 `isA<RuntimeError>()` 进行类型检查。
+
+`throw` 语句映射为 `llvm::make_error<RuntimeError>(...)`，其中包含抛出时栈上的实际值。
 
 `try-catch` 的实现：
 
