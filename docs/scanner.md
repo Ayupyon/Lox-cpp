@@ -125,13 +125,17 @@ using TokenValue = std::variant<std::monostate, std::int64_t, double>;
 | 变量/参数/成员 | lower_case | `type` `line` `lexeme` |
 | class private/protected 成员 | lower_case + `_` 后缀 | `count_` |
 | struct/public 成员 | lower_case（无后缀） | `type` |
-| enum 常量 / `constexpr` 常量 | `k` + CamelCase | `kLeftParen` `kMaxTokenLength` |
+| enum 常量 | `k` + CamelCase | `kLeftParen` |
+| `constexpr` 常量 | `k` + CamelCase | `kMaxTokenLength` |
+| `const` 变量（含局部） | lower_case | `max_token_length` |
 | namespace | lower_case | `lox` |
 
 ## 11. clang-tidy 配置要点
 
 - 禁用 `llvm-header-guard`（LLVM 子项目专用 guard 命名，与 Google `_H_` 尾下划线冲突）。
 - 禁用 `llvm-include-order`（LLVM include 顺序与 Google 不同）。
+- 禁用 `llvm-prefer-static-over-anonymous-namespace`（与 AGENTS.md「file-local API 放匿名命名空间」约定冲突）。
+- `ConstantCase`（`lower_case`）与 `ConstexprVariableCase`（`CamelCase` + `k` 前缀）分工：`const` 变量（含局部）为 lower_case，`constexpr` 常量为 `k` + CamelCase（见第 10 节）。未配置的细分选项（`LocalConstexprVariableCase`/`GlobalConstexprVariableCase`/`StaticConstexprVariableCase`/`LocalConstantCase` 等）按检查的回退语义归入对应通用类别，故仅配置通用两项即可。注意：`-dump-config` 不列出未配置的选项，不能据此判断选项是否存在。
 - 其余 `llvm-*`（`llvm-qualified-auto`、`llvm-else-after-return`、`llvm-prefer-isa-or-dyn-cast-in-conditionals` 等）保留——项目大量使用 LLVM ADT/RTTI，这些检查有用且不会误报。
 - `TokenTypeName` 用 `switch` 且**无 default**，使 `-Wswitch` 保持武装：新增 `TokenType` 而漏 case 即编译告警。
 - `TokenTypeName` 用 `switch` 而非 map：键稠密（`uint8_t` 0–54）+ 冷路径（仅诊断用）+ `-Wswitch` 完备性检查，map（`DenseMap`/`StringMap`）对稠密整型键无优势且无完备性保证。反向的关键字查找（`StringRef -> TokenType`）才是 map 的用武之地（见第 12 节）。
@@ -178,12 +182,12 @@ using TokenValue = std::variant<std::monostate, std::int64_t, double>;
 
 扩展当前语法文档（见第 14.13 节）的数值规则，均映射到既有 `kInteger`/`kFloat`，无新 token 类型：
 
-- 十进制：`DIGIT ("_"? DIGIT)*`
-- 十六进制：`("0x"|"0X") HEX_DIGIT ("_"? HEX_DIGIT)*`；八进制：`("0o"|"0O") OCTAL_DIGIT ("_"? OCTAL_DIGIT)*`；二进制：`("0b"|"0B") BIN_DIGIT ("_"? BIN_DIGIT)*`
+- 十进制：`DIGIT^+`
+- 十六进制：`("0x"|"0X") HEX_DIGIT^+`；八进制：`("0o"|"0O") OCTAL_DIGIT^+`；二进制：`("0b"|"0B") BIN_DIGIT^+`
 - 浮点：`DECIMAL "." DECIMAL EXPONENT?` 或 `DECIMAL EXPONENT`
 - 指数：`("e"|"E") ("+"|"-")? DECIMAL`--**总产生 `kFloat`**（含 `1e10` 无小数点）
-- 指数 `e`/`E` **非提交**（前瞻）：仅当后随可选 `+`/`-` 再 ≥1 数字才消费；否则 `e` 起标识符。例：`1eaten` -> `1` kInteger + `eaten` kIdentifier；`1e10` -> kFloat；`1.5e` -> `1.5` kFloat + `e` kIdentifier。
-- 下划线仅出现在已提交数字上下文的数字之间：前导/尾随/相邻下划线 = 词法错误（`100_`、`1__0`、`0x_F`、`1._5`、`1.5e10_` 均错误）。
+- 指数 `e`/`E` **非提交**（前瞻）：仅当后随可选 `+`/`-` 再 ≥1 数字才消费；否则 `e` 起标识符。例：`1eaten` -> `1` kInteger + `eaten` kIdentifier；`1e10` -> kFloat；`1.5e` -> `1.5` kFloat + `e` kIdentifier；`1e_5` -> `1` kInteger + `e_5` kIdentifier（下划线不参与指数前瞻，`e` 未被提交）。
+- 数字字面量中**不允许下划线**：任何位置（前导、尾随、数字之间、进制前缀后、指数内）出现 `_` 均为词法错误——整个数字 token 丢弃并累积一条错误，不拆分为"数字 + 标识符"（`1_000` 不是 `1` + `_000`）。`1_000`、`100_`、`1__0`、`0x_FF`、`1._5`、`1.5e10_` 均错误。
 - `0x`/`0o`/`0b` 后零个基数字 = 词法错误（提交性前缀）。
 - int 溢出（int64）-> 词法错误；float 溢出 -> 词法错误；float 下溢 -> 接受 `0.0`。
 - 符号**非**字面量一部分（一元运算，parser 职责）。
@@ -214,7 +218,7 @@ using TokenValue = std::variant<std::monostate, std::int64_t, double>;
 ### 14.9 整数/浮点解析
 
 - 整数：经 `__builtin_mul_overflow`/`__builtin_add_overflow` 累积，int64 溢出 -> 词法错误。
-- 浮点：`std::from_chars` 作用于去下划线副本。
+- 浮点：`std::from_chars` 直接作用于 lexeme（字面量不含下划线，无需副本）。
 
 ### 14.10 关键字表
 
@@ -232,4 +236,34 @@ using TokenValue = std::variant<std::monostate, std::int64_t, double>;
 
 ### 14.13 语法文档同步
 
-- 更新 `docs/lox-language.typ` 数值文法：以第 14.5 节的扩展 INTEGER/FLOAT/EXPONENT/基数字规则替换现第 35–38 行。
+- 已更新 `docs/lox-language.typ` 数值文法（第 35 行起）：以第 14.5 节的扩展 INTEGER/FLOAT/EXPONENT/基数字规则（不含下划线）替换原十进制文法，并声明"数字字面量中不允许下划线——任何数字与下划线的组合均为词法错误"。
+
+## 15. Scanner 实现落地
+
+本节记录 scanner 模块实现完成的状态（2026-07-31）：12 节的待定项除测试外均已实现（决策见 14 节与本节），实现期新增决策亦记录于此。
+
+### 15.1 已落地
+
+- `include/scanner/error.h`：`scanner::LexicalError`（guard `LOX_SCANNER_ERROR_H_`），累积 `Entry`（line/column/length/message/source_line）。`log()` 输出 `<filename>:<line>:<column>: error: <message>` + 源码行 + caret（`^` + `~`，run 长度按 `length`，超行尾截断），`is_displayed()` 时 `error:` 红色、caret 绿色；`convertToErrorCode()` 返回 `inconvertibleErrorCode()`。
+- `include/scanner/scanner.h`：`lox::Scanner`（API 依 14.8，可移动不可拷贝）。
+- `src/scanner/scanner.cpp`：字符驱动状态机、关键字表（`llvm::StringMap<TokenType>` 静态局部，21 关键字）、构造辅助与字符分类器位于 `namespace lox` 内匿名命名空间（依 AGENTS.md；引用 `Token`/`TokenType` 需在 `lox` 作用域内）。
+- CMake：`src/CMakeLists.txt` 加 `lox_scanner` 静态库（链 `${llvm_libs}`），链接进 `lox-cpp`。
+- 顶层 `CMakeLists.txt`：全局 `add_compile_options(-fno-rtti)`——LLVM 22.1.7 以 `LLVM_ENABLE_RTTI=OFF` 构建，项目代码不匹配时 `llvm::ErrorInfo` 子类链接缺 typeinfo（scanner 是首个使用 `llvm::Error` 的模块，链接时暴露）。
+- `.clang-tidy` 调整（见 11 节）：`ConstantCase` 改 `lower_case`（`const` 变量，原配置误伤 const 局部变量）；新增 `ConstexprVariableCase` `k` + CamelCase（`constexpr` 常量，恢复第 10 节原约定）；禁用 `llvm-prefer-static-over-anonymous-namespace`。
+
+### 15.2 实现期决策（14 节未覆盖的实现细节）
+
+- 坏数值 token 跨度 = 自数字起始至「数字/字母/下划线/点」的最大游程，整体丢弃（`1_000x` 为一个错误 token；`1.5e10_+2` 的 `+2` 不被吞）。
+- 意外字符（`@` `%` `?` `:` 等）为长度 1 的词法错误，resync 前进 1 字符；源内裸 `\0` 字节按意外字符处理。
+- `Entry::source_line` 存 `std::string` 拷贝：错误自包含，不依赖 source 缓冲区生命周期。
+- 错误消息英文："unexpected character 'x'" / "unterminated string literal" / "invalid escape sequence" / "integer literal out of range" / "floating-point literal out of range" / "underscore not allowed in numeric literal" / "<base> literal has no digits"（base = hexadecimal/octal/binary）。
+- 各进制整数按有符号幅度解析，`> INT64_MAX` 即溢出错误（含 `0x8000000000000000`）；`__builtin_mul_overflow`/`__builtin_add_overflow` 累积。
+- float 溢出/下溢判别：`std::from_chars` 报 `result_out_of_range` 时以 `long double` 重解析——超出 `DBL_MAX` 为溢出错误，否则接受（下溢得 `0.0`/次正规）。
+- `\u{...}`/`\uNNNN`/`\xNN` 的码点**范围**合法性（surrogate、`>0x10FFFF`）留待 compiler 解码期；scanner 仅校验转义语法（14.3）。
+- 转义错误 caret 指向转义序列（列 = token 起始列 + 序列内偏移）；未终止字符串 caret 指向开引号、span 至换行/EOF。
+- 字符串内坏转义后整串丢弃并记一条错误，快进至终止符（引号/换行/EOF）；中途再遇坏转义不重复报告。
+
+### 15.3 验证与测试
+
+- `run-clang-tidy` 0 告警（Google 配置）；`clang-format -style=file` 通过；`ninja` 构建无告警。
+- C++ 单元测试暂缓：仓库无测试基础设施（无 CTest/gtest，`tests/` 仅有 `.lox` 源），经用户确认本轮不建；以临时驱动（`/tmp`，未入库）对全场景 smoke test：关键字/标识符、各进制数值、指数非提交、下划线错误、int64 溢出、float 溢出/下溢、转义校验（合法/非法/未终止）、注释、CRLF 行号、多错误累积、空源、API 契约（可移动不可拷贝/可重入/Reset/错误恢复）。

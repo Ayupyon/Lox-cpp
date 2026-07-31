@@ -5,6 +5,7 @@ Checks: >
   llvm-*,
   -llvm-header-guard,
   -llvm-include-order,
+  -llvm-prefer-static-over-anonymous-namespace,
   misc-*,
   -misc-const-correctness,
   -misc-include-cleaner,
@@ -50,8 +51,12 @@ CheckOptions:
   - key:             readability-identifier-naming.PublicMemberCase
     value:           lower_case
   - key:             readability-identifier-naming.ConstantCase
-    value:           CamelCase
+    value:           lower_case
   - key:             readability-identifier-naming.ConstantPrefix
+    value:           ''
+  - key:             readability-identifier-naming.ConstexprVariableCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.ConstexprVariablePrefix
     value:           k
   - key:             readability-identifier-naming.IgnoreMainLikeFunctions
     value:           1
