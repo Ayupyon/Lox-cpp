@@ -191,6 +191,7 @@ using TokenValue = std::variant<std::monostate, std::int64_t, double>;
 - `0x`/`0o`/`0b` 后零个基数字 = 词法错误（提交性前缀）。
 - int 溢出（int64）-> 词法错误；float 溢出 -> 词法错误；float 下溢 -> 接受 `0.0`。
 - 符号**非**字面量一部分（一元运算，parser 职责）。
+- 匹配测试：`tests/lox-source/pass/number_literals.lox`；词法错误样例见 `tests/lox-source/compile_error/`（`underscore_decimal`/`underscore_hex`/`underscore_after_dot`/`underscore_exponent`/`underscore_trailing`/`underscore_inner`、`hex_no_digits`/`octal_no_digits`/`binary_no_digits`、`integer_overflow`/`hex_overflow`/`float_overflow`）。
 
 ### 14.6 LexicalError
 

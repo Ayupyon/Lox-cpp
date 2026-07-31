@@ -1,0 +1,30 @@
+let hex1 = 0xFF;
+let hex2 = 0X2a;
+let hex3 = 0x0;
+let hex_max = 0x7FFFFFFFFFFFFFFF;
+
+let oct1 = 0o17;
+let oct2 = 0O7;
+let oct3 = 0o0;
+
+let bin1 = 0b1010;
+let bin2 = 0B11;
+let bin3 = 0b0;
+
+let exp1 = 1e10;
+let exp2 = 1E10;
+let exp3 = 1.5e3;
+let exp4 = 1.5e-3;
+let exp5 = 1e+2;
+let exp6 = 2.5E-2;
+let exp7 = 1e0;
+let exp8 = 0.5e2;
+
+let underflow = 1e-999;
+
+let mix1 = 0xFF + 1;
+let mix2 = 0b1010 << 1;
+let mix3 = 0o17 * 2;
+let mix4 = 1e2 / 2;
+let mix5 = -0b1010;
+let mix6 = 0xFF / 0o17;
