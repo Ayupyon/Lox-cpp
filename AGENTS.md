@@ -16,6 +16,12 @@ Lox-cpp is using C++20 standard.
 
 + `llvm-build`: default LLVM dependency installation path.
 
+## Constraints
+
++ All module apis can be referenced by other module should be placed in `lox` namespace，for module local apis, place them in `<module>` namespace, for file local apis, place them in an anonymous namespace.
+
++ All header files *MUST* be protected by `#ifdef ...` pattern.
+
 ## Build
 
 + Generate cmake configuration files to `build` directory (If all `CMakeLists.txt`s are not modified and `build` exists, skip this step)：
