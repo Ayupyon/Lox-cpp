@@ -20,7 +20,7 @@ Lox-cpp is using C++20 standard.
 
 + All module apis can be referenced by other module should be placed in `lox` namespace，for module local apis, place them in `<module>` namespace, for file local apis, place them in an anonymous namespace.
 
-+ All header files *MUST* be protected by `#ifndef ...` pattern.
++ All header files *MUST* be protected by `#ifndef ...` pattern, guard macro should start by `LOX_`
 
 ## Build
 
