@@ -241,11 +241,11 @@ Lox 的面向对象模型：
 - `super` 关键字用于调用父类方法
 
 ```
-class Animal { speak() { print "..." } }
+class Animal { speak() { return "..."; } }
 class Dog extends Animal {
   speak() {
     super.speak();
-    print "Woof!";
+    return "Woof!";
   }
 }
 ```
@@ -410,7 +410,7 @@ VM 操作数栈上统一存储 `Value`，按 tag 区分类型。
 - `Instance`：`GcPtr<Class>` 所属类 + `HashMap<GcPtr<String>, Value>` 字段表
 - `BoundMethod`：`GcPtr<Instance>` 接收者 + `GcPtr<Closure>` 方法。`obj.method`
   求值时创建
-- `Native`：函数指针 + 函数名。用于内建函数（`print`、`clock` 等）
+- `Native`：函数指针 + 函数名。由外部库注册的内建函数载体；核心语言不预置任何内建函数
 - `List`：`Vec<Value>` 定长元素数组 + 长度。创建后长度不可变，元素可读写
 
 === 引用关系图
