@@ -23,5 +23,5 @@ ConstructorInitializerAllOnOneLineOrOnePerLine: true
 Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 FixNamespaceComments: true
-PointerAlignment: Left
+PointerAlignment: Right
 TabWidth: 2
