@@ -1,0 +1,10 @@
+// standalone single-line comment
+let a = 1; // trailing comment after code
+// first consecutive comment line
+// second consecutive comment line
+// third consecutive comment line
+let b = 2;
+let c = a + b;
+// pure comment line
+let d = c * 2;
+let e = d - 3;

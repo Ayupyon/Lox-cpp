@@ -1,0 +1,45 @@
+fun add(a, b) {
+  return a + b;
+}
+
+let sum = add(1, 2);
+
+fun nothing() {
+  return;
+}
+
+let r1 = nothing();
+
+fun implicit() {
+}
+
+let r2 = implicit();
+
+let g = add;
+let sum2 = g(3, 4);
+
+fun apply(f, x) {
+  return f(x);
+}
+
+fun inc(n) {
+  return n + 1;
+}
+
+let applied = apply(inc, 5);
+
+fun mk() {
+  fun inner() {
+    return 1;
+  }
+  return inner;
+}
+
+let fn = mk();
+let val = fn();
+
+fun two(a, b) {
+  return a;
+}
+
+let t = two(10, 20);

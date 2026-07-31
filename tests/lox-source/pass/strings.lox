@@ -1,0 +1,64 @@
+let s1 = "abc";
+let s2 = "abc";
+let same = s1 == s2;
+
+let s3 = "abc";
+let s4 = "abd";
+let diff = s3 != s4;
+
+let empty = "";
+let notEmpty = "x";
+let emptyNeq = empty != notEmpty;
+
+let nl = "a\nb";
+let cr = "a\rb";
+let tab = "a\tb";
+let bs = "a\\b";
+let q = "a\"b";
+let nul = "a\0b";
+let hex = "a\x41b";
+let uni = "a\u0041b";
+let brace = "a\u{41}b";
+
+let hexEq = "\x41" == "A";
+let uniEq = "\u0041" == "A";
+let braceEq = "\u{41}" == "A";
+let nlEq = "\n" == "a";
+let bsEq = "\\" == "a";
+
+let cross1 = ("abc" == 1);
+let cross2 = ("abc" == true);
+let cross3 = ("abc" == null);
+
+class Holder {
+  init(s) {
+    this.s = s;
+  }
+  getS() {
+    return this.s;
+  }
+  setS(v) {
+    this.s = v;
+  }
+}
+
+let h = Holder("hello");
+let hs = h.getS();
+h.setS("world");
+let hs2 = h.getS();
+let hsEq = hs == "hello";
+let hs2Eq = hs2 == "world";
+
+let list = ["x", "y", "z"];
+let l0 = list[0];
+let l1 = list[1];
+let l2 = list[2];
+let lEq = l0 == "x";
+
+list[1] = "Y";
+let l1b = list[1];
+
+let mixed = ["a", "b", "c", "d"];
+let mixedGet = mixed[2];
+mixed[0] = "Z";
+let mixed0 = mixed[0];

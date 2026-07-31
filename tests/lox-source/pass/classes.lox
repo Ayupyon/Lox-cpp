@@ -1,0 +1,67 @@
+class Point {
+  init(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  getX() {
+    return this.x;
+  }
+  getY() {
+    return this.y;
+  }
+  setX(v) {
+    this.x = v;
+  }
+  setY(v) {
+    this.y = v;
+  }
+  sum() {
+    return this.x + this.y;
+  }
+  doubled() {
+    return this.sum() * 2;
+  }
+}
+
+let p = Point(1, 2);
+let px = p.getX();
+let py = p.getY();
+let s = p.sum();
+let d = p.doubled();
+
+p.x = 9;
+let px2 = p.getX();
+
+p.setX(3);
+p.setY(4);
+let px3 = p.getX();
+let py3 = p.getY();
+let psum = p.sum();
+let pdoubled = p.doubled();
+
+let p2 = Point(10, 20);
+let p2sum = p2.sum();
+
+class Box {
+  init(v) {
+    this.v = v;
+  }
+  __getitem__(i) {
+    return this.v;
+  }
+  __setitem__(i, v) {
+    this.v = v;
+  }
+  getV() {
+    return this.v;
+  }
+}
+
+let b = Box(1);
+let bx = b[0];
+b[0] = 5;
+let by = b[0];
+let bv = b.getV();
+b[1] = 7;
+let bz = b[2];
+let bv2 = b.getV();

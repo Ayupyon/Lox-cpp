@@ -1,0 +1,120 @@
+let zero = 0;
+let i42 = 42;
+let big = 1000000;
+
+let pi = 3.14;
+let half = 0.5;
+let two = 2.0;
+
+let s_nl = "a\nb";
+let s_cr = "\r";
+let s_tab = "\t";
+let s_bs = "\\";
+let s_dq = "\"";
+let s_nul = "\0";
+let s_hex = "\x41";
+let s_u4 = "\u00e9";
+let s_uv = "\u{1f600}";
+
+let b_true = true;
+let b_false = false;
+let nothing = null;
+
+let not_b = !true;
+let neg_i = -5;
+let bitnot_i = ~0;
+
+let or_bits = 1 | 2;
+let xor_bits = 5 ^ 3;
+let and_bits = 6 & 3;
+let eq_b = 1 == 1;
+let ne_b = 1 != 2;
+let gt_b = 2 > 1;
+let ge_b = 2 >= 2;
+let lt_b = 1 < 2;
+let le_b = 1 <= 1;
+let lsh = 1 << 3;
+let rsh = 8 >> 1;
+let sub_i = 10 - 4;
+let add_i = 3 + 4;
+let div_i = 8 / 2;
+let mul_i = 3 * 4;
+let or_log = true || false;
+let and_log = true && true;
+
+let chain_a = 0;
+let chain_b = 0;
+chain_a = chain_b = 7;
+
+let arr = [1, 2, 3];
+let elem = arr[0];
+arr[1] = 9;
+
+let group = (1 + 2) * 3;
+
+class Base {
+  method() {
+    return this;
+  }
+}
+
+class Derived extends Base {
+  greet() {
+    let s = super.method();
+    return s;
+  }
+}
+
+let obj = Derived();
+let m = obj.greet();
+let field = obj.method();
+
+fun echo(x) {
+  return x;
+}
+let echoed = echo(1);
+
+if (true) {
+  let v = 1;
+} else {
+  let v = 2;
+}
+
+let count = 0;
+while (count < 3) {
+  count = count + 1;
+}
+
+for (let i = 0; i < 3; i = i + 1) {
+  let dummy = i;
+}
+
+try {
+  let x = 1;
+} catch Integer e {
+  let y = e;
+}
+
+fun maybeThrow(t) {
+  if (t) {
+    throw "oops";
+  }
+  return null;
+}
+
+try {
+  let r = maybeThrow(true);
+} catch String msg {
+  let m2 = msg;
+}
+
+let loop = 0;
+for (let i = 0; i < 5; i = i + 1) {
+  if (i == 3) {
+    break;
+  }
+  loop = loop + 1;
+}
+
+const FIXED = 100;
+let used = FIXED + 1;

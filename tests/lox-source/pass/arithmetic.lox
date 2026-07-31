@@ -1,0 +1,19 @@
+let a = 1 + 2;
+let b = 10 - 3;
+let c = 4 * 5;
+let d = 7 / 2;
+
+let e = 1 + 2.0;
+let f = 3.0 * 2;
+let g = 5.0 / 2.0;
+let h = 10 - 2.5;
+
+let neg = -5;
+let negf = -3.14;
+let dblneg = - - 5;
+
+let prec1 = 2 + 3 * 4;
+let prec2 = (2 + 3) * 4;
+let prec3 = 20 / 4 / 2;
+
+let assoc = 10 - 3 - 2;

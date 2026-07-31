@@ -1,0 +1,32 @@
+let i = 42;
+let z = 0;
+let f = 3.14;
+let half = 0.5;
+let two = 2.0;
+let bt = true;
+let bf = false;
+let n = null;
+let s = "hello";
+
+let empty = [];
+let three = [1, 2, 3];
+let filled = [1, 2; 5];
+let trunc = [1, 2, 3; 2];
+let nulls = [; 3];
+let trail = [1, 2,];
+
+let t0 = three[0];
+let t1 = three[1];
+let t2 = three[2];
+
+let f1 = filled[1];
+let f4 = filled[4];
+
+let tr0 = trunc[0];
+let tr1 = trunc[1];
+
+let n0 = nulls[0];
+let n2 = nulls[2];
+
+let ta = trail[0];
+let tb = trail[1];

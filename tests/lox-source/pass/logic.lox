@@ -1,0 +1,12 @@
+let n1 = !true;
+let n2 = !false;
+
+let or_t = true || false;
+let or_f = false || true;
+let or_sc = true || (1 / 0 < 0);
+
+let and_t = true && true;
+let and_f = true && false;
+let and_sc = false && (1 / 0 < 0);
+
+let nested = !(!true || false) && true;

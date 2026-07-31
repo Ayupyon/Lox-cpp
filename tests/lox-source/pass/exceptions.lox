@@ -1,0 +1,109 @@
+class E {}
+
+try {
+  throw E();
+} catch E e {
+}
+
+try {
+  throw 42;
+} catch Integer e {
+}
+
+try {
+  throw "x";
+} catch String e {
+}
+
+try {
+  throw true;
+} catch Boolean e {
+}
+
+try {
+  throw 3.14;
+} catch Float e {
+}
+
+try {
+  throw null;
+} catch Null e {
+}
+
+try {
+  throw [1, 2, 3];
+} catch List e {
+}
+
+class P {}
+class Q extends P {}
+
+let caughtP = 0;
+try {
+  throw Q();
+} catch P e {
+  caughtP = 1;
+} catch Q e {
+  caughtP = 2;
+}
+
+let caughtQ = 0;
+try {
+  throw Q();
+} catch Q e {
+  caughtQ = 1;
+} catch P e {
+  caughtQ = 2;
+}
+
+let innerCaught = 0;
+try {
+  try {
+    throw 42;
+  } catch Integer e {
+    innerCaught = 1;
+  }
+} catch E e {
+  innerCaught = 2;
+}
+
+let outerCaught = 0;
+try {
+  try {
+    throw E();
+  } catch Integer e {
+    outerCaught = 1;
+  }
+} catch E e {
+  outerCaught = 2;
+}
+
+let rethrown = 0;
+try {
+  try {
+    throw E();
+  } catch E e {
+    throw 7;
+  }
+} catch Integer e {
+  rethrown = 1;
+}
+
+let continued = 10;
+let after = continued + 1;
+
+class Custom {
+  init(code) {
+    this.code = code;
+  }
+  getCode() {
+    return this.code;
+  }
+}
+
+let customCode = 0;
+try {
+  throw Custom(99);
+} catch Custom e {
+  customCode = e.getCode();
+}

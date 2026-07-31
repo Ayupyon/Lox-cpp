@@ -1,0 +1,52 @@
+let a = [10, 20, 30];
+a[1] = a[0] + a[2];
+let a0 = a[0];
+let a1 = a[1];
+let a2 = a[2];
+
+let f = [1, 2; 4];
+let f0 = f[0];
+let f1 = f[1];
+let x = f[2];
+let y = f[3];
+
+let g = [; 3];
+let g0 = g[0];
+let g1 = g[1];
+let g2 = g[2];
+
+let empty = [];
+let m = [1, "a", true, null];
+let m0 = m[0];
+let m1 = m[1];
+let m2 = m[2];
+let m3 = m[3];
+
+let n = [[1, 2], [3, 4]];
+let n00 = n[0][0];
+let v = n[0][1];
+let n10 = n[1][0];
+let n11 = n[1][1];
+
+let tail = [1, 2,];
+let t0 = tail[0];
+let t1 = tail[1];
+
+let nested = [[1, 2; 4], [; 2]];
+let na0 = nested[0][0];
+let na1 = nested[0][1];
+let na2 = nested[0][2];
+let na3 = nested[0][3];
+let nb0 = nested[1][0];
+let nb1 = nested[1][1];
+
+let shared = [1, 2, 3];
+let alias = shared;
+alias[0] = 9;
+let sh0 = shared[0];
+
+let chained = [0, 0, 0];
+chained[0] = chained[1] = chained[2] = 5;
+let c0 = chained[0];
+let c1 = chained[1];
+let c2 = chained[2];

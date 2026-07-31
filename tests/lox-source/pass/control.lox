@@ -1,0 +1,47 @@
+let flag = true;
+if (flag) {
+  flag = false;
+} else {
+  flag = true;
+}
+
+if (flag) {
+  flag = false;
+} else {
+  flag = true;
+}
+
+let i = 0;
+while (i < 10) {
+  if (i > 3) {
+    break;
+  }
+  i = i + 1;
+}
+
+for (let j = 0; j < 3; j = j + 1) {
+}
+
+let k = 0;
+for (k = 0; k < 3; k = k + 1) {
+}
+
+for (;;) {
+  break;
+}
+
+for (let m = 0;; m = m + 1) {
+  if (m > 2) {
+    break;
+  }
+}
+
+for (let n = 0; n < 3;) {
+  n = n + 1;
+}
+
+for (let p = 0; p < 3; p = p + 1) {
+  for (let q = 0; q < 3; q = q + 1) {
+    break;
+  }
+}

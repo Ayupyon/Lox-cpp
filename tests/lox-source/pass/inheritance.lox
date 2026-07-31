@@ -1,0 +1,116 @@
+class A {
+  foo() {
+    return 1;
+  }
+  bar() {
+    return 10;
+  }
+}
+
+class B extends A {
+  foo() {
+    return super.foo() + 1;
+  }
+}
+
+class C extends B {
+  foo() {
+    return super.foo() + 1;
+  }
+}
+
+let a = A();
+let af = a.foo();
+let ab = a.bar();
+
+let b = B();
+let bf = b.foo();
+let bb = b.bar();
+
+let c = C();
+let cf = c.foo();
+let cb = c.bar();
+
+class Base {
+  init() {
+    this.n = 0;
+    this.tag = "base";
+  }
+  getN() {
+    return this.n;
+  }
+  getTag() {
+    return this.tag;
+  }
+  bump() {
+    this.n = this.n + 1;
+  }
+}
+
+class Sub extends Base {
+  init() {
+    super.init();
+    this.n = 1;
+    this.tag = "sub";
+  }
+}
+
+let sub = Sub();
+let sn = sub.getN();
+let st = sub.getTag();
+
+sub.bump();
+let sn2 = sub.getN();
+
+class Root {
+  value() {
+    return 100;
+  }
+}
+
+class Mid extends Root {
+  value() {
+    return super.value() + 10;
+  }
+}
+
+class Leaf extends Mid {
+  value() {
+    return super.value() + 1;
+  }
+}
+
+let leaf = Leaf();
+let lv = leaf.value();
+
+class GrandBase {
+  init(base) {
+    this.base = base;
+  }
+  total() {
+    return this.base;
+  }
+}
+
+class GrandMid extends GrandBase {
+  init(base, mid) {
+    super.init(base);
+    this.mid = mid;
+  }
+  total() {
+    return super.total() + this.mid;
+  }
+}
+
+class GrandLeaf extends GrandMid {
+  init(base, mid, leaf) {
+    super.init(base, mid);
+    this.leaf = leaf;
+  }
+  total() {
+    return super.total() + this.leaf;
+  }
+}
+
+let gl = GrandLeaf(1, 2, 3);
+let glt = gl.total();
