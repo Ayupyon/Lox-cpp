@@ -1,2 +1,27 @@
-BasedOnStyle: LLVM
+---
+
+BasedOnStyle: Google
 LineEnding: LF
+
+---
+
+Language: Cpp
+
+AlignConsecutiveMacros: AcrossComments
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AttributeMacros: ['__', 'NO_RETURN']
+BinPackArguments: false
+BinPackParameters: false
+BreakConstructorInitializers: BeforeColon
+BreakBeforeTernaryOperators: true
+ColumnLimit: 100
+CommentPragmas: NOLINT:.*
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+Cpp11BracedListStyle: true
+DerivePointerAlignment: false
+FixNamespaceComments: true
+PointerAlignment: Left
+TabWidth: 2
