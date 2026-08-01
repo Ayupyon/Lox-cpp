@@ -5,6 +5,7 @@
 #include <variant>
 
 #include "llvm/ADT/StringRef.h"
+#include "llvm/Support/raw_ostream.h"
 
 namespace lox {
 
@@ -90,125 +91,19 @@ struct Token {
   std::uint32_t column{};
   llvm::StringRef lexeme{};
   TokenValue value{};
-};
 
-// Stable display name for a token kind, for diagnostics such as "expected X,
-// found Y". Deliberately a switch without a default so -Wswitch stays armed:
-// adding a TokenType without a case becomes a compile warning.
-inline llvm::StringRef TokenTypeName(TokenType type) {
-  switch (type) {
-    case TokenType::kClass:
-      return "class";
-    case TokenType::kElse:
-      return "else";
-    case TokenType::kFalse:
-      return "false";
-    case TokenType::kFor:
-      return "for";
-    case TokenType::kFun:
-      return "fun";
-    case TokenType::kIf:
-      return "if";
-    case TokenType::kNull:
-      return "null";
-    case TokenType::kReturn:
-      return "return";
-    case TokenType::kSuper:
-      return "super";
-    case TokenType::kThis:
-      return "this";
-    case TokenType::kTrue:
-      return "true";
-    case TokenType::kWhile:
-      return "while";
-    case TokenType::kExtends:
-      return "extends";
-    case TokenType::kImport:
-      return "import";
-    case TokenType::kTry:
-      return "try";
-    case TokenType::kCatch:
-      return "catch";
-    case TokenType::kThrow:
-      return "throw";
-    case TokenType::kBreak:
-      return "break";
-    case TokenType::kLet:
-      return "let";
-    case TokenType::kConst:
-      return "const";
-    case TokenType::kAs:
-      return "as";
-    case TokenType::kInteger:
-      return "integer";
-    case TokenType::kFloat:
-      return "float";
-    case TokenType::kString:
-      return "string";
-    case TokenType::kIdentifier:
-      return "identifier";
-    case TokenType::kLeftParen:
-      return "(";
-    case TokenType::kRightParen:
-      return ")";
-    case TokenType::kLeftBrace:
-      return "{";
-    case TokenType::kRightBrace:
-      return "}";
-    case TokenType::kLeftBracket:
-      return "[";
-    case TokenType::kRightBracket:
-      return "]";
-    case TokenType::kComma:
-      return ",";
-    case TokenType::kSemicolon:
-      return ";";
-    case TokenType::kDot:
-      return ".";
-    case TokenType::kBang:
-      return "!";
-    case TokenType::kTilde:
-      return "~";
-    case TokenType::kMinus:
-      return "-";
-    case TokenType::kPlus:
-      return "+";
-    case TokenType::kSlash:
-      return "/";
-    case TokenType::kStar:
-      return "*";
-    case TokenType::kPipe:
-      return "|";
-    case TokenType::kCaret:
-      return "^";
-    case TokenType::kAmpersand:
-      return "&";
-    case TokenType::kLess:
-      return "<";
-    case TokenType::kGreater:
-      return ">";
-    case TokenType::kEqual:
-      return "=";
-    case TokenType::kLessLess:
-      return "<<";
-    case TokenType::kGreaterGreater:
-      return ">>";
-    case TokenType::kEqualEqual:
-      return "==";
-    case TokenType::kBangEqual:
-      return "!=";
-    case TokenType::kGreaterEqual:
-      return ">=";
-    case TokenType::kLessEqual:
-      return "<=";
-    case TokenType::kPipePipe:
-      return "||";
-    case TokenType::kAmpersandAmpersand:
-      return "&&";
-    case TokenType::kEof:
-      return "eof";
-  }
-}
+  // Stable display name of this token's kind, for diagnostics such as
+  // "expected X, found Y". Implemented in token.cpp as a switch without a
+  // default so -Wswitch stays armed: adding a TokenType without a case
+  // becomes a compile warning.
+  llvm::StringRef TypeName() const;
+
+  // Prints this token as "<line>:<col> <TypeName> <lexeme>", with the
+  // decoded numeric value appended in brackets for kInteger/kFloat. The
+  // lexeme is escaped so control characters inside string literals stay on
+  // one line.
+  void Print(llvm::raw_ostream &os) const;
+};
 
 }  // namespace lox
 

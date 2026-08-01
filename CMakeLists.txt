@@ -15,6 +15,10 @@ project(lox-cpp)
 set(PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_CXX_STANDARD 20)
 
+# LLVM 22.1.7 is built with LLVM_ENABLE_RTTI=OFF; project code must match, or
+# subclasses of llvm::ErrorInfo fail to link (missing typeinfo).
+add_compile_options(-fno-rtti)
+
 # build type configuration (default Debug)
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
@@ -52,3 +56,7 @@ llvm_map_components_to_libnames(llvm_libs Support Core)
 include_directories(include)
 
 add_subdirectory(src)
+
+# unit tests (googletest via FetchContent, see tests/CMakeLists.txt)
+enable_testing()
+add_subdirectory(tests)

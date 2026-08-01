@@ -32,9 +32,9 @@ struct Token {
   std::uint32_t   column{};    // 1-indexed
   llvm::StringRef lexeme{};    // 源码零拷贝切片；.size() 即长度
   TokenValue      value{};     // 仅 kInteger/kFloat 使用
+  llvm::StringRef TypeName() const;            // 诊断用
+  void            Print(llvm::raw_ostream &os) const;  // 输出流打印
 };
-
-inline llvm::StringRef TokenTypeName(TokenType type);  // 诊断用
 
 }  // namespace lox
 ```
@@ -111,7 +111,7 @@ using TokenValue = std::variant<std::monostate, std::int64_t, double>;
 
 ## 9. 命名空间与头文件保护
 
-- **命名空间**：`TokenType`/`TokenValue`/`Token`/`TokenTypeName` 位于 `lox`（跨模块被 parser/JIT 消费）。模块局部 API 放 `scanner`，文件局部放匿名命名空间（依 AGENTS.md）。
+- **命名空间**：`TokenType`/`TokenValue`/`Token`（含成员方法 `TypeName`/`Print`）位于 `lox`（跨模块被 parser/JIT 消费）。模块局部 API 放 `scanner`，文件局部放匿名命名空间（依 AGENTS.md）。
 - **头文件保护**：`#ifndef ...` 模式，guard 宏以 `LOX_` 开头（AGENTS.md 第 23 行）。`token.h` 用 `LOX_SCANNER_TOKEN_H_`（`LOX_` 前缀 + 路径 + `_H_` 后缀，含尾下划线）。后续 scanner 头文件依此，如 `include/scanner/error.h` -> `LOX_SCANNER_ERROR_H_`。
 
 ## 10. 命名风格
@@ -121,7 +121,7 @@ using TokenValue = std::variant<std::monostate, std::int64_t, double>;
 | 类别 | 风格 | 示例 |
 |---|---|---|
 | 类型（class/struct/enum/union/type-alias） | CamelCase | `Token` `TokenType` `TokenValue` |
-| 函数 | CamelCase | `TokenTypeName` |
+| 函数（含成员方法） | CamelCase | `TypeName` `Print` |
 | 变量/参数/成员 | lower_case | `type` `line` `lexeme` |
 | class private/protected 成员 | lower_case + `_` 后缀 | `count_` |
 | struct/public 成员 | lower_case（无后缀） | `type` |
@@ -137,8 +137,8 @@ using TokenValue = std::variant<std::monostate, std::int64_t, double>;
 - 禁用 `llvm-prefer-static-over-anonymous-namespace`（与 AGENTS.md「file-local API 放匿名命名空间」约定冲突）。
 - `ConstantCase`（`lower_case`）与 `ConstexprVariableCase`（`CamelCase` + `k` 前缀）分工：`const` 变量（含局部）为 lower_case，`constexpr` 常量为 `k` + CamelCase（见第 10 节）。未配置的细分选项（`LocalConstexprVariableCase`/`GlobalConstexprVariableCase`/`StaticConstexprVariableCase`/`LocalConstantCase` 等）按检查的回退语义归入对应通用类别，故仅配置通用两项即可。注意：`-dump-config` 不列出未配置的选项，不能据此判断选项是否存在。
 - 其余 `llvm-*`（`llvm-qualified-auto`、`llvm-else-after-return`、`llvm-prefer-isa-or-dyn-cast-in-conditionals` 等）保留——项目大量使用 LLVM ADT/RTTI，这些检查有用且不会误报。
-- `TokenTypeName` 用 `switch` 且**无 default**，使 `-Wswitch` 保持武装：新增 `TokenType` 而漏 case 即编译告警。
-- `TokenTypeName` 用 `switch` 而非 map：键稠密（`uint8_t` 0–54）+ 冷路径（仅诊断用）+ `-Wswitch` 完备性检查，map（`DenseMap`/`StringMap`）对稠密整型键无优势且无完备性保证。反向的关键字查找（`StringRef -> TokenType`）才是 map 的用武之地（见第 12 节）。
+- `Token::TypeName` 用 `switch` 且**无 default**，使 `-Wswitch` 保持武装：新增 `TokenType` 而漏 case 即编译告警（实现位于 `src/scanner/token.cpp`）。
+- `Token::TypeName` 用 `switch` 而非 map：键稠密（`uint8_t` 0–54）+ 冷路径（仅诊断用）+ `-Wswitch` 完备性检查，map（`DenseMap`/`StringMap`）对稠密整型键无优势且无完备性保证。反向的关键字查找（`StringRef -> TokenType`）才是 map 的用武之地（见第 12 节）。
 
 ## 12. 后续工作
 
@@ -151,7 +151,7 @@ using TokenValue = std::variant<std::monostate, std::int64_t, double>;
 
 ## 13. 已落地
 
-- `include/scanner/token.h`：`TokenType`（55）、`TokenValue`、`Token`、`TokenTypeName`。通过 clang-tidy（Google 配置）、clang-format、`-Wall -Wextra -Werror` 编译。
+- `include/scanner/token.h`：`TokenType`（55）、`TokenValue`、`Token`（成员方法 `TypeName`/`Print`，实现在 `src/scanner/token.cpp`，已加入 `lox_scanner` 目标）。通过 clang-tidy（Google 配置）、clang-format、`-Wall -Wextra -Werror` 编译。
 - `.clang-tidy`：从 LLVM 配置迁移为 Google 风格（见第 10、11 节）。
 - guard：`LOX_SCANNER_TOKEN_H_`（依 AGENTS.md `LOX_` 前缀约束）。
 
@@ -267,4 +267,28 @@ using TokenValue = std::variant<std::monostate, std::int64_t, double>;
 ### 15.3 验证与测试
 
 - `run-clang-tidy` 0 告警（Google 配置）；`clang-format -style=file` 通过；`ninja` 构建无告警。
-- C++ 单元测试暂缓：仓库无测试基础设施（无 CTest/gtest，`tests/` 仅有 `.lox` 源），经用户确认本轮不建；以临时驱动（`/tmp`，未入库）对全场景 smoke test：关键字/标识符、各进制数值、指数非提交、下划线错误、int64 溢出、float 溢出/下溢、转义校验（合法/非法/未终止）、注释、CRLF 行号、多错误累积、空源、API 契约（可移动不可拷贝/可重入/Reset/错误恢复）。
+- C++ 单元测试已落地（2026-07-31，见 §16）：`tests/scanner_golden_test`（gtest + FetchContent）对 `tests/lox-source/**/*.lox` 逐文件运行真实 `lox-cpp --run-stage scanner`，比对 stdout/stderr/exit code 与 golden（`tests/lox-source-out/scanner/` 镜像布局）；`--update` 重新生成 golden。此前以临时驱动（`/tmp`，未入库）对全场景 smoke test：关键字/标识符、各进制数值、指数非提交、下划线错误、int64 溢出、float 溢出/下溢、转义校验（合法/非法/未终止）、注释、CRLF 行号、多错误累积、空源、API 契约（可移动不可拷贝/可重入/Reset/错误恢复）。
+
+### 16. CLI 与 golden 测试落地（2026-07-31）
+
+- `src/main.cpp`：`llvm::cl` CLI（`--run-scanner-only` 布尔开关 + 位置参数 `<input file>`，`ParseCommandLineOptions` 传 `errs()`，错误/`--help` 处理见 LLVM 惯例）。模式分派：无位置参数 → interpret（REPL，未实现：打印 `interpret mode is not implemented` + `assert(false)`）；有文件无 flag → interpret 文件模式（同上 stub）；`--run-scanner-only <file>` → scanner 模式：`MemoryBuffer::getFile`（失败 stderr + exit 2）→ `Scanner::Scan()` 成功逐 token 打印 stdout + exit 0，`LexicalError` 经 `log(errs())` + exit 1。
+- token 行格式：`<line>:<col> <TypeName> <lexeme>`（经 `Token::Print`），kInteger/kFloat 追加 ` [<value>]`（`std::to_chars` 最短回程；double 如 `1e10` → `1e+10`、`2.0` → `2`）；lexeme 经 `llvm::printEscapedString`（`"` → `\22` 等）；EOF 行也打印。
+- **注释 bug 修复**：`ScanToken` 的 `case '/'` 原本直接发 `kSlash`，`//` 注释处理仅在 `SkipWhitespaceAndComments`（空白分支可达），注释从未被识别。修复为 `case '/'` 内 `Peek(1) == '/'` 时转 `SkipWhitespaceAndComments`，恢复 §14.2 契约（`//` 行注释不产生 token）。golden 审查（`comments.lox`）发现，经用户确认修复。
+- CMake：顶层 `enable_testing()` + `add_subdirectory(tests)`；`tests/CMakeLists.txt` FetchContent googletest（v1.15.2 固定 zip）+ `gtest_discover_tests`；`scanner_golden_test` 经 `target_compile_definitions` 注入二进制/仓库/源/golden 根路径（discovery 阶段无 argv，路径须编译期已知）。
+- 测试驱动：静态初始化遍历 `tests/lox-source` 收集 `.lox`（守卫测试防空遍历静默通过）；`ExecuteAndWait` + 临时文件重定向捕获子进程两流；期望 exit code 由 golden `.err` 非空与否推导（空 → 0，非空 → 1，文件读取失败 exit 2 不出现于既有测试）。
+
+### 17. CLI 重构：--run-stage 分派（2026-08-01）
+
+- `--run-scanner-only` 布尔开关替换为 `--run-stage` 枚举选项（`llvm::cl::opt<Stage>` + `clEnumValN`，枚举常量 `kScanner`/`kParser`/`kBytecode`/`kExecute`，匿名 namespace）：取值 `scanner`（输出 Token 流）/ `parser`（导出 AST）/ `bytecode`（输出字节码）/ `execute`（产生字节码并执行），默认 `execute`；非法值由 `ParseCommandLineOptions` 拒绝（stderr + exit 1），`--help` 列出四值（LLVM 惯例）。
+- 分派矩阵：
+  - `kExecute`（默认，覆盖无 flag 情形）→ interpret 模式（无文件为 REPL）：stderr `interpret mode is not implemented` + exit 1。execute ≡ 整条流水线（parse → bytecode → run）≡ interpret，消息统一；**删除原 interpret stub 的 `assert(false)`**。有文件无 flag 同走此路径（行为不变）。
+  - `kParser` / `kBytecode` → stderr `<stage> stage is not implemented` + exit 1；**stub 不碰输入**（不读文件也不读 stdin）。
+  - `kScanner` → 惰性加载输入：共享 helper `LoadInput`（`InputFile.empty() ? MemoryBuffer::getSTDIN() : MemoryBuffer::getFile`），仅 scanner 分支调用；文件读取失败 stderr `failed to open '<file>'` + exit 2，stdin 读取失败 `failed to read stdin` + exit 2；stdin 诊断标签 `<stdin>`（错误形如 `<stdin>:1:5: error: ...`）。`RunScanner` 签名改为 `(source, label)`。
+- `--run-stage` 与位置参数 `<input file>` 相互独立：无文件时 scanner/parser/bytecode 读 stdin（parser/bytecode 未实现），execute 进 interpret 模式。
+- 测试：`scanner_golden_test` 驱动改 `--run-stage scanner`（args 追加 `"scanner"`），golden 文件不变（token 输出与旧 flag 一致）。
+
+### 18. 交互式输入：scanner REPL（2026-08-01）
+
+- `--run-stage scanner` 无文件且 stdin 为终端（`llvm::sys::Process::StandardInIsUserInput()`）时，从批量 `getSTDIN` 改为交互式逐行扫描：每行前 `llvm::outs()` 打印 prompt `(lox-cpp) >> `（尾随空格）并 flush，`std::getline` 读一行，逐行独立 `Scan` 并输出该行完整 token 流（含 kEof）。EOF（Ctrl-D）正常退出（exit 0）。
+- 行内词法错误：stderr 报错（标签 `<stdin>`，行号恒 1）后继续循环，错误不影响最终退出码。
+- stdin 为管道/重定向时保持批量路径不变（整读一次扫描）；有文件模式不变。交互循环为通用 `RunInteractiveLoop(handler)`（prompt + 读行 + 逐行分派），未来 interpret/parser 阶段可复用，handler 仅提供"每行处理"。
