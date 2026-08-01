@@ -1,0 +1,114 @@
+1:1 let let
+1:5 identifier a
+1:7 = =
+1:9 integer 1 [1]
+1:11 + +
+1:13 integer 2 [2]
+1:14 ; ;
+2:1 let let
+2:5 identifier b
+2:7 = =
+2:9 integer 10 [10]
+2:12 - -
+2:14 integer 3 [3]
+2:15 ; ;
+3:1 let let
+3:5 identifier c
+3:7 = =
+3:9 integer 4 [4]
+3:11 * *
+3:13 integer 5 [5]
+3:14 ; ;
+4:1 let let
+4:5 identifier d
+4:7 = =
+4:9 integer 7 [7]
+4:11 / /
+4:13 integer 2 [2]
+4:14 ; ;
+6:1 let let
+6:5 identifier e
+6:7 = =
+6:9 integer 1 [1]
+6:11 + +
+6:13 float 2.0 [2]
+6:16 ; ;
+7:1 let let
+7:5 identifier f
+7:7 = =
+7:9 float 3.0 [3]
+7:13 * *
+7:15 integer 2 [2]
+7:16 ; ;
+8:1 let let
+8:5 identifier g
+8:7 = =
+8:9 float 5.0 [5]
+8:13 / /
+8:15 float 2.0 [2]
+8:18 ; ;
+9:1 let let
+9:5 identifier h
+9:7 = =
+9:9 integer 10 [10]
+9:12 - -
+9:14 float 2.5 [2.5]
+9:17 ; ;
+11:1 let let
+11:5 identifier neg
+11:9 = =
+11:11 - -
+11:12 integer 5 [5]
+11:13 ; ;
+12:1 let let
+12:5 identifier negf
+12:10 = =
+12:12 - -
+12:13 float 3.14 [3.14]
+12:17 ; ;
+13:1 let let
+13:5 identifier dblneg
+13:12 = =
+13:14 - -
+13:16 - -
+13:18 integer 5 [5]
+13:19 ; ;
+15:1 let let
+15:5 identifier prec1
+15:11 = =
+15:13 integer 2 [2]
+15:15 + +
+15:17 integer 3 [3]
+15:19 * *
+15:21 integer 4 [4]
+15:22 ; ;
+16:1 let let
+16:5 identifier prec2
+16:11 = =
+16:13 ( (
+16:14 integer 2 [2]
+16:16 + +
+16:18 integer 3 [3]
+16:19 ) )
+16:21 * *
+16:23 integer 4 [4]
+16:24 ; ;
+17:1 let let
+17:5 identifier prec3
+17:11 = =
+17:13 integer 20 [20]
+17:16 / /
+17:18 integer 4 [4]
+17:20 / /
+17:22 integer 2 [2]
+17:23 ; ;
+19:1 let let
+19:5 identifier assoc
+19:11 = =
+19:13 integer 10 [10]
+19:16 - -
+19:18 integer 3 [3]
+19:20 - -
+19:22 integer 2 [2]
+19:23 ; ;
+20:1 eof

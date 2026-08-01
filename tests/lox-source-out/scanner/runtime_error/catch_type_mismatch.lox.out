@@ -1,0 +1,12 @@
+1:1 try try
+1:5 { {
+1:7 throw throw
+1:13 integer 42 [42]
+1:15 ; ;
+1:17 } }
+1:19 catch catch
+1:25 identifier String
+1:32 identifier e
+1:34 { {
+1:36 } }
+2:1 eof

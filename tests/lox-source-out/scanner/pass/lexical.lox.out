@@ -1,0 +1,531 @@
+1:1 let let
+1:5 identifier zero
+1:10 = =
+1:12 integer 0 [0]
+1:13 ; ;
+2:1 let let
+2:5 identifier i42
+2:9 = =
+2:11 integer 42 [42]
+2:13 ; ;
+3:1 let let
+3:5 identifier big
+3:9 = =
+3:11 integer 1000000 [1000000]
+3:18 ; ;
+5:1 let let
+5:5 identifier pi
+5:8 = =
+5:10 float 3.14 [3.14]
+5:14 ; ;
+6:1 let let
+6:5 identifier half
+6:10 = =
+6:12 float 0.5 [0.5]
+6:15 ; ;
+7:1 let let
+7:5 identifier two
+7:9 = =
+7:11 float 2.0 [2]
+7:14 ; ;
+9:1 let let
+9:5 identifier s_nl
+9:10 = =
+9:12 string \22a\\nb\22
+9:18 ; ;
+10:1 let let
+10:5 identifier s_cr
+10:10 = =
+10:12 string \22\\r\22
+10:16 ; ;
+11:1 let let
+11:5 identifier s_tab
+11:11 = =
+11:13 string \22\\t\22
+11:17 ; ;
+12:1 let let
+12:5 identifier s_bs
+12:10 = =
+12:12 string \22\\\\\22
+12:16 ; ;
+13:1 let let
+13:5 identifier s_dq
+13:10 = =
+13:12 string \22\\\22\22
+13:16 ; ;
+14:1 let let
+14:5 identifier s_nul
+14:11 = =
+14:13 string \22\\0\22
+14:17 ; ;
+15:1 let let
+15:5 identifier s_hex
+15:11 = =
+15:13 string \22\\x41\22
+15:19 ; ;
+16:1 let let
+16:5 identifier s_u4
+16:10 = =
+16:12 string \22\\u00e9\22
+16:20 ; ;
+17:1 let let
+17:5 identifier s_uv
+17:10 = =
+17:12 string \22\\u{1f600}\22
+17:23 ; ;
+19:1 let let
+19:5 identifier b_true
+19:12 = =
+19:14 true true
+19:18 ; ;
+20:1 let let
+20:5 identifier b_false
+20:13 = =
+20:15 false false
+20:20 ; ;
+21:1 let let
+21:5 identifier nothing
+21:13 = =
+21:15 null null
+21:19 ; ;
+23:1 let let
+23:5 identifier not_b
+23:11 = =
+23:13 ! !
+23:14 true true
+23:18 ; ;
+24:1 let let
+24:5 identifier neg_i
+24:11 = =
+24:13 - -
+24:14 integer 5 [5]
+24:15 ; ;
+25:1 let let
+25:5 identifier bitnot_i
+25:14 = =
+25:16 ~ ~
+25:17 integer 0 [0]
+25:18 ; ;
+27:1 let let
+27:5 identifier or_bits
+27:13 = =
+27:15 integer 1 [1]
+27:17 | |
+27:19 integer 2 [2]
+27:20 ; ;
+28:1 let let
+28:5 identifier xor_bits
+28:14 = =
+28:16 integer 5 [5]
+28:18 ^ ^
+28:20 integer 3 [3]
+28:21 ; ;
+29:1 let let
+29:5 identifier and_bits
+29:14 = =
+29:16 integer 6 [6]
+29:18 & &
+29:20 integer 3 [3]
+29:21 ; ;
+30:1 let let
+30:5 identifier eq_b
+30:10 = =
+30:12 integer 1 [1]
+30:14 == ==
+30:17 integer 1 [1]
+30:18 ; ;
+31:1 let let
+31:5 identifier ne_b
+31:10 = =
+31:12 integer 1 [1]
+31:14 != !=
+31:17 integer 2 [2]
+31:18 ; ;
+32:1 let let
+32:5 identifier gt_b
+32:10 = =
+32:12 integer 2 [2]
+32:14 > >
+32:16 integer 1 [1]
+32:17 ; ;
+33:1 let let
+33:5 identifier ge_b
+33:10 = =
+33:12 integer 2 [2]
+33:14 >= >=
+33:17 integer 2 [2]
+33:18 ; ;
+34:1 let let
+34:5 identifier lt_b
+34:10 = =
+34:12 integer 1 [1]
+34:14 < <
+34:16 integer 2 [2]
+34:17 ; ;
+35:1 let let
+35:5 identifier le_b
+35:10 = =
+35:12 integer 1 [1]
+35:14 <= <=
+35:17 integer 1 [1]
+35:18 ; ;
+36:1 let let
+36:5 identifier lsh
+36:9 = =
+36:11 integer 1 [1]
+36:13 << <<
+36:16 integer 3 [3]
+36:17 ; ;
+37:1 let let
+37:5 identifier rsh
+37:9 = =
+37:11 integer 8 [8]
+37:13 >> >>
+37:16 integer 1 [1]
+37:17 ; ;
+38:1 let let
+38:5 identifier sub_i
+38:11 = =
+38:13 integer 10 [10]
+38:16 - -
+38:18 integer 4 [4]
+38:19 ; ;
+39:1 let let
+39:5 identifier add_i
+39:11 = =
+39:13 integer 3 [3]
+39:15 + +
+39:17 integer 4 [4]
+39:18 ; ;
+40:1 let let
+40:5 identifier div_i
+40:11 = =
+40:13 integer 8 [8]
+40:15 / /
+40:17 integer 2 [2]
+40:18 ; ;
+41:1 let let
+41:5 identifier mul_i
+41:11 = =
+41:13 integer 3 [3]
+41:15 * *
+41:17 integer 4 [4]
+41:18 ; ;
+42:1 let let
+42:5 identifier or_log
+42:12 = =
+42:14 true true
+42:19 || ||
+42:22 false false
+42:27 ; ;
+43:1 let let
+43:5 identifier and_log
+43:13 = =
+43:15 true true
+43:20 && &&
+43:23 true true
+43:27 ; ;
+45:1 let let
+45:5 identifier chain_a
+45:13 = =
+45:15 integer 0 [0]
+45:16 ; ;
+46:1 let let
+46:5 identifier chain_b
+46:13 = =
+46:15 integer 0 [0]
+46:16 ; ;
+47:1 identifier chain_a
+47:9 = =
+47:11 identifier chain_b
+47:19 = =
+47:21 integer 7 [7]
+47:22 ; ;
+49:1 let let
+49:5 identifier arr
+49:9 = =
+49:11 [ [
+49:12 integer 1 [1]
+49:13 , ,
+49:15 integer 2 [2]
+49:16 , ,
+49:18 integer 3 [3]
+49:19 ] ]
+49:20 ; ;
+50:1 let let
+50:5 identifier elem
+50:10 = =
+50:12 identifier arr
+50:15 [ [
+50:16 integer 0 [0]
+50:17 ] ]
+50:18 ; ;
+51:1 identifier arr
+51:4 [ [
+51:5 integer 1 [1]
+51:6 ] ]
+51:8 = =
+51:10 integer 9 [9]
+51:11 ; ;
+53:1 let let
+53:5 identifier group
+53:11 = =
+53:13 ( (
+53:14 integer 1 [1]
+53:16 + +
+53:18 integer 2 [2]
+53:19 ) )
+53:21 * *
+53:23 integer 3 [3]
+53:24 ; ;
+55:1 class class
+55:7 identifier Base
+55:12 { {
+56:3 identifier method
+56:9 ( (
+56:10 ) )
+56:12 { {
+57:5 return return
+57:12 this this
+57:16 ; ;
+58:3 } }
+59:1 } }
+61:1 class class
+61:7 identifier Derived
+61:15 extends extends
+61:23 identifier Base
+61:28 { {
+62:3 identifier greet
+62:8 ( (
+62:9 ) )
+62:11 { {
+63:5 let let
+63:9 identifier s
+63:11 = =
+63:13 super super
+63:18 . .
+63:19 identifier method
+63:25 ( (
+63:26 ) )
+63:27 ; ;
+64:5 return return
+64:12 identifier s
+64:13 ; ;
+65:3 } }
+66:1 } }
+68:1 let let
+68:5 identifier obj
+68:9 = =
+68:11 identifier Derived
+68:18 ( (
+68:19 ) )
+68:20 ; ;
+69:1 let let
+69:5 identifier m
+69:7 = =
+69:9 identifier obj
+69:12 . .
+69:13 identifier greet
+69:18 ( (
+69:19 ) )
+69:20 ; ;
+70:1 let let
+70:5 identifier field
+70:11 = =
+70:13 identifier obj
+70:16 . .
+70:17 identifier method
+70:23 ( (
+70:24 ) )
+70:25 ; ;
+72:1 fun fun
+72:5 identifier echo
+72:9 ( (
+72:10 identifier x
+72:11 ) )
+72:13 { {
+73:3 return return
+73:10 identifier x
+73:11 ; ;
+74:1 } }
+75:1 let let
+75:5 identifier echoed
+75:12 = =
+75:14 identifier echo
+75:18 ( (
+75:19 integer 1 [1]
+75:20 ) )
+75:21 ; ;
+77:1 if if
+77:4 ( (
+77:5 true true
+77:9 ) )
+77:11 { {
+78:3 let let
+78:7 identifier v
+78:9 = =
+78:11 integer 1 [1]
+78:12 ; ;
+79:1 } }
+79:3 else else
+79:8 { {
+80:3 let let
+80:7 identifier v
+80:9 = =
+80:11 integer 2 [2]
+80:12 ; ;
+81:1 } }
+83:1 let let
+83:5 identifier count
+83:11 = =
+83:13 integer 0 [0]
+83:14 ; ;
+84:1 while while
+84:7 ( (
+84:8 identifier count
+84:14 < <
+84:16 integer 3 [3]
+84:17 ) )
+84:19 { {
+85:3 identifier count
+85:9 = =
+85:11 identifier count
+85:17 + +
+85:19 integer 1 [1]
+85:20 ; ;
+86:1 } }
+88:1 for for
+88:5 ( (
+88:6 let let
+88:10 identifier i
+88:12 = =
+88:14 integer 0 [0]
+88:15 ; ;
+88:17 identifier i
+88:19 < <
+88:21 integer 3 [3]
+88:22 ; ;
+88:24 identifier i
+88:26 = =
+88:28 identifier i
+88:30 + +
+88:32 integer 1 [1]
+88:33 ) )
+88:35 { {
+89:3 let let
+89:7 identifier dummy
+89:13 = =
+89:15 identifier i
+89:16 ; ;
+90:1 } }
+92:1 try try
+92:5 { {
+93:3 let let
+93:7 identifier x
+93:9 = =
+93:11 integer 1 [1]
+93:12 ; ;
+94:1 } }
+94:3 catch catch
+94:9 identifier Integer
+94:17 identifier e
+94:19 { {
+95:3 let let
+95:7 identifier y
+95:9 = =
+95:11 identifier e
+95:12 ; ;
+96:1 } }
+98:1 fun fun
+98:5 identifier maybeThrow
+98:15 ( (
+98:16 identifier t
+98:17 ) )
+98:19 { {
+99:3 if if
+99:6 ( (
+99:7 identifier t
+99:8 ) )
+99:10 { {
+100:5 throw throw
+100:11 string \22oops\22
+100:17 ; ;
+101:3 } }
+102:3 return return
+102:10 null null
+102:14 ; ;
+103:1 } }
+105:1 try try
+105:5 { {
+106:3 let let
+106:7 identifier r
+106:9 = =
+106:11 identifier maybeThrow
+106:21 ( (
+106:22 true true
+106:26 ) )
+106:27 ; ;
+107:1 } }
+107:3 catch catch
+107:9 identifier String
+107:16 identifier msg
+107:20 { {
+108:3 let let
+108:7 identifier m2
+108:10 = =
+108:12 identifier msg
+108:15 ; ;
+109:1 } }
+111:1 let let
+111:5 identifier loop
+111:10 = =
+111:12 integer 0 [0]
+111:13 ; ;
+112:1 for for
+112:5 ( (
+112:6 let let
+112:10 identifier i
+112:12 = =
+112:14 integer 0 [0]
+112:15 ; ;
+112:17 identifier i
+112:19 < <
+112:21 integer 5 [5]
+112:22 ; ;
+112:24 identifier i
+112:26 = =
+112:28 identifier i
+112:30 + +
+112:32 integer 1 [1]
+112:33 ) )
+112:35 { {
+113:3 if if
+113:6 ( (
+113:7 identifier i
+113:9 == ==
+113:12 integer 3 [3]
+113:13 ) )
+113:15 { {
+114:5 break break
+114:10 ; ;
+115:3 } }
+116:3 identifier loop
+116:8 = =
+116:10 identifier loop
+116:15 + +
+116:17 integer 1 [1]
+116:18 ; ;
+117:1 } }
+119:1 const const
+119:7 identifier FIXED
+119:13 = =
+119:15 integer 100 [100]
+119:18 ; ;
+120:1 let let
+120:5 identifier used
+120:10 = =
+120:12 identifier FIXED
+120:18 + +
+120:20 integer 1 [1]
+120:21 ; ;
+121:1 eof

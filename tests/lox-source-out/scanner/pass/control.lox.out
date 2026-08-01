@@ -1,0 +1,206 @@
+1:1 let let
+1:5 identifier flag
+1:10 = =
+1:12 true true
+1:16 ; ;
+2:1 if if
+2:4 ( (
+2:5 identifier flag
+2:9 ) )
+2:11 { {
+3:3 identifier flag
+3:8 = =
+3:10 false false
+3:15 ; ;
+4:1 } }
+4:3 else else
+4:8 { {
+5:3 identifier flag
+5:8 = =
+5:10 true true
+5:14 ; ;
+6:1 } }
+8:1 if if
+8:4 ( (
+8:5 identifier flag
+8:9 ) )
+8:11 { {
+9:3 identifier flag
+9:8 = =
+9:10 false false
+9:15 ; ;
+10:1 } }
+10:3 else else
+10:8 { {
+11:3 identifier flag
+11:8 = =
+11:10 true true
+11:14 ; ;
+12:1 } }
+14:1 let let
+14:5 identifier i
+14:7 = =
+14:9 integer 0 [0]
+14:10 ; ;
+15:1 while while
+15:7 ( (
+15:8 identifier i
+15:10 < <
+15:12 integer 10 [10]
+15:14 ) )
+15:16 { {
+16:3 if if
+16:6 ( (
+16:7 identifier i
+16:9 > >
+16:11 integer 3 [3]
+16:12 ) )
+16:14 { {
+17:5 break break
+17:10 ; ;
+18:3 } }
+19:3 identifier i
+19:5 = =
+19:7 identifier i
+19:9 + +
+19:11 integer 1 [1]
+19:12 ; ;
+20:1 } }
+22:1 for for
+22:5 ( (
+22:6 let let
+22:10 identifier j
+22:12 = =
+22:14 integer 0 [0]
+22:15 ; ;
+22:17 identifier j
+22:19 < <
+22:21 integer 3 [3]
+22:22 ; ;
+22:24 identifier j
+22:26 = =
+22:28 identifier j
+22:30 + +
+22:32 integer 1 [1]
+22:33 ) )
+22:35 { {
+23:1 } }
+25:1 let let
+25:5 identifier k
+25:7 = =
+25:9 integer 0 [0]
+25:10 ; ;
+26:1 for for
+26:5 ( (
+26:6 identifier k
+26:8 = =
+26:10 integer 0 [0]
+26:11 ; ;
+26:13 identifier k
+26:15 < <
+26:17 integer 3 [3]
+26:18 ; ;
+26:20 identifier k
+26:22 = =
+26:24 identifier k
+26:26 + +
+26:28 integer 1 [1]
+26:29 ) )
+26:31 { {
+27:1 } }
+29:1 for for
+29:5 ( (
+29:6 ; ;
+29:7 ; ;
+29:8 ) )
+29:10 { {
+30:3 break break
+30:8 ; ;
+31:1 } }
+33:1 for for
+33:5 ( (
+33:6 let let
+33:10 identifier m
+33:12 = =
+33:14 integer 0 [0]
+33:15 ; ;
+33:16 ; ;
+33:18 identifier m
+33:20 = =
+33:22 identifier m
+33:24 + +
+33:26 integer 1 [1]
+33:27 ) )
+33:29 { {
+34:3 if if
+34:6 ( (
+34:7 identifier m
+34:9 > >
+34:11 integer 2 [2]
+34:12 ) )
+34:14 { {
+35:5 break break
+35:10 ; ;
+36:3 } }
+37:1 } }
+39:1 for for
+39:5 ( (
+39:6 let let
+39:10 identifier n
+39:12 = =
+39:14 integer 0 [0]
+39:15 ; ;
+39:17 identifier n
+39:19 < <
+39:21 integer 3 [3]
+39:22 ; ;
+39:23 ) )
+39:25 { {
+40:3 identifier n
+40:5 = =
+40:7 identifier n
+40:9 + +
+40:11 integer 1 [1]
+40:12 ; ;
+41:1 } }
+43:1 for for
+43:5 ( (
+43:6 let let
+43:10 identifier p
+43:12 = =
+43:14 integer 0 [0]
+43:15 ; ;
+43:17 identifier p
+43:19 < <
+43:21 integer 3 [3]
+43:22 ; ;
+43:24 identifier p
+43:26 = =
+43:28 identifier p
+43:30 + +
+43:32 integer 1 [1]
+43:33 ) )
+43:35 { {
+44:3 for for
+44:7 ( (
+44:8 let let
+44:12 identifier q
+44:14 = =
+44:16 integer 0 [0]
+44:17 ; ;
+44:19 identifier q
+44:21 < <
+44:23 integer 3 [3]
+44:24 ; ;
+44:26 identifier q
+44:28 = =
+44:30 identifier q
+44:32 + +
+44:34 integer 1 [1]
+44:35 ) )
+44:37 { {
+45:5 break break
+45:10 ; ;
+46:3 } }
+47:1 } }
+48:1 eof

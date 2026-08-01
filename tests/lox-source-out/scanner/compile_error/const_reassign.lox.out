@@ -1,0 +1,10 @@
+1:1 const const
+1:7 identifier c
+1:9 = =
+1:11 integer 1 [1]
+1:12 ; ;
+2:1 identifier c
+2:3 = =
+2:5 integer 2 [2]
+2:6 ; ;
+3:1 eof

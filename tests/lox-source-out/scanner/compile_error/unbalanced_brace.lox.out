@@ -1,0 +1,11 @@
+1:1 fun fun
+1:5 identifier f
+1:6 ( (
+1:7 ) )
+1:9 { {
+2:5 let let
+2:9 identifier x
+2:11 = =
+2:13 integer 1 [1]
+2:14 ; ;
+3:1 eof

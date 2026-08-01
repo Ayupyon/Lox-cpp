@@ -1,0 +1,197 @@
+1:1 let let
+1:5 identifier lt
+1:8 = =
+1:10 integer 1 [1]
+1:12 < <
+1:14 integer 2 [2]
+1:15 ; ;
+2:1 let let
+2:5 identifier le
+2:8 = =
+2:10 integer 2 [2]
+2:12 <= <=
+2:15 integer 2 [2]
+2:16 ; ;
+3:1 let let
+3:5 identifier gt
+3:8 = =
+3:10 integer 3 [3]
+3:12 > >
+3:14 integer 2 [2]
+3:15 ; ;
+4:1 let let
+4:5 identifier ge
+4:8 = =
+4:10 integer 2 [2]
+4:12 >= >=
+4:15 integer 2 [2]
+4:16 ; ;
+6:1 let let
+6:5 identifier mix1
+6:10 = =
+6:12 integer 1 [1]
+6:14 < <
+6:16 float 2.5 [2.5]
+6:19 ; ;
+7:1 let let
+7:5 identifier mix2
+7:10 = =
+7:12 float 3.0 [3]
+7:16 > >
+7:18 integer 2 [2]
+7:19 ; ;
+8:1 let let
+8:5 identifier mix3
+8:10 = =
+8:12 float 2.5 [2.5]
+8:16 <= <=
+8:19 float 2.5 [2.5]
+8:22 ; ;
+9:1 let let
+9:5 identifier mix4
+9:10 = =
+9:12 float 1.0 [1]
+9:16 >= >=
+9:19 integer 1 [1]
+9:20 ; ;
+11:1 let let
+11:5 identifier eq_int_t
+11:14 = =
+11:16 integer 1 [1]
+11:18 == ==
+11:21 integer 1 [1]
+11:22 ; ;
+12:1 let let
+12:5 identifier eq_int_f
+12:14 = =
+12:16 integer 1 [1]
+12:18 == ==
+12:21 integer 2 [2]
+12:22 ; ;
+13:1 let let
+13:5 identifier eq_bool_t
+13:15 = =
+13:17 true true
+13:22 == ==
+13:25 true true
+13:29 ; ;
+14:1 let let
+14:5 identifier eq_bool_f
+14:15 = =
+14:17 true true
+14:22 == ==
+14:25 false false
+14:30 ; ;
+15:1 let let
+15:5 identifier eq_str_t
+15:14 = =
+15:16 string \22a\22
+15:20 == ==
+15:23 string \22a\22
+15:26 ; ;
+16:1 let let
+16:5 identifier eq_str_f
+16:14 = =
+16:16 string \22a\22
+16:20 == ==
+16:23 string \22b\22
+16:26 ; ;
+17:1 let let
+17:5 identifier eq_float_t
+17:16 = =
+17:18 float 1.5 [1.5]
+17:22 == ==
+17:25 float 1.5 [1.5]
+17:28 ; ;
+18:1 let let
+18:5 identifier eq_null_t
+18:15 = =
+18:17 null null
+18:22 == ==
+18:25 null null
+18:29 ; ;
+19:1 let let
+19:5 identifier ne_int_t
+19:14 = =
+19:16 integer 1 [1]
+19:18 != !=
+19:21 integer 2 [2]
+19:22 ; ;
+20:1 let let
+20:5 identifier ne_int_f
+20:14 = =
+20:16 integer 1 [1]
+20:18 != !=
+20:21 integer 1 [1]
+20:22 ; ;
+22:1 let let
+22:5 identifier cross_num_str
+22:19 = =
+22:21 integer 1 [1]
+22:23 == ==
+22:26 string \221\22
+22:29 ; ;
+23:1 let let
+23:5 identifier cross_int_float
+23:21 = =
+23:23 integer 1 [1]
+23:25 == ==
+23:28 float 1.0 [1]
+23:31 ; ;
+24:1 let let
+24:5 identifier cross_bool_int
+24:20 = =
+24:22 true true
+24:27 == ==
+24:30 integer 1 [1]
+24:31 ; ;
+26:1 let let
+26:5 identifier s1
+26:8 = =
+26:10 string \22abc\22
+26:15 ; ;
+27:1 let let
+27:5 identifier s2
+27:8 = =
+27:10 string \22abc\22
+27:15 ; ;
+28:1 let let
+28:5 identifier seq
+28:9 = =
+28:11 identifier s1
+28:14 == ==
+28:17 identifier s2
+28:19 ; ;
+30:1 class class
+30:7 identifier P
+30:9 { {
+30:10 } }
+31:1 let let
+31:5 identifier o1
+31:8 = =
+31:10 identifier P
+31:11 ( (
+31:12 ) )
+31:13 ; ;
+32:1 let let
+32:5 identifier o2
+32:8 = =
+32:10 identifier P
+32:11 ( (
+32:12 ) )
+32:13 ; ;
+33:1 let let
+33:5 identifier same_ref
+33:14 = =
+33:16 identifier o1
+33:19 == ==
+33:22 identifier o1
+33:24 ; ;
+34:1 let let
+34:5 identifier diff_ref
+34:14 = =
+34:16 identifier o1
+34:19 == ==
+34:22 identifier o2
+34:24 ; ;
+35:1 eof

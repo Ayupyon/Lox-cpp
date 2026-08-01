@@ -1,0 +1,3 @@
+tests/lox-source/compile_error/underscore_trailing.lox:1:9: error: underscore not allowed in numeric literal
+let x = 100_;
+        ^~~~

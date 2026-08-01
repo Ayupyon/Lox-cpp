@@ -1,0 +1,137 @@
+1:1 let let
+1:5 identifier hex1
+1:10 = =
+1:12 integer 0xFF [255]
+1:16 ; ;
+2:1 let let
+2:5 identifier hex2
+2:10 = =
+2:12 integer 0X2a [42]
+2:16 ; ;
+3:1 let let
+3:5 identifier hex3
+3:10 = =
+3:12 integer 0x0 [0]
+3:15 ; ;
+4:1 let let
+4:5 identifier hex_max
+4:13 = =
+4:15 integer 0x7FFFFFFFFFFFFFFF [9223372036854775807]
+4:33 ; ;
+6:1 let let
+6:5 identifier oct1
+6:10 = =
+6:12 integer 0o17 [15]
+6:16 ; ;
+7:1 let let
+7:5 identifier oct2
+7:10 = =
+7:12 integer 0O7 [7]
+7:15 ; ;
+8:1 let let
+8:5 identifier oct3
+8:10 = =
+8:12 integer 0o0 [0]
+8:15 ; ;
+10:1 let let
+10:5 identifier bin1
+10:10 = =
+10:12 integer 0b1010 [10]
+10:18 ; ;
+11:1 let let
+11:5 identifier bin2
+11:10 = =
+11:12 integer 0B11 [3]
+11:16 ; ;
+12:1 let let
+12:5 identifier bin3
+12:10 = =
+12:12 integer 0b0 [0]
+12:15 ; ;
+14:1 let let
+14:5 identifier exp1
+14:10 = =
+14:12 float 1e10 [1e+10]
+14:16 ; ;
+15:1 let let
+15:5 identifier exp2
+15:10 = =
+15:12 float 1E10 [1e+10]
+15:16 ; ;
+16:1 let let
+16:5 identifier exp3
+16:10 = =
+16:12 float 1.5e3 [1500]
+16:17 ; ;
+17:1 let let
+17:5 identifier exp4
+17:10 = =
+17:12 float 1.5e-3 [0.0015]
+17:18 ; ;
+18:1 let let
+18:5 identifier exp5
+18:10 = =
+18:12 float 1e+2 [100]
+18:16 ; ;
+19:1 let let
+19:5 identifier exp6
+19:10 = =
+19:12 float 2.5E-2 [0.025]
+19:18 ; ;
+20:1 let let
+20:5 identifier exp7
+20:10 = =
+20:12 float 1e0 [1]
+20:15 ; ;
+21:1 let let
+21:5 identifier exp8
+21:10 = =
+21:12 float 0.5e2 [50]
+21:17 ; ;
+23:1 let let
+23:5 identifier underflow
+23:15 = =
+23:17 float 1e-999 [0]
+23:23 ; ;
+25:1 let let
+25:5 identifier mix1
+25:10 = =
+25:12 integer 0xFF [255]
+25:17 + +
+25:19 integer 1 [1]
+25:20 ; ;
+26:1 let let
+26:5 identifier mix2
+26:10 = =
+26:12 integer 0b1010 [10]
+26:19 << <<
+26:22 integer 1 [1]
+26:23 ; ;
+27:1 let let
+27:5 identifier mix3
+27:10 = =
+27:12 integer 0o17 [15]
+27:17 * *
+27:19 integer 2 [2]
+27:20 ; ;
+28:1 let let
+28:5 identifier mix4
+28:10 = =
+28:12 float 1e2 [100]
+28:16 / /
+28:18 integer 2 [2]
+28:19 ; ;
+29:1 let let
+29:5 identifier mix5
+29:10 = =
+29:12 - -
+29:13 integer 0b1010 [10]
+29:19 ; ;
+30:1 let let
+30:5 identifier mix6
+30:10 = =
+30:12 integer 0xFF [255]
+30:17 / /
+30:19 integer 0o17 [15]
+30:23 ; ;
+31:1 eof

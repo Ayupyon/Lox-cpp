@@ -1,0 +1,11 @@
+1:1 let let
+1:5 identifier x
+1:7 = =
+1:9 integer 5 [5]
+1:10 ; ;
+2:1 identifier x
+2:2 [ [
+2:3 integer 0 [0]
+2:4 ] ]
+2:5 ; ;
+3:1 eof

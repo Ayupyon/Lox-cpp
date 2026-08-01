@@ -1,0 +1,9 @@
+1:1 let let
+1:5 identifier x
+1:7 = =
+1:9 ( (
+1:10 integer 1 [1]
+1:12 + +
+1:14 integer 2 [2]
+1:15 ; ;
+2:1 eof

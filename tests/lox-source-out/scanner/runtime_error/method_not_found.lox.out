@@ -1,0 +1,18 @@
+1:1 class class
+1:7 identifier A
+1:9 { {
+1:10 } }
+2:1 let let
+2:5 identifier a
+2:7 = =
+2:9 identifier A
+2:10 ( (
+2:11 ) )
+2:12 ; ;
+3:1 identifier a
+3:2 . .
+3:3 identifier missing
+3:10 ( (
+3:11 ) )
+3:12 ; ;
+4:1 eof

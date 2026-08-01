@@ -1,0 +1,431 @@
+1:1 let let
+1:5 identifier a
+1:7 = =
+1:9 [ [
+1:10 integer 10 [10]
+1:12 , ,
+1:14 integer 20 [20]
+1:16 , ,
+1:18 integer 30 [30]
+1:20 ] ]
+1:21 ; ;
+2:1 identifier a
+2:2 [ [
+2:3 integer 1 [1]
+2:4 ] ]
+2:6 = =
+2:8 identifier a
+2:9 [ [
+2:10 integer 0 [0]
+2:11 ] ]
+2:13 + +
+2:15 identifier a
+2:16 [ [
+2:17 integer 2 [2]
+2:18 ] ]
+2:19 ; ;
+3:1 let let
+3:5 identifier a0
+3:8 = =
+3:10 identifier a
+3:11 [ [
+3:12 integer 0 [0]
+3:13 ] ]
+3:14 ; ;
+4:1 let let
+4:5 identifier a1
+4:8 = =
+4:10 identifier a
+4:11 [ [
+4:12 integer 1 [1]
+4:13 ] ]
+4:14 ; ;
+5:1 let let
+5:5 identifier a2
+5:8 = =
+5:10 identifier a
+5:11 [ [
+5:12 integer 2 [2]
+5:13 ] ]
+5:14 ; ;
+7:1 let let
+7:5 identifier f
+7:7 = =
+7:9 [ [
+7:10 integer 1 [1]
+7:11 , ,
+7:13 integer 2 [2]
+7:14 ; ;
+7:16 integer 4 [4]
+7:17 ] ]
+7:18 ; ;
+8:1 let let
+8:5 identifier f0
+8:8 = =
+8:10 identifier f
+8:11 [ [
+8:12 integer 0 [0]
+8:13 ] ]
+8:14 ; ;
+9:1 let let
+9:5 identifier f1
+9:8 = =
+9:10 identifier f
+9:11 [ [
+9:12 integer 1 [1]
+9:13 ] ]
+9:14 ; ;
+10:1 let let
+10:5 identifier x
+10:7 = =
+10:9 identifier f
+10:10 [ [
+10:11 integer 2 [2]
+10:12 ] ]
+10:13 ; ;
+11:1 let let
+11:5 identifier y
+11:7 = =
+11:9 identifier f
+11:10 [ [
+11:11 integer 3 [3]
+11:12 ] ]
+11:13 ; ;
+13:1 let let
+13:5 identifier g
+13:7 = =
+13:9 [ [
+13:10 ; ;
+13:12 integer 3 [3]
+13:13 ] ]
+13:14 ; ;
+14:1 let let
+14:5 identifier g0
+14:8 = =
+14:10 identifier g
+14:11 [ [
+14:12 integer 0 [0]
+14:13 ] ]
+14:14 ; ;
+15:1 let let
+15:5 identifier g1
+15:8 = =
+15:10 identifier g
+15:11 [ [
+15:12 integer 1 [1]
+15:13 ] ]
+15:14 ; ;
+16:1 let let
+16:5 identifier g2
+16:8 = =
+16:10 identifier g
+16:11 [ [
+16:12 integer 2 [2]
+16:13 ] ]
+16:14 ; ;
+18:1 let let
+18:5 identifier empty
+18:11 = =
+18:13 [ [
+18:14 ] ]
+18:15 ; ;
+19:1 let let
+19:5 identifier m
+19:7 = =
+19:9 [ [
+19:10 integer 1 [1]
+19:11 , ,
+19:13 string \22a\22
+19:16 , ,
+19:18 true true
+19:22 , ,
+19:24 null null
+19:28 ] ]
+19:29 ; ;
+20:1 let let
+20:5 identifier m0
+20:8 = =
+20:10 identifier m
+20:11 [ [
+20:12 integer 0 [0]
+20:13 ] ]
+20:14 ; ;
+21:1 let let
+21:5 identifier m1
+21:8 = =
+21:10 identifier m
+21:11 [ [
+21:12 integer 1 [1]
+21:13 ] ]
+21:14 ; ;
+22:1 let let
+22:5 identifier m2
+22:8 = =
+22:10 identifier m
+22:11 [ [
+22:12 integer 2 [2]
+22:13 ] ]
+22:14 ; ;
+23:1 let let
+23:5 identifier m3
+23:8 = =
+23:10 identifier m
+23:11 [ [
+23:12 integer 3 [3]
+23:13 ] ]
+23:14 ; ;
+25:1 let let
+25:5 identifier n
+25:7 = =
+25:9 [ [
+25:10 [ [
+25:11 integer 1 [1]
+25:12 , ,
+25:14 integer 2 [2]
+25:15 ] ]
+25:16 , ,
+25:18 [ [
+25:19 integer 3 [3]
+25:20 , ,
+25:22 integer 4 [4]
+25:23 ] ]
+25:24 ] ]
+25:25 ; ;
+26:1 let let
+26:5 identifier n00
+26:9 = =
+26:11 identifier n
+26:12 [ [
+26:13 integer 0 [0]
+26:14 ] ]
+26:15 [ [
+26:16 integer 0 [0]
+26:17 ] ]
+26:18 ; ;
+27:1 let let
+27:5 identifier v
+27:7 = =
+27:9 identifier n
+27:10 [ [
+27:11 integer 0 [0]
+27:12 ] ]
+27:13 [ [
+27:14 integer 1 [1]
+27:15 ] ]
+27:16 ; ;
+28:1 let let
+28:5 identifier n10
+28:9 = =
+28:11 identifier n
+28:12 [ [
+28:13 integer 1 [1]
+28:14 ] ]
+28:15 [ [
+28:16 integer 0 [0]
+28:17 ] ]
+28:18 ; ;
+29:1 let let
+29:5 identifier n11
+29:9 = =
+29:11 identifier n
+29:12 [ [
+29:13 integer 1 [1]
+29:14 ] ]
+29:15 [ [
+29:16 integer 1 [1]
+29:17 ] ]
+29:18 ; ;
+31:1 let let
+31:5 identifier tail
+31:10 = =
+31:12 [ [
+31:13 integer 1 [1]
+31:14 , ,
+31:16 integer 2 [2]
+31:17 , ,
+31:18 ] ]
+31:19 ; ;
+32:1 let let
+32:5 identifier t0
+32:8 = =
+32:10 identifier tail
+32:14 [ [
+32:15 integer 0 [0]
+32:16 ] ]
+32:17 ; ;
+33:1 let let
+33:5 identifier t1
+33:8 = =
+33:10 identifier tail
+33:14 [ [
+33:15 integer 1 [1]
+33:16 ] ]
+33:17 ; ;
+35:1 let let
+35:5 identifier nested
+35:12 = =
+35:14 [ [
+35:15 [ [
+35:16 integer 1 [1]
+35:17 , ,
+35:19 integer 2 [2]
+35:20 ; ;
+35:22 integer 4 [4]
+35:23 ] ]
+35:24 , ,
+35:26 [ [
+35:27 ; ;
+35:29 integer 2 [2]
+35:30 ] ]
+35:31 ] ]
+35:32 ; ;
+36:1 let let
+36:5 identifier na0
+36:9 = =
+36:11 identifier nested
+36:17 [ [
+36:18 integer 0 [0]
+36:19 ] ]
+36:20 [ [
+36:21 integer 0 [0]
+36:22 ] ]
+36:23 ; ;
+37:1 let let
+37:5 identifier na1
+37:9 = =
+37:11 identifier nested
+37:17 [ [
+37:18 integer 0 [0]
+37:19 ] ]
+37:20 [ [
+37:21 integer 1 [1]
+37:22 ] ]
+37:23 ; ;
+38:1 let let
+38:5 identifier na2
+38:9 = =
+38:11 identifier nested
+38:17 [ [
+38:18 integer 0 [0]
+38:19 ] ]
+38:20 [ [
+38:21 integer 2 [2]
+38:22 ] ]
+38:23 ; ;
+39:1 let let
+39:5 identifier na3
+39:9 = =
+39:11 identifier nested
+39:17 [ [
+39:18 integer 0 [0]
+39:19 ] ]
+39:20 [ [
+39:21 integer 3 [3]
+39:22 ] ]
+39:23 ; ;
+40:1 let let
+40:5 identifier nb0
+40:9 = =
+40:11 identifier nested
+40:17 [ [
+40:18 integer 1 [1]
+40:19 ] ]
+40:20 [ [
+40:21 integer 0 [0]
+40:22 ] ]
+40:23 ; ;
+41:1 let let
+41:5 identifier nb1
+41:9 = =
+41:11 identifier nested
+41:17 [ [
+41:18 integer 1 [1]
+41:19 ] ]
+41:20 [ [
+41:21 integer 1 [1]
+41:22 ] ]
+41:23 ; ;
+43:1 let let
+43:5 identifier shared
+43:12 = =
+43:14 [ [
+43:15 integer 1 [1]
+43:16 , ,
+43:18 integer 2 [2]
+43:19 , ,
+43:21 integer 3 [3]
+43:22 ] ]
+43:23 ; ;
+44:1 let let
+44:5 identifier alias
+44:11 = =
+44:13 identifier shared
+44:19 ; ;
+45:1 identifier alias
+45:6 [ [
+45:7 integer 0 [0]
+45:8 ] ]
+45:10 = =
+45:12 integer 9 [9]
+45:13 ; ;
+46:1 let let
+46:5 identifier sh0
+46:9 = =
+46:11 identifier shared
+46:17 [ [
+46:18 integer 0 [0]
+46:19 ] ]
+46:20 ; ;
+48:1 let let
+48:5 identifier chained
+48:13 = =
+48:15 [ [
+48:16 integer 0 [0]
+48:17 , ,
+48:19 integer 0 [0]
+48:20 , ,
+48:22 integer 0 [0]
+48:23 ] ]
+48:24 ; ;
+49:1 identifier chained
+49:8 [ [
+49:9 integer 0 [0]
+49:10 ] ]
+49:12 = =
+49:14 identifier chained
+49:21 [ [
+49:22 integer 1 [1]
+49:23 ] ]
+49:25 = =
+49:27 identifier chained
+49:34 [ [
+49:35 integer 2 [2]
+49:36 ] ]
+49:38 = =
+49:40 integer 5 [5]
+49:41 ; ;
+50:1 let let
+50:5 identifier c0
+50:8 = =
+50:10 identifier chained
+50:17 [ [
+50:18 integer 0 [0]
+50:19 ] ]
+50:20 ; ;
+51:1 let let
+51:5 identifier c1
+51:8 = =
+51:10 identifier chained
+51:17 [ [
+51:18 integer 1 [1]
+51:19 ] ]
+51:20 ; ;
+52:1 let let
+52:5 identifier c2
+52:8 = =
+52:10 identifier chained
+52:17 [ [
+52:18 integer 2 [2]
+52:19 ] ]
+52:20 ; ;
+53:1 eof

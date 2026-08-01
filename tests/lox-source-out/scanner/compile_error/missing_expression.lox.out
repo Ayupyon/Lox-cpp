@@ -1,0 +1,5 @@
+1:1 let let
+1:5 identifier x
+1:7 = =
+1:9 ; ;
+2:1 eof

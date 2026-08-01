@@ -1,0 +1,6 @@
+1:1 let let
+1:5 identifier value
+1:11 = =
+1:13 integer 1 [1]
+1:14 ; ;
+2:1 eof

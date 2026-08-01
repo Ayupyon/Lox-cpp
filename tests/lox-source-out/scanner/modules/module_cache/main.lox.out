@@ -1,0 +1,18 @@
+1:1 import import
+1:8 string \22helper\22
+1:17 as as
+1:20 identifier h1
+1:22 ; ;
+1:24 import import
+1:31 string \22helper\22
+1:40 as as
+1:43 identifier h2
+1:45 ; ;
+1:47 let let
+1:51 identifier same
+1:56 = =
+1:58 identifier h1
+1:61 == ==
+1:64 identifier h2
+1:66 ; ;
+2:1 eof
