@@ -22,6 +22,8 @@ Lox-cpp is using C++20 standard.
 
 + All header files *MUST* be protected by `#ifndef ...` pattern, guard macro should start by `LOX_`
 
++ When need to choose container to hold data structures, refer to https://llvm.org/docs/ProgrammersManual.html
+
 ## Build
 
 + Generate cmake configuration files to `build` directory (If all `CMakeLists.txt`s are not modified and `build` exists, skip this step)：
