@@ -30,7 +30,7 @@ class Scanner {
   Scanner &operator=(Scanner &&) = default;
 
   // Scans the whole source and returns the token stream terminated by kEof,
-  // or a scanner::LexicalError accumulating every lexical problem found (the
+  // or a lox::scanner::LexicalError accumulating every lexical problem found (the
   // partial stream is discarded). Resets all scanning state first, so it is
   // idempotent and re-entrant.
   [[nodiscard]] auto Scan() -> llvm::Expected<llvm::SmallVector<Token, 0>>;

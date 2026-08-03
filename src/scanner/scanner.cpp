@@ -118,7 +118,7 @@ std::string CurrentSourceLine(llvm::StringRef source, std::size_t pos) {
 
 }  // namespace lox
 
-namespace scanner {
+namespace lox::scanner {
 
 char LexicalError::ID = 0;
 
@@ -152,7 +152,7 @@ void LexicalError::log(llvm::raw_ostream &os) const {
 
 std::error_code LexicalError::convertToErrorCode() const { return llvm::inconvertibleErrorCode(); }
 
-}  // namespace scanner
+}  // namespace lox::scanner
 
 namespace lox {
 

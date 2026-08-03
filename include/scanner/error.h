@@ -10,7 +10,7 @@
 #include "llvm/Support/Error.h"
 #include "llvm/Support/raw_ostream.h"
 
-namespace scanner {
+namespace lox::scanner {
 
 // Accumulated lexical diagnostics, propagated out-of-band through llvm::Error.
 // The scanner does not stop at the first problem: it resynchronizes at the
@@ -47,6 +47,6 @@ class LexicalError : public llvm::ErrorInfo<LexicalError> {
   std::vector<Entry> entries_;
 };
 
-}  // namespace scanner
+}  // namespace lox::scanner
 
 #endif  // LOX_SCANNER_ERROR_H_

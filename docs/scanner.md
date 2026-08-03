@@ -245,7 +245,7 @@ using TokenValue = std::variant<std::monostate, std::int64_t, double>;
 
 ### 15.1 已落地
 
-- `include/scanner/error.h`：`scanner::LexicalError`（guard `LOX_SCANNER_ERROR_H_`），累积 `Entry`（line/column/length/message/source_line）。`log()` 输出 `<filename>:<line>:<column>: error: <message>` + 源码行 + caret（`^` + `~`，run 长度按 `length`，超行尾截断），`is_displayed()` 时 `error:` 红色、caret 绿色；`convertToErrorCode()` 返回 `inconvertibleErrorCode()`。
+- `include/scanner/error.h`：`lox::scanner::LexicalError`（guard `LOX_SCANNER_ERROR_H_`），累积 `Entry`（line/column/length/message/source_line）。`log()` 输出 `<filename>:<line>:<column>: error: <message>` + 源码行 + caret（`^` + `~`，run 长度按 `length`，超行尾截断），`is_displayed()` 时 `error:` 红色、caret 绿色；`convertToErrorCode()` 返回 `inconvertibleErrorCode()`。
 - `include/scanner/scanner.h`：`lox::Scanner`（API 依 14.8，可移动不可拷贝）。
 - `src/scanner/scanner.cpp`：字符驱动状态机、关键字表（`llvm::StringMap<TokenType>` 静态局部，21 关键字）、构造辅助与字符分类器位于 `namespace lox` 内匿名命名空间（依 AGENTS.md；引用 `Token`/`TokenType` 需在 `lox` 作用域内）。
 - CMake：`src/CMakeLists.txt` 加 `lox_scanner` 静态库（链 `${llvm_libs}`），链接进 `lox-cpp`。

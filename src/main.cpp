@@ -56,7 +56,7 @@ int RunScanner(llvm::StringRef source, llvm::StringRef label) {
   llvm::Expected<llvm::SmallVector<lox::Token, 0>> tokens = scanner.Scan();
   if (!tokens) {
     llvm::handleAllErrors(std::move(tokens.takeError()),
-                          [](const scanner::LexicalError &error) { error.log(llvm::errs()); });
+                          [](const lox::scanner::LexicalError &error) { error.log(llvm::errs()); });
     return 1;
   }
 
