@@ -9,6 +9,9 @@
 #include "llvm/Support/MemoryBuffer.h"
 #include "llvm/Support/Process.h"
 #include "llvm/Support/raw_ostream.h"
+#include "parser/ast.h"
+#include "parser/error.h"
+#include "parser/parser.h"
 #include "scanner/error.h"
 #include "scanner/scanner.h"
 #include "scanner/token.h"
@@ -67,6 +70,30 @@ int RunScanner(llvm::StringRef source, llvm::StringRef label) {
   return 0;
 }
 
+// Scans the input buffer, parses the token stream, and prints the AST to
+// stdout. Returns 0 on success, 1 if the scanner or parser reported errors
+// (already printed to stderr).
+int RunParser(llvm::StringRef source, llvm::StringRef label) {
+  lox::Scanner scanner(source, label);
+  llvm::Expected<llvm::SmallVector<lox::Token, 0>> tokens = scanner.Scan();
+  if (!tokens) {
+    llvm::handleAllErrors(std::move(tokens.takeError()),
+                          [](const lox::scanner::LexicalError &error) { error.log(llvm::errs()); });
+    return 1;
+  }
+
+  lox::Parser parser(source, std::move(*tokens), label);
+  llvm::Expected<llvm::SmallVector<lox::StmtPtr, 0>> program = parser.Parse();
+  if (!program) {
+    llvm::handleAllErrors(std::move(program.takeError()),
+                          [](const lox::parser::SyntaxError &error) { error.log(llvm::errs()); });
+    return 1;
+  }
+
+  lox::Dump(*program, llvm::outs());
+  return 0;
+}
+
 // Interactive line loop: prints the prompt before each line, reads one line at
 // a time from stdin and hands it to handler. A non-zero handler result (e.g.
 // lexical errors on that line) does not stop the loop; EOF (Ctrl-D) ends the
@@ -109,7 +136,25 @@ int main(int argc, char **argv) {
     case Stage::kExecute:
       return InterpretMode();
     case Stage::kParser:
-      return UnimplementedStage("parser");
+      // No input file and a terminal behind stdin: interactive line-by-line
+      // parsing. A piped/redirected stdin keeps the batch path below.
+      if (InputFile.empty() && llvm::sys::Process::StandardInIsUserInput()) {
+        return RunInteractiveLoop([](llvm::StringRef line) { return RunParser(line, "<stdin>"); });
+      }
+      {
+        llvm::StringRef label;
+        llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> buffer = LoadInput(label);
+        if (!buffer) {
+          if (InputFile.empty()) {
+            llvm::errs() << "failed to read stdin: " << buffer.getError().message() << '\n';
+          } else {
+            llvm::errs() << "failed to open '" << label << "': " << buffer.getError().message()
+                         << '\n';
+          }
+          return 2;
+        }
+        return RunParser(buffer.get()->getBuffer(), label);
+      }
     case Stage::kBytecode:
       return UnimplementedStage("bytecode");
     case Stage::kScanner:

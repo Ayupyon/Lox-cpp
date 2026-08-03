@@ -13,7 +13,7 @@
 namespace lox {
 
 // 1-indexed source position of an AST node's leading token, mirroring the
-// line/column pair carried by scanner::Token. Used for diagnostics and for
+// line/column pair carried by lox::Token. Used for diagnostics and for
 // the Dump location prefix.
 struct SourceLocation {
   std::uint32_t line{};
