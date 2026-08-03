@@ -138,7 +138,7 @@ importDecl -> import STRING (as IDENTIFIER)? ";"
 
 ```
 statement -> exprStmt | forStmt | ifStmt
-          | returnStmt | whileStmt | tryStmt | breakStmt | block ;
+          | returnStmt | whileStmt | tryStmt | throwStmt | breakStmt | block ;
 
 exprStmt -> expression ";"
 
@@ -155,6 +155,8 @@ whileStmt  -> "while" "(" expression ")" block ;
 
 tryStmt -> "try" block ("catch" IDENTIFIER IDENTIFIER? block)+ ;
 
+throwStmt -> "throw" expression ";" ;
+
 breakStmt -> "break" ";" ;
 
 block      -> "{" declaration* "}" ;
@@ -164,6 +166,7 @@ block      -> "{" declaration* "}" ;
 - `block`：创建新的作用域，所有变量和常量均只在作用域内有效，在内层作用域定义的函数和类方法可以捕获外层的变量（闭包语义）
 - 控制流语句体均要求使用block包裹内层语句
 - try-catch语句指定捕获的类型（可选捕获对应的对象），多个catch子句按声明顺序依次匹配，第一个类型匹配的子句生效
+- `throwStmt`：抛出任意类型的值，沿调用栈向上传播直到被匹配的 `catch` 子句捕获；未捕获时传播到顶层并终止程序
 - `breakStmt`：跳出最近一层循环（`while` 或 `for`），在循环体外使用为编译时错误
 - `returnStmt`：从函数返回值，默认返回 `null`
 
