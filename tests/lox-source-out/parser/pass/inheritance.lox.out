@@ -1,0 +1,210 @@
+1:1 ClassStmt name=A
+  2:3 FunDeclStmt name=foo params=[]
+    2:9 BlockStmt
+      3:5 ReturnStmt
+        3:12 LiteralExpr Integer [1]
+  5:3 FunDeclStmt name=bar params=[]
+    5:9 BlockStmt
+      6:5 ReturnStmt
+        6:12 LiteralExpr Integer [10]
+10:1 ClassStmt name=B superclass=A
+  11:3 FunDeclStmt name=foo params=[]
+    11:9 BlockStmt
+      12:5 ReturnStmt
+        12:12 BinaryExpr Add
+          12:12 CallExpr
+            callee: 12:12 SuperExpr method=foo
+          12:26 LiteralExpr Integer [1]
+16:1 ClassStmt name=C superclass=B
+  17:3 FunDeclStmt name=foo params=[]
+    17:9 BlockStmt
+      18:5 ReturnStmt
+        18:12 BinaryExpr Add
+          18:12 CallExpr
+            callee: 18:12 SuperExpr method=foo
+          18:26 LiteralExpr Integer [1]
+22:1 VarDeclStmt name=a
+  22:9 CallExpr
+    callee: 22:9 VarExpr name=A
+23:1 VarDeclStmt name=af
+  23:10 CallExpr
+    callee: 23:10 GetExpr name=foo
+      23:10 VarExpr name=a
+24:1 VarDeclStmt name=ab
+  24:10 CallExpr
+    callee: 24:10 GetExpr name=bar
+      24:10 VarExpr name=a
+26:1 VarDeclStmt name=b
+  26:9 CallExpr
+    callee: 26:9 VarExpr name=B
+27:1 VarDeclStmt name=bf
+  27:10 CallExpr
+    callee: 27:10 GetExpr name=foo
+      27:10 VarExpr name=b
+28:1 VarDeclStmt name=bb
+  28:10 CallExpr
+    callee: 28:10 GetExpr name=bar
+      28:10 VarExpr name=b
+30:1 VarDeclStmt name=c
+  30:9 CallExpr
+    callee: 30:9 VarExpr name=C
+31:1 VarDeclStmt name=cf
+  31:10 CallExpr
+    callee: 31:10 GetExpr name=foo
+      31:10 VarExpr name=c
+32:1 VarDeclStmt name=cb
+  32:10 CallExpr
+    callee: 32:10 GetExpr name=bar
+      32:10 VarExpr name=c
+34:1 ClassStmt name=Base
+  35:3 FunDeclStmt name=init params=[]
+    35:10 BlockStmt
+      36:5 ExpressionStmt
+        36:5 SetExpr name=n
+          object: 36:5 ThisExpr
+          value: 36:14 LiteralExpr Integer [0]
+      37:5 ExpressionStmt
+        37:5 SetExpr name=tag
+          object: 37:5 ThisExpr
+          value: 37:16 LiteralExpr String \22base\22
+  39:3 FunDeclStmt name=getN params=[]
+    39:10 BlockStmt
+      40:5 ReturnStmt
+        40:12 GetExpr name=n
+          40:12 ThisExpr
+  42:3 FunDeclStmt name=getTag params=[]
+    42:12 BlockStmt
+      43:5 ReturnStmt
+        43:12 GetExpr name=tag
+          43:12 ThisExpr
+  45:3 FunDeclStmt name=bump params=[]
+    45:10 BlockStmt
+      46:5 ExpressionStmt
+        46:5 SetExpr name=n
+          object: 46:5 ThisExpr
+          value: 46:14 BinaryExpr Add
+            46:14 GetExpr name=n
+              46:14 ThisExpr
+            46:23 LiteralExpr Integer [1]
+50:1 ClassStmt name=Sub superclass=Base
+  51:3 FunDeclStmt name=init params=[]
+    51:10 BlockStmt
+      52:5 ExpressionStmt
+        52:5 CallExpr
+          callee: 52:5 SuperExpr method=init
+      53:5 ExpressionStmt
+        53:5 SetExpr name=n
+          object: 53:5 ThisExpr
+          value: 53:14 LiteralExpr Integer [1]
+      54:5 ExpressionStmt
+        54:5 SetExpr name=tag
+          object: 54:5 ThisExpr
+          value: 54:16 LiteralExpr String \22sub\22
+58:1 VarDeclStmt name=sub
+  58:11 CallExpr
+    callee: 58:11 VarExpr name=Sub
+59:1 VarDeclStmt name=sn
+  59:10 CallExpr
+    callee: 59:10 GetExpr name=getN
+      59:10 VarExpr name=sub
+60:1 VarDeclStmt name=st
+  60:10 CallExpr
+    callee: 60:10 GetExpr name=getTag
+      60:10 VarExpr name=sub
+62:1 ExpressionStmt
+  62:1 CallExpr
+    callee: 62:1 GetExpr name=bump
+      62:1 VarExpr name=sub
+63:1 VarDeclStmt name=sn2
+  63:11 CallExpr
+    callee: 63:11 GetExpr name=getN
+      63:11 VarExpr name=sub
+65:1 ClassStmt name=Root
+  66:3 FunDeclStmt name=value params=[]
+    66:11 BlockStmt
+      67:5 ReturnStmt
+        67:12 LiteralExpr Integer [100]
+71:1 ClassStmt name=Mid superclass=Root
+  72:3 FunDeclStmt name=value params=[]
+    72:11 BlockStmt
+      73:5 ReturnStmt
+        73:12 BinaryExpr Add
+          73:12 CallExpr
+            callee: 73:12 SuperExpr method=value
+          73:28 LiteralExpr Integer [10]
+77:1 ClassStmt name=Leaf superclass=Mid
+  78:3 FunDeclStmt name=value params=[]
+    78:11 BlockStmt
+      79:5 ReturnStmt
+        79:12 BinaryExpr Add
+          79:12 CallExpr
+            callee: 79:12 SuperExpr method=value
+          79:28 LiteralExpr Integer [1]
+83:1 VarDeclStmt name=leaf
+  83:12 CallExpr
+    callee: 83:12 VarExpr name=Leaf
+84:1 VarDeclStmt name=lv
+  84:10 CallExpr
+    callee: 84:10 GetExpr name=value
+      84:10 VarExpr name=leaf
+86:1 ClassStmt name=GrandBase
+  87:3 FunDeclStmt name=init params=[base]
+    87:14 BlockStmt
+      88:5 ExpressionStmt
+        88:5 SetExpr name=base
+          object: 88:5 ThisExpr
+          value: 88:17 VarExpr name=base
+  90:3 FunDeclStmt name=total params=[]
+    90:11 BlockStmt
+      91:5 ReturnStmt
+        91:12 GetExpr name=base
+          91:12 ThisExpr
+95:1 ClassStmt name=GrandMid superclass=GrandBase
+  96:3 FunDeclStmt name=init params=[base, mid]
+    96:19 BlockStmt
+      97:5 ExpressionStmt
+        97:5 CallExpr
+          callee: 97:5 SuperExpr method=init
+          argument: 97:16 VarExpr name=base
+      98:5 ExpressionStmt
+        98:5 SetExpr name=mid
+          object: 98:5 ThisExpr
+          value: 98:16 VarExpr name=mid
+  100:3 FunDeclStmt name=total params=[]
+    100:11 BlockStmt
+      101:5 ReturnStmt
+        101:12 BinaryExpr Add
+          101:12 CallExpr
+            callee: 101:12 SuperExpr method=total
+          101:28 GetExpr name=mid
+            101:28 ThisExpr
+105:1 ClassStmt name=GrandLeaf superclass=GrandMid
+  106:3 FunDeclStmt name=init params=[base, mid, leaf]
+    106:25 BlockStmt
+      107:5 ExpressionStmt
+        107:5 CallExpr
+          callee: 107:5 SuperExpr method=init
+          argument: 107:16 VarExpr name=base
+          argument: 107:22 VarExpr name=mid
+      108:5 ExpressionStmt
+        108:5 SetExpr name=leaf
+          object: 108:5 ThisExpr
+          value: 108:17 VarExpr name=leaf
+  110:3 FunDeclStmt name=total params=[]
+    110:11 BlockStmt
+      111:5 ReturnStmt
+        111:12 BinaryExpr Add
+          111:12 CallExpr
+            callee: 111:12 SuperExpr method=total
+          111:28 GetExpr name=leaf
+            111:28 ThisExpr
+115:1 VarDeclStmt name=gl
+  115:10 CallExpr
+    callee: 115:10 VarExpr name=GrandLeaf
+    argument: 115:20 LiteralExpr Integer [1]
+    argument: 115:23 LiteralExpr Integer [2]
+    argument: 115:26 LiteralExpr Integer [3]
+116:1 VarDeclStmt name=glt
+  116:11 CallExpr
+    callee: 116:11 GetExpr name=total
+      116:11 VarExpr name=gl

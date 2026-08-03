@@ -1,0 +1,4 @@
+1:1 ExpressionStmt
+  1:1 BinaryExpr ShiftLeft
+    1:1 LiteralExpr Integer [1]
+    1:6 LiteralExpr Float [2]

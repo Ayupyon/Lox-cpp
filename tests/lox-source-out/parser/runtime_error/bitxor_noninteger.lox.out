@@ -1,0 +1,4 @@
+1:1 ExpressionStmt
+  1:1 BinaryExpr BitXor
+    1:1 LiteralExpr Integer [1]
+    1:5 LiteralExpr Float [2.5]

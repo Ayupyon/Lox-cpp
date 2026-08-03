@@ -1,0 +1,6 @@
+1:1 ExpressionStmt
+  1:1 ListExpr
+    element: 1:2 LiteralExpr Integer [1]
+    element: 1:5 LiteralExpr Integer [2]
+    size: 1:8 UnaryExpr Negate
+      1:9 LiteralExpr Integer [1]

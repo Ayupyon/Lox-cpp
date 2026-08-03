@@ -1,0 +1,69 @@
+1:1 FunDeclStmt name=add params=[a, b]
+  1:15 BlockStmt
+    2:3 ReturnStmt
+      2:10 BinaryExpr Add
+        2:10 VarExpr name=a
+        2:14 VarExpr name=b
+5:1 VarDeclStmt name=sum
+  5:11 CallExpr
+    callee: 5:11 VarExpr name=add
+    argument: 5:15 LiteralExpr Integer [1]
+    argument: 5:18 LiteralExpr Integer [2]
+7:1 FunDeclStmt name=nothing params=[]
+  7:15 BlockStmt
+    8:3 ReturnStmt
+11:1 VarDeclStmt name=r1
+  11:10 CallExpr
+    callee: 11:10 VarExpr name=nothing
+13:1 FunDeclStmt name=implicit params=[]
+  13:16 BlockStmt
+16:1 VarDeclStmt name=r2
+  16:10 CallExpr
+    callee: 16:10 VarExpr name=implicit
+18:1 VarDeclStmt name=g
+  18:9 VarExpr name=add
+19:1 VarDeclStmt name=sum2
+  19:12 CallExpr
+    callee: 19:12 VarExpr name=g
+    argument: 19:14 LiteralExpr Integer [3]
+    argument: 19:17 LiteralExpr Integer [4]
+21:1 FunDeclStmt name=apply params=[f, x]
+  21:17 BlockStmt
+    22:3 ReturnStmt
+      22:10 CallExpr
+        callee: 22:10 VarExpr name=f
+        argument: 22:12 VarExpr name=x
+25:1 FunDeclStmt name=inc params=[n]
+  25:12 BlockStmt
+    26:3 ReturnStmt
+      26:10 BinaryExpr Add
+        26:10 VarExpr name=n
+        26:14 LiteralExpr Integer [1]
+29:1 VarDeclStmt name=applied
+  29:15 CallExpr
+    callee: 29:15 VarExpr name=apply
+    argument: 29:21 VarExpr name=inc
+    argument: 29:26 LiteralExpr Integer [5]
+31:1 FunDeclStmt name=mk params=[]
+  31:10 BlockStmt
+    32:3 FunDeclStmt name=inner params=[]
+      32:15 BlockStmt
+        33:5 ReturnStmt
+          33:12 LiteralExpr Integer [1]
+    35:3 ReturnStmt
+      35:10 VarExpr name=inner
+38:1 VarDeclStmt name=fn
+  38:10 CallExpr
+    callee: 38:10 VarExpr name=mk
+39:1 VarDeclStmt name=val
+  39:11 CallExpr
+    callee: 39:11 VarExpr name=fn
+41:1 FunDeclStmt name=two params=[a, b]
+  41:15 BlockStmt
+    42:3 ReturnStmt
+      42:10 VarExpr name=a
+45:1 VarDeclStmt name=t
+  45:9 CallExpr
+    callee: 45:9 VarExpr name=two
+    argument: 45:13 LiteralExpr Integer [10]
+    argument: 45:17 LiteralExpr Integer [20]

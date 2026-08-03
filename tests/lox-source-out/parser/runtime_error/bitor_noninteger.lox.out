@@ -1,0 +1,4 @@
+1:1 ExpressionStmt
+  1:1 BinaryExpr BitOr
+    1:1 LiteralExpr Integer [1]
+    1:5 LiteralExpr String \22x\22

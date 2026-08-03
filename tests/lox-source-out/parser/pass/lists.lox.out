@@ -1,0 +1,220 @@
+1:1 VarDeclStmt name=a
+  1:9 ListExpr
+    element: 1:10 LiteralExpr Integer [10]
+    element: 1:14 LiteralExpr Integer [20]
+    element: 1:18 LiteralExpr Integer [30]
+2:1 ExpressionStmt
+  2:1 SetIndexExpr
+    object: 2:1 VarExpr name=a
+    index: 2:3 LiteralExpr Integer [1]
+    value: 2:8 BinaryExpr Add
+      2:8 SubscriptExpr
+        object: 2:8 VarExpr name=a
+        index: 2:10 LiteralExpr Integer [0]
+      2:15 SubscriptExpr
+        object: 2:15 VarExpr name=a
+        index: 2:17 LiteralExpr Integer [2]
+3:1 VarDeclStmt name=a0
+  3:10 SubscriptExpr
+    object: 3:10 VarExpr name=a
+    index: 3:12 LiteralExpr Integer [0]
+4:1 VarDeclStmt name=a1
+  4:10 SubscriptExpr
+    object: 4:10 VarExpr name=a
+    index: 4:12 LiteralExpr Integer [1]
+5:1 VarDeclStmt name=a2
+  5:10 SubscriptExpr
+    object: 5:10 VarExpr name=a
+    index: 5:12 LiteralExpr Integer [2]
+7:1 VarDeclStmt name=f
+  7:9 ListExpr
+    element: 7:10 LiteralExpr Integer [1]
+    element: 7:13 LiteralExpr Integer [2]
+    size: 7:16 LiteralExpr Integer [4]
+8:1 VarDeclStmt name=f0
+  8:10 SubscriptExpr
+    object: 8:10 VarExpr name=f
+    index: 8:12 LiteralExpr Integer [0]
+9:1 VarDeclStmt name=f1
+  9:10 SubscriptExpr
+    object: 9:10 VarExpr name=f
+    index: 9:12 LiteralExpr Integer [1]
+10:1 VarDeclStmt name=x
+  10:9 SubscriptExpr
+    object: 10:9 VarExpr name=f
+    index: 10:11 LiteralExpr Integer [2]
+11:1 VarDeclStmt name=y
+  11:9 SubscriptExpr
+    object: 11:9 VarExpr name=f
+    index: 11:11 LiteralExpr Integer [3]
+13:1 VarDeclStmt name=g
+  13:9 ListExpr
+    size: 13:12 LiteralExpr Integer [3]
+14:1 VarDeclStmt name=g0
+  14:10 SubscriptExpr
+    object: 14:10 VarExpr name=g
+    index: 14:12 LiteralExpr Integer [0]
+15:1 VarDeclStmt name=g1
+  15:10 SubscriptExpr
+    object: 15:10 VarExpr name=g
+    index: 15:12 LiteralExpr Integer [1]
+16:1 VarDeclStmt name=g2
+  16:10 SubscriptExpr
+    object: 16:10 VarExpr name=g
+    index: 16:12 LiteralExpr Integer [2]
+18:1 VarDeclStmt name=empty
+  18:13 ListExpr
+19:1 VarDeclStmt name=m
+  19:9 ListExpr
+    element: 19:10 LiteralExpr Integer [1]
+    element: 19:13 LiteralExpr String \22a\22
+    element: 19:18 LiteralExpr True
+    element: 19:24 LiteralExpr Null
+20:1 VarDeclStmt name=m0
+  20:10 SubscriptExpr
+    object: 20:10 VarExpr name=m
+    index: 20:12 LiteralExpr Integer [0]
+21:1 VarDeclStmt name=m1
+  21:10 SubscriptExpr
+    object: 21:10 VarExpr name=m
+    index: 21:12 LiteralExpr Integer [1]
+22:1 VarDeclStmt name=m2
+  22:10 SubscriptExpr
+    object: 22:10 VarExpr name=m
+    index: 22:12 LiteralExpr Integer [2]
+23:1 VarDeclStmt name=m3
+  23:10 SubscriptExpr
+    object: 23:10 VarExpr name=m
+    index: 23:12 LiteralExpr Integer [3]
+25:1 VarDeclStmt name=n
+  25:9 ListExpr
+    element: 25:10 ListExpr
+      element: 25:11 LiteralExpr Integer [1]
+      element: 25:14 LiteralExpr Integer [2]
+    element: 25:18 ListExpr
+      element: 25:19 LiteralExpr Integer [3]
+      element: 25:22 LiteralExpr Integer [4]
+26:1 VarDeclStmt name=n00
+  26:11 SubscriptExpr
+    object: 26:11 SubscriptExpr
+      object: 26:11 VarExpr name=n
+      index: 26:13 LiteralExpr Integer [0]
+    index: 26:16 LiteralExpr Integer [0]
+27:1 VarDeclStmt name=v
+  27:9 SubscriptExpr
+    object: 27:9 SubscriptExpr
+      object: 27:9 VarExpr name=n
+      index: 27:11 LiteralExpr Integer [0]
+    index: 27:14 LiteralExpr Integer [1]
+28:1 VarDeclStmt name=n10
+  28:11 SubscriptExpr
+    object: 28:11 SubscriptExpr
+      object: 28:11 VarExpr name=n
+      index: 28:13 LiteralExpr Integer [1]
+    index: 28:16 LiteralExpr Integer [0]
+29:1 VarDeclStmt name=n11
+  29:11 SubscriptExpr
+    object: 29:11 SubscriptExpr
+      object: 29:11 VarExpr name=n
+      index: 29:13 LiteralExpr Integer [1]
+    index: 29:16 LiteralExpr Integer [1]
+31:1 VarDeclStmt name=tail
+  31:12 ListExpr
+    element: 31:13 LiteralExpr Integer [1]
+    element: 31:16 LiteralExpr Integer [2]
+32:1 VarDeclStmt name=t0
+  32:10 SubscriptExpr
+    object: 32:10 VarExpr name=tail
+    index: 32:15 LiteralExpr Integer [0]
+33:1 VarDeclStmt name=t1
+  33:10 SubscriptExpr
+    object: 33:10 VarExpr name=tail
+    index: 33:15 LiteralExpr Integer [1]
+35:1 VarDeclStmt name=nested
+  35:14 ListExpr
+    element: 35:15 ListExpr
+      element: 35:16 LiteralExpr Integer [1]
+      element: 35:19 LiteralExpr Integer [2]
+      size: 35:22 LiteralExpr Integer [4]
+    element: 35:26 ListExpr
+      size: 35:29 LiteralExpr Integer [2]
+36:1 VarDeclStmt name=na0
+  36:11 SubscriptExpr
+    object: 36:11 SubscriptExpr
+      object: 36:11 VarExpr name=nested
+      index: 36:18 LiteralExpr Integer [0]
+    index: 36:21 LiteralExpr Integer [0]
+37:1 VarDeclStmt name=na1
+  37:11 SubscriptExpr
+    object: 37:11 SubscriptExpr
+      object: 37:11 VarExpr name=nested
+      index: 37:18 LiteralExpr Integer [0]
+    index: 37:21 LiteralExpr Integer [1]
+38:1 VarDeclStmt name=na2
+  38:11 SubscriptExpr
+    object: 38:11 SubscriptExpr
+      object: 38:11 VarExpr name=nested
+      index: 38:18 LiteralExpr Integer [0]
+    index: 38:21 LiteralExpr Integer [2]
+39:1 VarDeclStmt name=na3
+  39:11 SubscriptExpr
+    object: 39:11 SubscriptExpr
+      object: 39:11 VarExpr name=nested
+      index: 39:18 LiteralExpr Integer [0]
+    index: 39:21 LiteralExpr Integer [3]
+40:1 VarDeclStmt name=nb0
+  40:11 SubscriptExpr
+    object: 40:11 SubscriptExpr
+      object: 40:11 VarExpr name=nested
+      index: 40:18 LiteralExpr Integer [1]
+    index: 40:21 LiteralExpr Integer [0]
+41:1 VarDeclStmt name=nb1
+  41:11 SubscriptExpr
+    object: 41:11 SubscriptExpr
+      object: 41:11 VarExpr name=nested
+      index: 41:18 LiteralExpr Integer [1]
+    index: 41:21 LiteralExpr Integer [1]
+43:1 VarDeclStmt name=shared
+  43:14 ListExpr
+    element: 43:15 LiteralExpr Integer [1]
+    element: 43:18 LiteralExpr Integer [2]
+    element: 43:21 LiteralExpr Integer [3]
+44:1 VarDeclStmt name=alias
+  44:13 VarExpr name=shared
+45:1 ExpressionStmt
+  45:1 SetIndexExpr
+    object: 45:1 VarExpr name=alias
+    index: 45:7 LiteralExpr Integer [0]
+    value: 45:12 LiteralExpr Integer [9]
+46:1 VarDeclStmt name=sh0
+  46:11 SubscriptExpr
+    object: 46:11 VarExpr name=shared
+    index: 46:18 LiteralExpr Integer [0]
+48:1 VarDeclStmt name=chained
+  48:15 ListExpr
+    element: 48:16 LiteralExpr Integer [0]
+    element: 48:19 LiteralExpr Integer [0]
+    element: 48:22 LiteralExpr Integer [0]
+49:1 ExpressionStmt
+  49:1 SetIndexExpr
+    object: 49:1 VarExpr name=chained
+    index: 49:9 LiteralExpr Integer [0]
+    value: 49:14 SetIndexExpr
+      object: 49:14 VarExpr name=chained
+      index: 49:22 LiteralExpr Integer [1]
+      value: 49:27 SetIndexExpr
+        object: 49:27 VarExpr name=chained
+        index: 49:35 LiteralExpr Integer [2]
+        value: 49:40 LiteralExpr Integer [5]
+50:1 VarDeclStmt name=c0
+  50:10 SubscriptExpr
+    object: 50:10 VarExpr name=chained
+    index: 50:18 LiteralExpr Integer [0]
+51:1 VarDeclStmt name=c1
+  51:10 SubscriptExpr
+    object: 51:10 VarExpr name=chained
+    index: 51:18 LiteralExpr Integer [1]
+52:1 VarDeclStmt name=c2
+  52:10 SubscriptExpr
+    object: 52:10 VarExpr name=chained
+    index: 52:18 LiteralExpr Integer [2]

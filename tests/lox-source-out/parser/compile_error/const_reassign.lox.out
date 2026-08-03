@@ -1,0 +1,5 @@
+1:1 ConstDeclStmt name=c
+  1:11 LiteralExpr Integer [1]
+2:1 ExpressionStmt
+  2:1 AssignExpr name=c
+    2:5 LiteralExpr Integer [2]

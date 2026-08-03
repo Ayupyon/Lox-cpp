@@ -1,0 +1,8 @@
+1:1 VarDeclStmt name=a
+  1:9 ListExpr
+    element: 1:10 LiteralExpr Integer [1]
+    element: 1:13 LiteralExpr Integer [2]
+2:1 ExpressionStmt
+  2:1 SubscriptExpr
+    object: 2:1 VarExpr name=a
+    index: 2:3 LiteralExpr Integer [5]

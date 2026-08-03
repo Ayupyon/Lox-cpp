@@ -1,0 +1,87 @@
+1:1 VarDeclStmt name=i
+  1:9 LiteralExpr Integer [42]
+2:1 VarDeclStmt name=z
+  2:9 LiteralExpr Integer [0]
+3:1 VarDeclStmt name=f
+  3:9 LiteralExpr Float [3.14]
+4:1 VarDeclStmt name=half
+  4:12 LiteralExpr Float [0.5]
+5:1 VarDeclStmt name=two
+  5:11 LiteralExpr Float [2]
+6:1 VarDeclStmt name=bt
+  6:10 LiteralExpr True
+7:1 VarDeclStmt name=bf
+  7:10 LiteralExpr False
+8:1 VarDeclStmt name=n
+  8:9 LiteralExpr Null
+9:1 VarDeclStmt name=s
+  9:9 LiteralExpr String \22hello\22
+11:1 VarDeclStmt name=empty
+  11:13 ListExpr
+12:1 VarDeclStmt name=three
+  12:13 ListExpr
+    element: 12:14 LiteralExpr Integer [1]
+    element: 12:17 LiteralExpr Integer [2]
+    element: 12:20 LiteralExpr Integer [3]
+13:1 VarDeclStmt name=filled
+  13:14 ListExpr
+    element: 13:15 LiteralExpr Integer [1]
+    element: 13:18 LiteralExpr Integer [2]
+    size: 13:21 LiteralExpr Integer [5]
+14:1 VarDeclStmt name=trunc
+  14:13 ListExpr
+    element: 14:14 LiteralExpr Integer [1]
+    element: 14:17 LiteralExpr Integer [2]
+    element: 14:20 LiteralExpr Integer [3]
+    size: 14:23 LiteralExpr Integer [2]
+15:1 VarDeclStmt name=nulls
+  15:13 ListExpr
+    size: 15:16 LiteralExpr Integer [3]
+16:1 VarDeclStmt name=trail
+  16:13 ListExpr
+    element: 16:14 LiteralExpr Integer [1]
+    element: 16:17 LiteralExpr Integer [2]
+18:1 VarDeclStmt name=t0
+  18:10 SubscriptExpr
+    object: 18:10 VarExpr name=three
+    index: 18:16 LiteralExpr Integer [0]
+19:1 VarDeclStmt name=t1
+  19:10 SubscriptExpr
+    object: 19:10 VarExpr name=three
+    index: 19:16 LiteralExpr Integer [1]
+20:1 VarDeclStmt name=t2
+  20:10 SubscriptExpr
+    object: 20:10 VarExpr name=three
+    index: 20:16 LiteralExpr Integer [2]
+22:1 VarDeclStmt name=f1
+  22:10 SubscriptExpr
+    object: 22:10 VarExpr name=filled
+    index: 22:17 LiteralExpr Integer [1]
+23:1 VarDeclStmt name=f4
+  23:10 SubscriptExpr
+    object: 23:10 VarExpr name=filled
+    index: 23:17 LiteralExpr Integer [4]
+25:1 VarDeclStmt name=tr0
+  25:11 SubscriptExpr
+    object: 25:11 VarExpr name=trunc
+    index: 25:17 LiteralExpr Integer [0]
+26:1 VarDeclStmt name=tr1
+  26:11 SubscriptExpr
+    object: 26:11 VarExpr name=trunc
+    index: 26:17 LiteralExpr Integer [1]
+28:1 VarDeclStmt name=n0
+  28:10 SubscriptExpr
+    object: 28:10 VarExpr name=nulls
+    index: 28:16 LiteralExpr Integer [0]
+29:1 VarDeclStmt name=n2
+  29:10 SubscriptExpr
+    object: 29:10 VarExpr name=nulls
+    index: 29:16 LiteralExpr Integer [2]
+31:1 VarDeclStmt name=ta
+  31:10 SubscriptExpr
+    object: 31:10 VarExpr name=trail
+    index: 31:16 LiteralExpr Integer [0]
+32:1 VarDeclStmt name=tb
+  32:10 SubscriptExpr
+    object: 32:10 VarExpr name=trail
+    index: 32:16 LiteralExpr Integer [1]

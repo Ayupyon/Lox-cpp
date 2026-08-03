@@ -1,0 +1,13 @@
+1:1 ClassStmt name=A
+  1:11 FunDeclStmt name=foo params=[]
+    1:17 BlockStmt
+      1:19 ExpressionStmt
+        1:19 CallExpr
+          callee: 1:19 SuperExpr method=bar
+2:1 VarDeclStmt name=a
+  2:9 CallExpr
+    callee: 2:9 VarExpr name=A
+3:1 ExpressionStmt
+  3:1 CallExpr
+    callee: 3:1 GetExpr name=foo
+      3:1 VarExpr name=a

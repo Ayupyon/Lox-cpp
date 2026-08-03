@@ -1,0 +1,170 @@
+1:1 ClassStmt name=Point
+  2:3 FunDeclStmt name=init params=[x, y]
+    2:14 BlockStmt
+      3:5 ExpressionStmt
+        3:5 SetExpr name=x
+          object: 3:5 ThisExpr
+          value: 3:14 VarExpr name=x
+      4:5 ExpressionStmt
+        4:5 SetExpr name=y
+          object: 4:5 ThisExpr
+          value: 4:14 VarExpr name=y
+  6:3 FunDeclStmt name=getX params=[]
+    6:10 BlockStmt
+      7:5 ReturnStmt
+        7:12 GetExpr name=x
+          7:12 ThisExpr
+  9:3 FunDeclStmt name=getY params=[]
+    9:10 BlockStmt
+      10:5 ReturnStmt
+        10:12 GetExpr name=y
+          10:12 ThisExpr
+  12:3 FunDeclStmt name=setX params=[v]
+    12:11 BlockStmt
+      13:5 ExpressionStmt
+        13:5 SetExpr name=x
+          object: 13:5 ThisExpr
+          value: 13:14 VarExpr name=v
+  15:3 FunDeclStmt name=setY params=[v]
+    15:11 BlockStmt
+      16:5 ExpressionStmt
+        16:5 SetExpr name=y
+          object: 16:5 ThisExpr
+          value: 16:14 VarExpr name=v
+  18:3 FunDeclStmt name=sum params=[]
+    18:9 BlockStmt
+      19:5 ReturnStmt
+        19:12 BinaryExpr Add
+          19:12 GetExpr name=x
+            19:12 ThisExpr
+          19:21 GetExpr name=y
+            19:21 ThisExpr
+  21:3 FunDeclStmt name=doubled params=[]
+    21:13 BlockStmt
+      22:5 ReturnStmt
+        22:12 BinaryExpr Multiply
+          22:12 CallExpr
+            callee: 22:12 GetExpr name=sum
+              22:12 ThisExpr
+          22:25 LiteralExpr Integer [2]
+26:1 VarDeclStmt name=p
+  26:9 CallExpr
+    callee: 26:9 VarExpr name=Point
+    argument: 26:15 LiteralExpr Integer [1]
+    argument: 26:18 LiteralExpr Integer [2]
+27:1 VarDeclStmt name=px
+  27:10 CallExpr
+    callee: 27:10 GetExpr name=getX
+      27:10 VarExpr name=p
+28:1 VarDeclStmt name=py
+  28:10 CallExpr
+    callee: 28:10 GetExpr name=getY
+      28:10 VarExpr name=p
+29:1 VarDeclStmt name=s
+  29:9 CallExpr
+    callee: 29:9 GetExpr name=sum
+      29:9 VarExpr name=p
+30:1 VarDeclStmt name=d
+  30:9 CallExpr
+    callee: 30:9 GetExpr name=doubled
+      30:9 VarExpr name=p
+32:1 ExpressionStmt
+  32:1 SetExpr name=x
+    object: 32:1 VarExpr name=p
+    value: 32:7 LiteralExpr Integer [9]
+33:1 VarDeclStmt name=px2
+  33:11 CallExpr
+    callee: 33:11 GetExpr name=getX
+      33:11 VarExpr name=p
+35:1 ExpressionStmt
+  35:1 CallExpr
+    callee: 35:1 GetExpr name=setX
+      35:1 VarExpr name=p
+    argument: 35:8 LiteralExpr Integer [3]
+36:1 ExpressionStmt
+  36:1 CallExpr
+    callee: 36:1 GetExpr name=setY
+      36:1 VarExpr name=p
+    argument: 36:8 LiteralExpr Integer [4]
+37:1 VarDeclStmt name=px3
+  37:11 CallExpr
+    callee: 37:11 GetExpr name=getX
+      37:11 VarExpr name=p
+38:1 VarDeclStmt name=py3
+  38:11 CallExpr
+    callee: 38:11 GetExpr name=getY
+      38:11 VarExpr name=p
+39:1 VarDeclStmt name=psum
+  39:12 CallExpr
+    callee: 39:12 GetExpr name=sum
+      39:12 VarExpr name=p
+40:1 VarDeclStmt name=pdoubled
+  40:16 CallExpr
+    callee: 40:16 GetExpr name=doubled
+      40:16 VarExpr name=p
+42:1 VarDeclStmt name=p2
+  42:10 CallExpr
+    callee: 42:10 VarExpr name=Point
+    argument: 42:16 LiteralExpr Integer [10]
+    argument: 42:20 LiteralExpr Integer [20]
+43:1 VarDeclStmt name=p2sum
+  43:13 CallExpr
+    callee: 43:13 GetExpr name=sum
+      43:13 VarExpr name=p2
+45:1 ClassStmt name=Box
+  46:3 FunDeclStmt name=init params=[v]
+    46:11 BlockStmt
+      47:5 ExpressionStmt
+        47:5 SetExpr name=v
+          object: 47:5 ThisExpr
+          value: 47:14 VarExpr name=v
+  49:3 FunDeclStmt name=__getitem__ params=[i]
+    49:18 BlockStmt
+      50:5 ReturnStmt
+        50:12 GetExpr name=v
+          50:12 ThisExpr
+  52:3 FunDeclStmt name=__setitem__ params=[i, v]
+    52:21 BlockStmt
+      53:5 ExpressionStmt
+        53:5 SetExpr name=v
+          object: 53:5 ThisExpr
+          value: 53:14 VarExpr name=v
+  55:3 FunDeclStmt name=getV params=[]
+    55:10 BlockStmt
+      56:5 ReturnStmt
+        56:12 GetExpr name=v
+          56:12 ThisExpr
+60:1 VarDeclStmt name=b
+  60:9 CallExpr
+    callee: 60:9 VarExpr name=Box
+    argument: 60:13 LiteralExpr Integer [1]
+61:1 VarDeclStmt name=bx
+  61:10 SubscriptExpr
+    object: 61:10 VarExpr name=b
+    index: 61:12 LiteralExpr Integer [0]
+62:1 ExpressionStmt
+  62:1 SetIndexExpr
+    object: 62:1 VarExpr name=b
+    index: 62:3 LiteralExpr Integer [0]
+    value: 62:8 LiteralExpr Integer [5]
+63:1 VarDeclStmt name=by
+  63:10 SubscriptExpr
+    object: 63:10 VarExpr name=b
+    index: 63:12 LiteralExpr Integer [0]
+64:1 VarDeclStmt name=bv
+  64:10 CallExpr
+    callee: 64:10 GetExpr name=getV
+      64:10 VarExpr name=b
+65:1 ExpressionStmt
+  65:1 SetIndexExpr
+    object: 65:1 VarExpr name=b
+    index: 65:3 LiteralExpr Integer [1]
+    value: 65:8 LiteralExpr Integer [7]
+66:1 VarDeclStmt name=bz
+  66:10 SubscriptExpr
+    object: 66:10 VarExpr name=b
+    index: 66:12 LiteralExpr Integer [2]
+67:1 VarDeclStmt name=bv2
+  67:11 CallExpr
+    callee: 67:11 GetExpr name=getV
+      67:11 VarExpr name=b

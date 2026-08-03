@@ -1,0 +1,117 @@
+1:1 VarDeclStmt name=flag
+  1:12 LiteralExpr True
+2:1 IfStmt
+  condition: 2:5 VarExpr name=flag
+  then: 2:11 BlockStmt
+    3:3 ExpressionStmt
+      3:3 AssignExpr name=flag
+        3:10 LiteralExpr False
+  else: 4:8 BlockStmt
+    5:3 ExpressionStmt
+      5:3 AssignExpr name=flag
+        5:10 LiteralExpr True
+8:1 IfStmt
+  condition: 8:5 VarExpr name=flag
+  then: 8:11 BlockStmt
+    9:3 ExpressionStmt
+      9:3 AssignExpr name=flag
+        9:10 LiteralExpr False
+  else: 10:8 BlockStmt
+    11:3 ExpressionStmt
+      11:3 AssignExpr name=flag
+        11:10 LiteralExpr True
+14:1 VarDeclStmt name=i
+  14:9 LiteralExpr Integer [0]
+15:1 WhileStmt
+  condition: 15:8 BinaryExpr Less
+    15:8 VarExpr name=i
+    15:12 LiteralExpr Integer [10]
+  body: 15:16 BlockStmt
+    16:3 IfStmt
+      condition: 16:7 BinaryExpr Greater
+        16:7 VarExpr name=i
+        16:11 LiteralExpr Integer [3]
+      then: 16:14 BlockStmt
+        17:5 BreakStmt
+    19:3 ExpressionStmt
+      19:3 AssignExpr name=i
+        19:7 BinaryExpr Add
+          19:7 VarExpr name=i
+          19:11 LiteralExpr Integer [1]
+22:1 ForStmt
+  initializer: 22:6 VarDeclStmt name=j
+    22:14 LiteralExpr Integer [0]
+  condition: 22:17 BinaryExpr Less
+    22:17 VarExpr name=j
+    22:21 LiteralExpr Integer [3]
+  increment: 22:24 AssignExpr name=j
+    22:28 BinaryExpr Add
+      22:28 VarExpr name=j
+      22:32 LiteralExpr Integer [1]
+  body: 22:35 BlockStmt
+25:1 VarDeclStmt name=k
+  25:9 LiteralExpr Integer [0]
+26:1 ForStmt
+  initializer: 26:6 ExpressionStmt
+    26:6 AssignExpr name=k
+      26:10 LiteralExpr Integer [0]
+  condition: 26:13 BinaryExpr Less
+    26:13 VarExpr name=k
+    26:17 LiteralExpr Integer [3]
+  increment: 26:20 AssignExpr name=k
+    26:24 BinaryExpr Add
+      26:24 VarExpr name=k
+      26:28 LiteralExpr Integer [1]
+  body: 26:31 BlockStmt
+29:1 ForStmt
+  body: 29:10 BlockStmt
+    30:3 BreakStmt
+33:1 ForStmt
+  initializer: 33:6 VarDeclStmt name=m
+    33:14 LiteralExpr Integer [0]
+  increment: 33:18 AssignExpr name=m
+    33:22 BinaryExpr Add
+      33:22 VarExpr name=m
+      33:26 LiteralExpr Integer [1]
+  body: 33:29 BlockStmt
+    34:3 IfStmt
+      condition: 34:7 BinaryExpr Greater
+        34:7 VarExpr name=m
+        34:11 LiteralExpr Integer [2]
+      then: 34:14 BlockStmt
+        35:5 BreakStmt
+39:1 ForStmt
+  initializer: 39:6 VarDeclStmt name=n
+    39:14 LiteralExpr Integer [0]
+  condition: 39:17 BinaryExpr Less
+    39:17 VarExpr name=n
+    39:21 LiteralExpr Integer [3]
+  body: 39:25 BlockStmt
+    40:3 ExpressionStmt
+      40:3 AssignExpr name=n
+        40:7 BinaryExpr Add
+          40:7 VarExpr name=n
+          40:11 LiteralExpr Integer [1]
+43:1 ForStmt
+  initializer: 43:6 VarDeclStmt name=p
+    43:14 LiteralExpr Integer [0]
+  condition: 43:17 BinaryExpr Less
+    43:17 VarExpr name=p
+    43:21 LiteralExpr Integer [3]
+  increment: 43:24 AssignExpr name=p
+    43:28 BinaryExpr Add
+      43:28 VarExpr name=p
+      43:32 LiteralExpr Integer [1]
+  body: 43:35 BlockStmt
+    44:3 ForStmt
+      initializer: 44:8 VarDeclStmt name=q
+        44:16 LiteralExpr Integer [0]
+      condition: 44:19 BinaryExpr Less
+        44:19 VarExpr name=q
+        44:23 LiteralExpr Integer [3]
+      increment: 44:26 AssignExpr name=q
+        44:30 BinaryExpr Add
+          44:30 VarExpr name=q
+          44:34 LiteralExpr Integer [1]
+      body: 44:37 BlockStmt
+        45:5 BreakStmt

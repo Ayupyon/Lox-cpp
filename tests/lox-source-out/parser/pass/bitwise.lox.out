@@ -1,0 +1,55 @@
+1:1 VarDeclStmt name=a
+  1:9 UnaryExpr BitNot
+    1:10 LiteralExpr Integer [0]
+2:1 VarDeclStmt name=b
+  2:9 UnaryExpr BitNot
+    2:10 LiteralExpr Integer [5]
+4:1 VarDeclStmt name=c
+  4:9 BinaryExpr BitOr
+    4:9 LiteralExpr Integer [1]
+    4:13 LiteralExpr Integer [2]
+5:1 VarDeclStmt name=d
+  5:9 BinaryExpr BitXor
+    5:9 LiteralExpr Integer [5]
+    5:13 LiteralExpr Integer [3]
+6:1 VarDeclStmt name=e
+  6:9 BinaryExpr BitAnd
+    6:9 LiteralExpr Integer [6]
+    6:13 LiteralExpr Integer [3]
+8:1 VarDeclStmt name=f
+  8:9 BinaryExpr ShiftLeft
+    8:9 LiteralExpr Integer [1]
+    8:14 LiteralExpr Integer [4]
+9:1 VarDeclStmt name=g
+  9:9 BinaryExpr ShiftRight
+    9:9 LiteralExpr Integer [256]
+    9:16 LiteralExpr Integer [2]
+11:1 VarDeclStmt name=p1
+  11:10 BinaryExpr ShiftLeft
+    11:10 BinaryExpr Add
+      11:10 LiteralExpr Integer [1]
+      11:14 LiteralExpr Integer [2]
+    11:19 LiteralExpr Integer [1]
+12:1 VarDeclStmt name=p2
+  12:10 BinaryExpr BitOr
+    12:10 LiteralExpr Integer [1]
+    12:14 BinaryExpr BitAnd
+      12:14 LiteralExpr Integer [2]
+      12:18 LiteralExpr Integer [3]
+13:1 VarDeclStmt name=p3
+  13:10 BinaryExpr ShiftLeft
+    13:10 LiteralExpr Integer [2]
+    13:15 BinaryExpr Add
+      13:15 LiteralExpr Integer [1]
+      13:19 LiteralExpr Integer [1]
+14:1 VarDeclStmt name=p4
+  14:10 BinaryExpr BitXor
+    14:10 LiteralExpr Integer [1]
+    14:14 BinaryExpr BitAnd
+      14:14 LiteralExpr Integer [2]
+      14:18 LiteralExpr Integer [3]
+16:1 VarDeclStmt name=mix
+  16:11 BinaryExpr BitAnd
+    16:11 UnaryExpr BitNot
+      16:12 LiteralExpr Integer [0]
+    16:16 LiteralExpr Integer [255]

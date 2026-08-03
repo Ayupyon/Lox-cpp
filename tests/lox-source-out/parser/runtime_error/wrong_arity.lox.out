@@ -1,0 +1,7 @@
+1:1 FunDeclStmt name=f params=[a]
+  1:10 BlockStmt
+2:1 ExpressionStmt
+  2:1 CallExpr
+    callee: 2:1 VarExpr name=f
+    argument: 2:3 LiteralExpr Integer [1]
+    argument: 2:6 LiteralExpr Integer [2]

@@ -1,0 +1,4 @@
+1:1 ClassStmt name=E
+2:1 ThrowStmt
+  2:7 CallExpr
+    callee: 2:7 VarExpr name=E

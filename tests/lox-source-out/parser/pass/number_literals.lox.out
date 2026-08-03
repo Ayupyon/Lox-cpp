@@ -1,0 +1,61 @@
+1:1 VarDeclStmt name=hex1
+  1:12 LiteralExpr Integer [255]
+2:1 VarDeclStmt name=hex2
+  2:12 LiteralExpr Integer [42]
+3:1 VarDeclStmt name=hex3
+  3:12 LiteralExpr Integer [0]
+4:1 VarDeclStmt name=hex_max
+  4:15 LiteralExpr Integer [9223372036854775807]
+6:1 VarDeclStmt name=oct1
+  6:12 LiteralExpr Integer [15]
+7:1 VarDeclStmt name=oct2
+  7:12 LiteralExpr Integer [7]
+8:1 VarDeclStmt name=oct3
+  8:12 LiteralExpr Integer [0]
+10:1 VarDeclStmt name=bin1
+  10:12 LiteralExpr Integer [10]
+11:1 VarDeclStmt name=bin2
+  11:12 LiteralExpr Integer [3]
+12:1 VarDeclStmt name=bin3
+  12:12 LiteralExpr Integer [0]
+14:1 VarDeclStmt name=exp1
+  14:12 LiteralExpr Float [1e+10]
+15:1 VarDeclStmt name=exp2
+  15:12 LiteralExpr Float [1e+10]
+16:1 VarDeclStmt name=exp3
+  16:12 LiteralExpr Float [1500]
+17:1 VarDeclStmt name=exp4
+  17:12 LiteralExpr Float [0.0015]
+18:1 VarDeclStmt name=exp5
+  18:12 LiteralExpr Float [100]
+19:1 VarDeclStmt name=exp6
+  19:12 LiteralExpr Float [0.025]
+20:1 VarDeclStmt name=exp7
+  20:12 LiteralExpr Float [1]
+21:1 VarDeclStmt name=exp8
+  21:12 LiteralExpr Float [50]
+23:1 VarDeclStmt name=underflow
+  23:17 LiteralExpr Float [0]
+25:1 VarDeclStmt name=mix1
+  25:12 BinaryExpr Add
+    25:12 LiteralExpr Integer [255]
+    25:19 LiteralExpr Integer [1]
+26:1 VarDeclStmt name=mix2
+  26:12 BinaryExpr ShiftLeft
+    26:12 LiteralExpr Integer [10]
+    26:22 LiteralExpr Integer [1]
+27:1 VarDeclStmt name=mix3
+  27:12 BinaryExpr Multiply
+    27:12 LiteralExpr Integer [15]
+    27:19 LiteralExpr Integer [2]
+28:1 VarDeclStmt name=mix4
+  28:12 BinaryExpr Divide
+    28:12 LiteralExpr Float [100]
+    28:18 LiteralExpr Integer [2]
+29:1 VarDeclStmt name=mix5
+  29:12 UnaryExpr Negate
+    29:13 LiteralExpr Integer [10]
+30:1 VarDeclStmt name=mix6
+  30:12 BinaryExpr Divide
+    30:12 LiteralExpr Integer [255]
+    30:19 LiteralExpr Integer [15]

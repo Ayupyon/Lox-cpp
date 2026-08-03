@@ -1,0 +1,2 @@
+1:1 VarDeclStmt name=value
+  1:13 LiteralExpr Integer [42]

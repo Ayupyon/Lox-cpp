@@ -1,0 +1,16 @@
+2:1 VarDeclStmt name=a
+  2:9 LiteralExpr Integer [1]
+6:1 VarDeclStmt name=b
+  6:9 LiteralExpr Integer [2]
+7:1 VarDeclStmt name=c
+  7:9 BinaryExpr Add
+    7:9 VarExpr name=a
+    7:13 VarExpr name=b
+9:1 VarDeclStmt name=d
+  9:9 BinaryExpr Multiply
+    9:9 VarExpr name=c
+    9:13 LiteralExpr Integer [2]
+10:1 VarDeclStmt name=e
+  10:9 BinaryExpr Subtract
+    10:9 VarExpr name=d
+    10:13 LiteralExpr Integer [3]

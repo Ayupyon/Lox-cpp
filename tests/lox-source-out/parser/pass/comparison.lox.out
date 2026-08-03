@@ -1,0 +1,107 @@
+1:1 VarDeclStmt name=lt
+  1:10 BinaryExpr Less
+    1:10 LiteralExpr Integer [1]
+    1:14 LiteralExpr Integer [2]
+2:1 VarDeclStmt name=le
+  2:10 BinaryExpr LessEqual
+    2:10 LiteralExpr Integer [2]
+    2:15 LiteralExpr Integer [2]
+3:1 VarDeclStmt name=gt
+  3:10 BinaryExpr Greater
+    3:10 LiteralExpr Integer [3]
+    3:14 LiteralExpr Integer [2]
+4:1 VarDeclStmt name=ge
+  4:10 BinaryExpr GreaterEqual
+    4:10 LiteralExpr Integer [2]
+    4:15 LiteralExpr Integer [2]
+6:1 VarDeclStmt name=mix1
+  6:12 BinaryExpr Less
+    6:12 LiteralExpr Integer [1]
+    6:16 LiteralExpr Float [2.5]
+7:1 VarDeclStmt name=mix2
+  7:12 BinaryExpr Greater
+    7:12 LiteralExpr Float [3]
+    7:18 LiteralExpr Integer [2]
+8:1 VarDeclStmt name=mix3
+  8:12 BinaryExpr LessEqual
+    8:12 LiteralExpr Float [2.5]
+    8:19 LiteralExpr Float [2.5]
+9:1 VarDeclStmt name=mix4
+  9:12 BinaryExpr GreaterEqual
+    9:12 LiteralExpr Float [1]
+    9:19 LiteralExpr Integer [1]
+11:1 VarDeclStmt name=eq_int_t
+  11:16 BinaryExpr Equal
+    11:16 LiteralExpr Integer [1]
+    11:21 LiteralExpr Integer [1]
+12:1 VarDeclStmt name=eq_int_f
+  12:16 BinaryExpr Equal
+    12:16 LiteralExpr Integer [1]
+    12:21 LiteralExpr Integer [2]
+13:1 VarDeclStmt name=eq_bool_t
+  13:17 BinaryExpr Equal
+    13:17 LiteralExpr True
+    13:25 LiteralExpr True
+14:1 VarDeclStmt name=eq_bool_f
+  14:17 BinaryExpr Equal
+    14:17 LiteralExpr True
+    14:25 LiteralExpr False
+15:1 VarDeclStmt name=eq_str_t
+  15:16 BinaryExpr Equal
+    15:16 LiteralExpr String \22a\22
+    15:23 LiteralExpr String \22a\22
+16:1 VarDeclStmt name=eq_str_f
+  16:16 BinaryExpr Equal
+    16:16 LiteralExpr String \22a\22
+    16:23 LiteralExpr String \22b\22
+17:1 VarDeclStmt name=eq_float_t
+  17:18 BinaryExpr Equal
+    17:18 LiteralExpr Float [1.5]
+    17:25 LiteralExpr Float [1.5]
+18:1 VarDeclStmt name=eq_null_t
+  18:17 BinaryExpr Equal
+    18:17 LiteralExpr Null
+    18:25 LiteralExpr Null
+19:1 VarDeclStmt name=ne_int_t
+  19:16 BinaryExpr NotEqual
+    19:16 LiteralExpr Integer [1]
+    19:21 LiteralExpr Integer [2]
+20:1 VarDeclStmt name=ne_int_f
+  20:16 BinaryExpr NotEqual
+    20:16 LiteralExpr Integer [1]
+    20:21 LiteralExpr Integer [1]
+22:1 VarDeclStmt name=cross_num_str
+  22:21 BinaryExpr Equal
+    22:21 LiteralExpr Integer [1]
+    22:26 LiteralExpr String \221\22
+23:1 VarDeclStmt name=cross_int_float
+  23:23 BinaryExpr Equal
+    23:23 LiteralExpr Integer [1]
+    23:28 LiteralExpr Float [1]
+24:1 VarDeclStmt name=cross_bool_int
+  24:22 BinaryExpr Equal
+    24:22 LiteralExpr True
+    24:30 LiteralExpr Integer [1]
+26:1 VarDeclStmt name=s1
+  26:10 LiteralExpr String \22abc\22
+27:1 VarDeclStmt name=s2
+  27:10 LiteralExpr String \22abc\22
+28:1 VarDeclStmt name=seq
+  28:11 BinaryExpr Equal
+    28:11 VarExpr name=s1
+    28:17 VarExpr name=s2
+30:1 ClassStmt name=P
+31:1 VarDeclStmt name=o1
+  31:10 CallExpr
+    callee: 31:10 VarExpr name=P
+32:1 VarDeclStmt name=o2
+  32:10 CallExpr
+    callee: 32:10 VarExpr name=P
+33:1 VarDeclStmt name=same_ref
+  33:16 BinaryExpr Equal
+    33:16 VarExpr name=o1
+    33:22 VarExpr name=o1
+34:1 VarDeclStmt name=diff_ref
+  34:16 BinaryExpr Equal
+    34:16 VarExpr name=o1
+    34:22 VarExpr name=o2

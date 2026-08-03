@@ -1,0 +1,6 @@
+1:1 VarDeclStmt name=x
+  1:9 LiteralExpr Integer [5]
+2:1 ExpressionStmt
+  2:1 SetExpr name=foo
+    object: 2:1 VarExpr name=x
+    value: 2:9 LiteralExpr Integer [1]

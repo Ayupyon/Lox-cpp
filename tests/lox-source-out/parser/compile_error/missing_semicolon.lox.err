@@ -1,0 +1,3 @@
+tests/lox-source/compile_error/missing_semicolon.lox:2:1: error: expected ';' after variable declaration
+
+^

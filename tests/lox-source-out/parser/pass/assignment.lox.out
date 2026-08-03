@@ -1,0 +1,74 @@
+1:1 VarDeclStmt name=x
+  1:9 LiteralExpr Integer [1]
+2:1 ExpressionStmt
+  2:1 AssignExpr name=x
+    2:5 LiteralExpr Integer [2]
+3:1 ExpressionStmt
+  3:1 AssignExpr name=x
+    3:5 BinaryExpr Add
+      3:5 VarExpr name=x
+      3:9 LiteralExpr Integer [1]
+5:1 ClassStmt name=C
+6:1 VarDeclStmt name=o
+  6:9 CallExpr
+    callee: 6:9 VarExpr name=C
+7:1 ExpressionStmt
+  7:1 SetExpr name=f
+    object: 7:1 VarExpr name=o
+    value: 7:7 LiteralExpr Integer [1]
+8:1 ExpressionStmt
+  8:1 SetExpr name=f
+    object: 8:1 VarExpr name=o
+    value: 8:7 BinaryExpr Add
+      8:7 GetExpr name=f
+        8:7 VarExpr name=o
+      8:13 LiteralExpr Integer [1]
+10:1 VarDeclStmt name=a
+  10:9 ListExpr
+    element: 10:10 LiteralExpr Integer [1]
+    element: 10:13 LiteralExpr Integer [2]
+11:1 ExpressionStmt
+  11:1 SetIndexExpr
+    object: 11:1 VarExpr name=a
+    index: 11:3 LiteralExpr Integer [0]
+    value: 11:8 LiteralExpr Integer [9]
+12:1 ExpressionStmt
+  12:1 SetIndexExpr
+    object: 12:1 VarExpr name=a
+    index: 12:3 LiteralExpr Integer [1]
+    value: 12:8 SubscriptExpr
+      object: 12:8 VarExpr name=a
+      index: 12:10 LiteralExpr Integer [0]
+14:1 VarDeclStmt name=a2
+  14:10 LiteralExpr Integer [0]
+15:1 VarDeclStmt name=b2
+  15:10 LiteralExpr Integer [0]
+16:1 VarDeclStmt name=c2
+  16:10 LiteralExpr Integer [0]
+17:1 ExpressionStmt
+  17:1 AssignExpr name=a2
+    17:6 AssignExpr name=b2
+      17:11 AssignExpr name=c2
+        17:16 LiteralExpr Integer [1]
+19:1 ConstDeclStmt name=l
+  19:11 ListExpr
+    element: 19:12 LiteralExpr Integer [1]
+    element: 19:15 LiteralExpr Integer [2]
+20:1 ExpressionStmt
+  20:1 SetIndexExpr
+    object: 20:1 VarExpr name=l
+    index: 20:3 LiteralExpr Integer [0]
+    value: 20:8 LiteralExpr Integer [9]
+22:1 VarDeclStmt name=s
+  22:9 LiteralExpr Integer [1]
+23:1 BlockStmt
+  24:3 VarDeclStmt name=s
+    24:11 LiteralExpr Integer [2]
+  25:3 ExpressionStmt
+    25:3 AssignExpr name=s
+      25:7 LiteralExpr Integer [3]
+27:1 ExpressionStmt
+  27:1 AssignExpr name=s
+    27:5 BinaryExpr Add
+      27:5 VarExpr name=s
+      27:9 LiteralExpr Integer [0]

@@ -1,0 +1,4 @@
+1:1 ExpressionStmt
+  1:1 BinaryExpr ShiftRight
+    1:1 LiteralExpr Integer [1]
+    1:6 LiteralExpr String \22a\22

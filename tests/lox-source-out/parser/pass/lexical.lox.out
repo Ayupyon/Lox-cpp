@@ -1,0 +1,263 @@
+1:1 VarDeclStmt name=zero
+  1:12 LiteralExpr Integer [0]
+2:1 VarDeclStmt name=i42
+  2:11 LiteralExpr Integer [42]
+3:1 VarDeclStmt name=big
+  3:11 LiteralExpr Integer [1000000]
+5:1 VarDeclStmt name=pi
+  5:10 LiteralExpr Float [3.14]
+6:1 VarDeclStmt name=half
+  6:12 LiteralExpr Float [0.5]
+7:1 VarDeclStmt name=two
+  7:11 LiteralExpr Float [2]
+9:1 VarDeclStmt name=s_nl
+  9:12 LiteralExpr String \22a\\nb\22
+10:1 VarDeclStmt name=s_cr
+  10:12 LiteralExpr String \22\\r\22
+11:1 VarDeclStmt name=s_tab
+  11:13 LiteralExpr String \22\\t\22
+12:1 VarDeclStmt name=s_bs
+  12:12 LiteralExpr String \22\\\\\22
+13:1 VarDeclStmt name=s_dq
+  13:12 LiteralExpr String \22\\\22\22
+14:1 VarDeclStmt name=s_nul
+  14:13 LiteralExpr String \22\\0\22
+15:1 VarDeclStmt name=s_hex
+  15:13 LiteralExpr String \22\\x41\22
+16:1 VarDeclStmt name=s_u4
+  16:12 LiteralExpr String \22\\u00e9\22
+17:1 VarDeclStmt name=s_uv
+  17:12 LiteralExpr String \22\\u{1f600}\22
+19:1 VarDeclStmt name=b_true
+  19:14 LiteralExpr True
+20:1 VarDeclStmt name=b_false
+  20:15 LiteralExpr False
+21:1 VarDeclStmt name=nothing
+  21:15 LiteralExpr Null
+23:1 VarDeclStmt name=not_b
+  23:13 UnaryExpr Not
+    23:14 LiteralExpr True
+24:1 VarDeclStmt name=neg_i
+  24:13 UnaryExpr Negate
+    24:14 LiteralExpr Integer [5]
+25:1 VarDeclStmt name=bitnot_i
+  25:16 UnaryExpr BitNot
+    25:17 LiteralExpr Integer [0]
+27:1 VarDeclStmt name=or_bits
+  27:15 BinaryExpr BitOr
+    27:15 LiteralExpr Integer [1]
+    27:19 LiteralExpr Integer [2]
+28:1 VarDeclStmt name=xor_bits
+  28:16 BinaryExpr BitXor
+    28:16 LiteralExpr Integer [5]
+    28:20 LiteralExpr Integer [3]
+29:1 VarDeclStmt name=and_bits
+  29:16 BinaryExpr BitAnd
+    29:16 LiteralExpr Integer [6]
+    29:20 LiteralExpr Integer [3]
+30:1 VarDeclStmt name=eq_b
+  30:12 BinaryExpr Equal
+    30:12 LiteralExpr Integer [1]
+    30:17 LiteralExpr Integer [1]
+31:1 VarDeclStmt name=ne_b
+  31:12 BinaryExpr NotEqual
+    31:12 LiteralExpr Integer [1]
+    31:17 LiteralExpr Integer [2]
+32:1 VarDeclStmt name=gt_b
+  32:12 BinaryExpr Greater
+    32:12 LiteralExpr Integer [2]
+    32:16 LiteralExpr Integer [1]
+33:1 VarDeclStmt name=ge_b
+  33:12 BinaryExpr GreaterEqual
+    33:12 LiteralExpr Integer [2]
+    33:17 LiteralExpr Integer [2]
+34:1 VarDeclStmt name=lt_b
+  34:12 BinaryExpr Less
+    34:12 LiteralExpr Integer [1]
+    34:16 LiteralExpr Integer [2]
+35:1 VarDeclStmt name=le_b
+  35:12 BinaryExpr LessEqual
+    35:12 LiteralExpr Integer [1]
+    35:17 LiteralExpr Integer [1]
+36:1 VarDeclStmt name=lsh
+  36:11 BinaryExpr ShiftLeft
+    36:11 LiteralExpr Integer [1]
+    36:16 LiteralExpr Integer [3]
+37:1 VarDeclStmt name=rsh
+  37:11 BinaryExpr ShiftRight
+    37:11 LiteralExpr Integer [8]
+    37:16 LiteralExpr Integer [1]
+38:1 VarDeclStmt name=sub_i
+  38:13 BinaryExpr Subtract
+    38:13 LiteralExpr Integer [10]
+    38:18 LiteralExpr Integer [4]
+39:1 VarDeclStmt name=add_i
+  39:13 BinaryExpr Add
+    39:13 LiteralExpr Integer [3]
+    39:17 LiteralExpr Integer [4]
+40:1 VarDeclStmt name=div_i
+  40:13 BinaryExpr Divide
+    40:13 LiteralExpr Integer [8]
+    40:17 LiteralExpr Integer [2]
+41:1 VarDeclStmt name=mul_i
+  41:13 BinaryExpr Multiply
+    41:13 LiteralExpr Integer [3]
+    41:17 LiteralExpr Integer [4]
+42:1 VarDeclStmt name=or_log
+  42:14 LogicalExpr Or
+    42:14 LiteralExpr True
+    42:22 LiteralExpr False
+43:1 VarDeclStmt name=and_log
+  43:15 LogicalExpr And
+    43:15 LiteralExpr True
+    43:23 LiteralExpr True
+45:1 VarDeclStmt name=chain_a
+  45:15 LiteralExpr Integer [0]
+46:1 VarDeclStmt name=chain_b
+  46:15 LiteralExpr Integer [0]
+47:1 ExpressionStmt
+  47:1 AssignExpr name=chain_a
+    47:11 AssignExpr name=chain_b
+      47:21 LiteralExpr Integer [7]
+49:1 VarDeclStmt name=arr
+  49:11 ListExpr
+    element: 49:12 LiteralExpr Integer [1]
+    element: 49:15 LiteralExpr Integer [2]
+    element: 49:18 LiteralExpr Integer [3]
+50:1 VarDeclStmt name=elem
+  50:12 SubscriptExpr
+    object: 50:12 VarExpr name=arr
+    index: 50:16 LiteralExpr Integer [0]
+51:1 ExpressionStmt
+  51:1 SetIndexExpr
+    object: 51:1 VarExpr name=arr
+    index: 51:5 LiteralExpr Integer [1]
+    value: 51:10 LiteralExpr Integer [9]
+53:1 VarDeclStmt name=group
+  53:14 BinaryExpr Multiply
+    53:14 BinaryExpr Add
+      53:14 LiteralExpr Integer [1]
+      53:18 LiteralExpr Integer [2]
+    53:23 LiteralExpr Integer [3]
+55:1 ClassStmt name=Base
+  56:3 FunDeclStmt name=method params=[]
+    56:12 BlockStmt
+      57:5 ReturnStmt
+        57:12 ThisExpr
+61:1 ClassStmt name=Derived superclass=Base
+  62:3 FunDeclStmt name=greet params=[]
+    62:11 BlockStmt
+      63:5 VarDeclStmt name=s
+        63:13 CallExpr
+          callee: 63:13 SuperExpr method=method
+      64:5 ReturnStmt
+        64:12 VarExpr name=s
+68:1 VarDeclStmt name=obj
+  68:11 CallExpr
+    callee: 68:11 VarExpr name=Derived
+69:1 VarDeclStmt name=m
+  69:9 CallExpr
+    callee: 69:9 GetExpr name=greet
+      69:9 VarExpr name=obj
+70:1 VarDeclStmt name=field
+  70:13 CallExpr
+    callee: 70:13 GetExpr name=method
+      70:13 VarExpr name=obj
+72:1 FunDeclStmt name=echo params=[x]
+  72:13 BlockStmt
+    73:3 ReturnStmt
+      73:10 VarExpr name=x
+75:1 VarDeclStmt name=echoed
+  75:14 CallExpr
+    callee: 75:14 VarExpr name=echo
+    argument: 75:19 LiteralExpr Integer [1]
+77:1 IfStmt
+  condition: 77:5 LiteralExpr True
+  then: 77:11 BlockStmt
+    78:3 VarDeclStmt name=v
+      78:11 LiteralExpr Integer [1]
+  else: 79:8 BlockStmt
+    80:3 VarDeclStmt name=v
+      80:11 LiteralExpr Integer [2]
+83:1 VarDeclStmt name=count
+  83:13 LiteralExpr Integer [0]
+84:1 WhileStmt
+  condition: 84:8 BinaryExpr Less
+    84:8 VarExpr name=count
+    84:16 LiteralExpr Integer [3]
+  body: 84:19 BlockStmt
+    85:3 ExpressionStmt
+      85:3 AssignExpr name=count
+        85:11 BinaryExpr Add
+          85:11 VarExpr name=count
+          85:19 LiteralExpr Integer [1]
+88:1 ForStmt
+  initializer: 88:6 VarDeclStmt name=i
+    88:14 LiteralExpr Integer [0]
+  condition: 88:17 BinaryExpr Less
+    88:17 VarExpr name=i
+    88:21 LiteralExpr Integer [3]
+  increment: 88:24 AssignExpr name=i
+    88:28 BinaryExpr Add
+      88:28 VarExpr name=i
+      88:32 LiteralExpr Integer [1]
+  body: 88:35 BlockStmt
+    89:3 VarDeclStmt name=dummy
+      89:15 VarExpr name=i
+92:1 TryStmt
+  92:5 BlockStmt
+    93:3 VarDeclStmt name=x
+      93:11 LiteralExpr Integer [1]
+  catch: CatchClause type=Integer binding=e
+    94:19 BlockStmt
+      95:3 VarDeclStmt name=y
+        95:11 VarExpr name=e
+98:1 FunDeclStmt name=maybeThrow params=[t]
+  98:19 BlockStmt
+    99:3 IfStmt
+      condition: 99:7 VarExpr name=t
+      then: 99:10 BlockStmt
+        100:5 ThrowStmt
+          100:11 LiteralExpr String \22oops\22
+    102:3 ReturnStmt
+      102:10 LiteralExpr Null
+105:1 TryStmt
+  105:5 BlockStmt
+    106:3 VarDeclStmt name=r
+      106:11 CallExpr
+        callee: 106:11 VarExpr name=maybeThrow
+        argument: 106:22 LiteralExpr True
+  catch: CatchClause type=String binding=msg
+    107:20 BlockStmt
+      108:3 VarDeclStmt name=m2
+        108:12 VarExpr name=msg
+111:1 VarDeclStmt name=loop
+  111:12 LiteralExpr Integer [0]
+112:1 ForStmt
+  initializer: 112:6 VarDeclStmt name=i
+    112:14 LiteralExpr Integer [0]
+  condition: 112:17 BinaryExpr Less
+    112:17 VarExpr name=i
+    112:21 LiteralExpr Integer [5]
+  increment: 112:24 AssignExpr name=i
+    112:28 BinaryExpr Add
+      112:28 VarExpr name=i
+      112:32 LiteralExpr Integer [1]
+  body: 112:35 BlockStmt
+    113:3 IfStmt
+      condition: 113:7 BinaryExpr Equal
+        113:7 VarExpr name=i
+        113:12 LiteralExpr Integer [3]
+      then: 113:15 BlockStmt
+        114:5 BreakStmt
+    116:3 ExpressionStmt
+      116:3 AssignExpr name=loop
+        116:10 BinaryExpr Add
+          116:10 VarExpr name=loop
+          116:17 LiteralExpr Integer [1]
+119:1 ConstDeclStmt name=FIXED
+  119:15 LiteralExpr Integer [100]
+120:1 VarDeclStmt name=used
+  120:12 BinaryExpr Add
+    120:12 VarExpr name=FIXED
+    120:20 LiteralExpr Integer [1]

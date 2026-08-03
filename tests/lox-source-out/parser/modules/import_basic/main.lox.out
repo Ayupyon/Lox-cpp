@@ -1,0 +1,4 @@
+1:1 ImportStmt path=\22helper\22 alias=h
+1:23 VarDeclStmt name=v
+  1:31 GetExpr name=value
+    1:31 VarExpr name=h

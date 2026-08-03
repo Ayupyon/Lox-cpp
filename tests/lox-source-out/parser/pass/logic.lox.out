@@ -1,0 +1,46 @@
+1:1 VarDeclStmt name=n1
+  1:10 UnaryExpr Not
+    1:11 LiteralExpr True
+2:1 VarDeclStmt name=n2
+  2:10 UnaryExpr Not
+    2:11 LiteralExpr False
+4:1 VarDeclStmt name=or_t
+  4:12 LogicalExpr Or
+    4:12 LiteralExpr True
+    4:20 LiteralExpr False
+5:1 VarDeclStmt name=or_f
+  5:12 LogicalExpr Or
+    5:12 LiteralExpr False
+    5:21 LiteralExpr True
+6:1 VarDeclStmt name=or_sc
+  6:13 LogicalExpr Or
+    6:13 LiteralExpr True
+    6:22 BinaryExpr Less
+      6:22 BinaryExpr Divide
+        6:22 LiteralExpr Integer [1]
+        6:26 LiteralExpr Integer [0]
+      6:30 LiteralExpr Integer [0]
+8:1 VarDeclStmt name=and_t
+  8:13 LogicalExpr And
+    8:13 LiteralExpr True
+    8:21 LiteralExpr True
+9:1 VarDeclStmt name=and_f
+  9:13 LogicalExpr And
+    9:13 LiteralExpr True
+    9:21 LiteralExpr False
+10:1 VarDeclStmt name=and_sc
+  10:14 LogicalExpr And
+    10:14 LiteralExpr False
+    10:24 BinaryExpr Less
+      10:24 BinaryExpr Divide
+        10:24 LiteralExpr Integer [1]
+        10:28 LiteralExpr Integer [0]
+      10:32 LiteralExpr Integer [0]
+12:1 VarDeclStmt name=nested
+  12:14 LogicalExpr And
+    12:14 UnaryExpr Not
+      12:16 LogicalExpr Or
+        12:16 UnaryExpr Not
+          12:17 LiteralExpr True
+        12:25 LiteralExpr False
+    12:35 LiteralExpr True

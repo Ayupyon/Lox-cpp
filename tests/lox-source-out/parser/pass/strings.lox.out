@@ -1,0 +1,166 @@
+1:1 VarDeclStmt name=s1
+  1:10 LiteralExpr String \22abc\22
+2:1 VarDeclStmt name=s2
+  2:10 LiteralExpr String \22abc\22
+3:1 VarDeclStmt name=same
+  3:12 BinaryExpr Equal
+    3:12 VarExpr name=s1
+    3:18 VarExpr name=s2
+5:1 VarDeclStmt name=s3
+  5:10 LiteralExpr String \22abc\22
+6:1 VarDeclStmt name=s4
+  6:10 LiteralExpr String \22abd\22
+7:1 VarDeclStmt name=diff
+  7:12 BinaryExpr NotEqual
+    7:12 VarExpr name=s3
+    7:18 VarExpr name=s4
+9:1 VarDeclStmt name=empty
+  9:13 LiteralExpr String \22\22
+10:1 VarDeclStmt name=notEmpty
+  10:16 LiteralExpr String \22x\22
+11:1 VarDeclStmt name=emptyNeq
+  11:16 BinaryExpr NotEqual
+    11:16 VarExpr name=empty
+    11:25 VarExpr name=notEmpty
+13:1 VarDeclStmt name=nl
+  13:10 LiteralExpr String \22a\\nb\22
+14:1 VarDeclStmt name=cr
+  14:10 LiteralExpr String \22a\\rb\22
+15:1 VarDeclStmt name=tab
+  15:11 LiteralExpr String \22a\\tb\22
+16:1 VarDeclStmt name=bs
+  16:10 LiteralExpr String \22a\\\\b\22
+17:1 VarDeclStmt name=q
+  17:9 LiteralExpr String \22a\\\22b\22
+18:1 VarDeclStmt name=nul
+  18:11 LiteralExpr String \22a\\0b\22
+19:1 VarDeclStmt name=hex
+  19:11 LiteralExpr String \22a\\x41b\22
+20:1 VarDeclStmt name=uni
+  20:11 LiteralExpr String \22a\\u0041b\22
+21:1 VarDeclStmt name=brace
+  21:13 LiteralExpr String \22a\\u{41}b\22
+23:1 VarDeclStmt name=hexEq
+  23:13 BinaryExpr Equal
+    23:13 LiteralExpr String \22\\x41\22
+    23:23 LiteralExpr String \22A\22
+24:1 VarDeclStmt name=uniEq
+  24:13 BinaryExpr Equal
+    24:13 LiteralExpr String \22\\u0041\22
+    24:25 LiteralExpr String \22A\22
+25:1 VarDeclStmt name=braceEq
+  25:15 BinaryExpr Equal
+    25:15 LiteralExpr String \22\\u{41}\22
+    25:27 LiteralExpr String \22A\22
+26:1 VarDeclStmt name=nlEq
+  26:12 BinaryExpr Equal
+    26:12 LiteralExpr String \22\\n\22
+    26:20 LiteralExpr String \22a\22
+27:1 VarDeclStmt name=bsEq
+  27:12 BinaryExpr Equal
+    27:12 LiteralExpr String \22\\\\\22
+    27:20 LiteralExpr String \22a\22
+29:1 VarDeclStmt name=cross1
+  29:15 BinaryExpr Equal
+    29:15 LiteralExpr String \22abc\22
+    29:24 LiteralExpr Integer [1]
+30:1 VarDeclStmt name=cross2
+  30:15 BinaryExpr Equal
+    30:15 LiteralExpr String \22abc\22
+    30:24 LiteralExpr True
+31:1 VarDeclStmt name=cross3
+  31:15 BinaryExpr Equal
+    31:15 LiteralExpr String \22abc\22
+    31:24 LiteralExpr Null
+33:1 ClassStmt name=Holder
+  34:3 FunDeclStmt name=init params=[s]
+    34:11 BlockStmt
+      35:5 ExpressionStmt
+        35:5 SetExpr name=s
+          object: 35:5 ThisExpr
+          value: 35:14 VarExpr name=s
+  37:3 FunDeclStmt name=getS params=[]
+    37:10 BlockStmt
+      38:5 ReturnStmt
+        38:12 GetExpr name=s
+          38:12 ThisExpr
+  40:3 FunDeclStmt name=setS params=[v]
+    40:11 BlockStmt
+      41:5 ExpressionStmt
+        41:5 SetExpr name=s
+          object: 41:5 ThisExpr
+          value: 41:14 VarExpr name=v
+45:1 VarDeclStmt name=h
+  45:9 CallExpr
+    callee: 45:9 VarExpr name=Holder
+    argument: 45:16 LiteralExpr String \22hello\22
+46:1 VarDeclStmt name=hs
+  46:10 CallExpr
+    callee: 46:10 GetExpr name=getS
+      46:10 VarExpr name=h
+47:1 ExpressionStmt
+  47:1 CallExpr
+    callee: 47:1 GetExpr name=setS
+      47:1 VarExpr name=h
+    argument: 47:8 LiteralExpr String \22world\22
+48:1 VarDeclStmt name=hs2
+  48:11 CallExpr
+    callee: 48:11 GetExpr name=getS
+      48:11 VarExpr name=h
+49:1 VarDeclStmt name=hsEq
+  49:12 BinaryExpr Equal
+    49:12 VarExpr name=hs
+    49:18 LiteralExpr String \22hello\22
+50:1 VarDeclStmt name=hs2Eq
+  50:13 BinaryExpr Equal
+    50:13 VarExpr name=hs2
+    50:20 LiteralExpr String \22world\22
+52:1 VarDeclStmt name=list
+  52:12 ListExpr
+    element: 52:13 LiteralExpr String \22x\22
+    element: 52:18 LiteralExpr String \22y\22
+    element: 52:23 LiteralExpr String \22z\22
+53:1 VarDeclStmt name=l0
+  53:10 SubscriptExpr
+    object: 53:10 VarExpr name=list
+    index: 53:15 LiteralExpr Integer [0]
+54:1 VarDeclStmt name=l1
+  54:10 SubscriptExpr
+    object: 54:10 VarExpr name=list
+    index: 54:15 LiteralExpr Integer [1]
+55:1 VarDeclStmt name=l2
+  55:10 SubscriptExpr
+    object: 55:10 VarExpr name=list
+    index: 55:15 LiteralExpr Integer [2]
+56:1 VarDeclStmt name=lEq
+  56:11 BinaryExpr Equal
+    56:11 VarExpr name=l0
+    56:17 LiteralExpr String \22x\22
+58:1 ExpressionStmt
+  58:1 SetIndexExpr
+    object: 58:1 VarExpr name=list
+    index: 58:6 LiteralExpr Integer [1]
+    value: 58:11 LiteralExpr String \22Y\22
+59:1 VarDeclStmt name=l1b
+  59:11 SubscriptExpr
+    object: 59:11 VarExpr name=list
+    index: 59:16 LiteralExpr Integer [1]
+61:1 VarDeclStmt name=mixed
+  61:13 ListExpr
+    element: 61:14 LiteralExpr String \22a\22
+    element: 61:19 LiteralExpr String \22b\22
+    element: 61:24 LiteralExpr String \22c\22
+    element: 61:29 LiteralExpr String \22d\22
+62:1 VarDeclStmt name=mixedGet
+  62:16 SubscriptExpr
+    object: 62:16 VarExpr name=mixed
+    index: 62:22 LiteralExpr Integer [2]
+63:1 ExpressionStmt
+  63:1 SetIndexExpr
+    object: 63:1 VarExpr name=mixed
+    index: 63:7 LiteralExpr Integer [0]
+    value: 63:12 LiteralExpr String \22Z\22
+64:1 VarDeclStmt name=mixed0
+  64:14 SubscriptExpr
+    object: 64:14 VarExpr name=mixed
+    index: 64:20 LiteralExpr Integer [0]

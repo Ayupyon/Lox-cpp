@@ -1,0 +1,6 @@
+1:1 TryStmt
+  1:5 BlockStmt
+    1:7 ThrowStmt
+      1:13 LiteralExpr Integer [42]
+  catch: CatchClause type=String binding=e
+    1:34 BlockStmt

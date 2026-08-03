@@ -25,9 +25,21 @@ target_compile_definitions(scanner_golden_test PRIVATE
 include(GoogleTest)
 gtest_discover_tests(scanner_golden_test)
 
+# Golden test: for every tests/lox-source/**/*.lox, run the real lox-cpp binary
+# with --run-stage parser and compare stdout/stderr/exit code against the
+# golden files under tests/lox-source-out/parser/ (same relative layout).
+add_executable(parser_golden_test parser_golden_test.cpp)
+target_link_libraries(parser_golden_test PRIVATE GTest::gtest_main ${llvm_libs})
+target_compile_definitions(parser_golden_test PRIVATE
+  LOX_CPP_BINARY="$<TARGET_FILE:lox-cpp>"
+  LOX_REPO_ROOT="${CMAKE_SOURCE_DIR}"
+  LOX_SOURCE_ROOT="${CMAKE_SOURCE_DIR}/tests/lox-source"
+  LOX_GOLDEN_ROOT="${CMAKE_SOURCE_DIR}/tests/lox-source-out/parser"
+)
+gtest_discover_tests(parser_golden_test)
+
 # AST dump unit test: constructs sample ASTs by hand and checks the Dump
-# output. End-to-end golden tests (tests/lox-source/**/*.lox -> parser dumps)
-# come with the parser itself.
+# output.
 add_executable(ast_dump_test ast_dump_test.cpp)
 target_link_libraries(ast_dump_test PRIVATE GTest::gtest_main lox_parser ${llvm_libs})
 gtest_discover_tests(ast_dump_test)

@@ -1,0 +1,2 @@
+1:1 ThrowStmt
+  1:7 LiteralExpr Integer [42]

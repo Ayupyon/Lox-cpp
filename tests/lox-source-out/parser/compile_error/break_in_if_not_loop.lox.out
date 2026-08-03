@@ -1,0 +1,4 @@
+1:1 IfStmt
+  condition: 1:5 LiteralExpr True
+  then: 1:11 BlockStmt
+    2:5 BreakStmt

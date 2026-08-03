@@ -1,0 +1,98 @@
+1:1 VarDeclStmt name=x
+  1:9 LiteralExpr Integer [10]
+2:1 FunDeclStmt name=get params=[]
+  2:11 BlockStmt
+    3:3 ReturnStmt
+      3:10 VarExpr name=x
+5:1 VarDeclStmt name=v1
+  5:10 CallExpr
+    callee: 5:10 VarExpr name=get
+7:1 VarDeclStmt name=y
+  7:9 LiteralExpr Integer [1]
+8:1 FunDeclStmt name=getY params=[]
+  8:12 BlockStmt
+    9:3 ReturnStmt
+      9:10 VarExpr name=y
+11:1 ExpressionStmt
+  11:1 AssignExpr name=y
+    11:5 LiteralExpr Integer [2]
+12:1 VarDeclStmt name=v2
+  12:10 CallExpr
+    callee: 12:10 VarExpr name=getY
+14:1 VarDeclStmt name=results
+  14:15 ListExpr
+    element: 14:16 LiteralExpr Integer [0]
+    element: 14:19 LiteralExpr Integer [0]
+    element: 14:22 LiteralExpr Integer [0]
+15:1 VarDeclStmt name=idx
+  15:11 LiteralExpr Integer [0]
+16:1 ForStmt
+  initializer: 16:6 VarDeclStmt name=i
+    16:14 LiteralExpr Integer [0]
+  condition: 16:17 BinaryExpr Less
+    16:17 VarExpr name=i
+    16:21 LiteralExpr Integer [3]
+  increment: 16:24 AssignExpr name=i
+    16:28 BinaryExpr Add
+      16:28 VarExpr name=i
+      16:32 LiteralExpr Integer [1]
+  body: 16:35 BlockStmt
+    17:3 FunDeclStmt name=cap params=[]
+      17:13 BlockStmt
+        18:5 ReturnStmt
+          18:12 VarExpr name=i
+    20:3 ExpressionStmt
+      20:3 SetIndexExpr
+        object: 20:3 VarExpr name=results
+        index: 20:11 VarExpr name=idx
+        value: 20:18 CallExpr
+          callee: 20:18 VarExpr name=cap
+    21:3 ExpressionStmt
+      21:3 AssignExpr name=idx
+        21:9 BinaryExpr Add
+          21:9 VarExpr name=idx
+          21:15 LiteralExpr Integer [1]
+24:1 FunDeclStmt name=mk params=[]
+  24:10 BlockStmt
+    25:3 VarDeclStmt name=c
+      25:11 LiteralExpr Integer [0]
+    26:3 FunDeclStmt name=inc params=[]
+      26:13 BlockStmt
+        27:5 ExpressionStmt
+          27:5 AssignExpr name=c
+            27:9 BinaryExpr Add
+              27:9 VarExpr name=c
+              27:13 LiteralExpr Integer [1]
+        28:5 ReturnStmt
+          28:12 VarExpr name=c
+    30:3 FunDeclStmt name=get params=[]
+      30:13 BlockStmt
+        31:5 ReturnStmt
+          31:12 VarExpr name=c
+    33:3 ReturnStmt
+      33:10 ListExpr
+        element: 33:11 VarExpr name=inc
+        element: 33:16 VarExpr name=get
+36:1 VarDeclStmt name=pair
+  36:12 CallExpr
+    callee: 36:12 VarExpr name=mk
+37:1 VarDeclStmt name=incFn
+  37:13 SubscriptExpr
+    object: 37:13 VarExpr name=pair
+    index: 37:18 LiteralExpr Integer [0]
+38:1 VarDeclStmt name=getFn
+  38:13 SubscriptExpr
+    object: 38:13 VarExpr name=pair
+    index: 38:18 LiteralExpr Integer [1]
+39:1 VarDeclStmt name=after1
+  39:14 CallExpr
+    callee: 39:14 VarExpr name=incFn
+40:1 VarDeclStmt name=visible
+  40:15 CallExpr
+    callee: 40:15 VarExpr name=getFn
+41:1 VarDeclStmt name=after2
+  41:14 CallExpr
+    callee: 41:14 VarExpr name=incFn
+42:1 VarDeclStmt name=visible2
+  42:16 CallExpr
+    callee: 42:16 VarExpr name=getFn

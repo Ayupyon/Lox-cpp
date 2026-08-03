@@ -1,0 +1,4 @@
+1:1 WhileStmt
+  condition: 1:8 LiteralExpr Integer [1]
+  body: 1:11 BlockStmt
+    1:13 BreakStmt

@@ -1,0 +1,6 @@
+1:1 VarDeclStmt name=x
+  1:9 LiteralExpr Integer [5]
+2:1 ExpressionStmt
+  2:1 SubscriptExpr
+    object: 2:1 VarExpr name=x
+    index: 2:3 LiteralExpr Integer [0]
