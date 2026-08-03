@@ -24,3 +24,10 @@ target_compile_definitions(scanner_golden_test PRIVATE
 
 include(GoogleTest)
 gtest_discover_tests(scanner_golden_test)
+
+# AST dump unit test: constructs sample ASTs by hand and checks the Dump
+# output. End-to-end golden tests (tests/lox-source/**/*.lox -> parser dumps)
+# come with the parser itself.
+add_executable(ast_dump_test ast_dump_test.cpp)
+target_link_libraries(ast_dump_test PRIVATE GTest::gtest_main lox_parser ${llvm_libs})
+gtest_discover_tests(ast_dump_test)
