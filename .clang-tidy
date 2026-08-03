@@ -58,6 +58,10 @@ CheckOptions:
     value:           CamelCase
   - key:             readability-identifier-naming.ConstexprVariablePrefix
     value:           k
+  # classof is the exact name LLVM's isa/cast machinery requires; it is exempt
+  # from the CamelCase function rule like log/convertToErrorCode (NOLINT there).
+  - key:             readability-identifier-naming.FunctionIgnoredRegexp
+    value:           '^classof$'
   - key:             readability-identifier-naming.IgnoreMainLikeFunctions
     value:           1
   - key:             readability-redundant-member-init.IgnoreBaseInCopyConstructors
