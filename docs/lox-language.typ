@@ -33,8 +33,9 @@ IDENTIFIER -> ALPHA (ALPHA | DIGIT)*
 == 字面量
 
 - 数字：整数支持十进制、十六进制（`0x`/`0X`）、八进制（`0o`/`0O`）、二进制（`0b`/`0B`），
-  浮点数为十进制、可带指数（无小数点的 `1e10` 也为浮点）。数字字面量中#strong[不允许下划线]——
-  任何数字与下划线的组合（如 `1_000`、`0x_FF`、`1._5`、`1.5e10_`）均为词法错误：
+  浮点数为十进制、可带指数（无小数点的 `1e10`
+  也为浮点）。数字字面量中#strong[不允许下划线]—— 任何数字与下划线的组合（如
+  `1_000`、`0x_FF`、`1._5`、`1.5e10_`）均为词法错误：
 
   ```lox-grammar
   DIGIT      -> "0"–"9"
@@ -126,11 +127,14 @@ varDecl -> let IDENTIFIER "=" expression ";"
 
 constDecl -> const IDENTIFIER "=" expression ";"
 
-importDecl -> import STRING (as IDENTIFIER)? ";"
+importDecl -> import dottedName (as IDENTIFIER)? ";"
+dottedName -> IDENTIFIER ("." IDENTIFIER)* ;
 ```
 
 - 变量和常量声明必须附带对应的定义
 - 类声明通过extends关键字实现单继承
+- `import`
+  采用点号命名空间语法（`import a.b.c`），模块名即点号形式，按段解析为文件路径（见模块系统节）
 
 == 语句层（Statements）
 
@@ -166,7 +170,8 @@ block      -> "{" declaration* "}" ;
 - `block`：创建新的作用域，所有变量和常量均只在作用域内有效，在内层作用域定义的函数和类方法可以捕获外层的变量（闭包语义）
 - 控制流语句体均要求使用block包裹内层语句
 - try-catch语句指定捕获的类型（可选捕获对应的对象），多个catch子句按声明顺序依次匹配，第一个类型匹配的子句生效
-- `throwStmt`：抛出任意类型的值，沿调用栈向上传播直到被匹配的 `catch` 子句捕获；未捕获时传播到顶层并终止程序
+- `throwStmt`：抛出任意类型的值，沿调用栈向上传播直到被匹配的 `catch`
+  子句捕获；未捕获时传播到顶层并终止程序
 - `breakStmt`：跳出最近一层循环（`while` 或 `for`），在循环体外使用为编译时错误
 - `returnStmt`：从函数返回值，默认返回 `null`
 
@@ -244,7 +249,7 @@ Lox 是动态类型语言，值在运行时携带类型标签。
 - `Boolean` — 布尔值
 - `Integer` — 64位整数类型
 - `Float` — 双精度浮点数
-- `Object(String | Function | Closure | Class | Instance | Native | Upvalue | BoundMethod | List)` /
+- `Object(String | Function | Closure | Class | Instance | Native | Upvalue | BoundMethod | List | Module)` /
   `GcPtr<T>`
 
 对象类型通过引用技术和垃圾回收器两层进行内存管理。
@@ -377,9 +382,15 @@ equality），对对象类型比较引用相等性（reference equality）。
 
 === 模块系统
 
-- `import` 按入口脚本的相对路径解析模块文件
+- `import` 采用点号命名空间语法（`import a.b.c`），模块名即点号形式 `a.b.c`
+- 模块按点号名解析为文件路径：每段累积路径 `p` 依次尝试 `p.lox`（文件模块）与
+  `p/__init__.lox`（目录包模块）；末段必须命中其一，中间段无文件时为命名空间占位符
 - 每个模块在首次导入时编译并执行，后续导入直接返回缓存的模块对象
-- `as` 为导入的模块指定本地别名：`import "foo" as bar` 将模块绑定到 `bar`
+- 无 `as` 时按命名空间分层绑定：单段 `import lib` 直接绑定 `lib`；多段
+  `import lib.utils` 将首段绑定为命名空间，末段模块挂为其子项，`lib.utils.foo`
+  链式取导出
+- `as` 为导入的模块指定本地别名并绕过命名空间：`import lib.utils as u`
+  将模块直接绑定到 `u`
 
 = 执行模型
 
@@ -411,7 +422,7 @@ Lox 的值分为两类：
 
 - *值类型*（栈上，按值传递）：`Null`、`Boolean`、`Integer`（i64）、`Float`（f64）
 - *引用类型*（GC 堆分配，通过 `GcPtr<T>`
-  引用）：`String`、`Function`、`Closure`、`Class`、`Instance`、`Native`、`Upvalue`、`BoundMethod`
+  引用）：`String`、`Function`、`Closure`、`Class`、`Instance`、`Native`、`Upvalue`、`BoundMethod`、`Module`
 
 VM 操作数栈上统一存储 `Value`，按 tag 区分类型。
 
@@ -436,9 +447,13 @@ VM 操作数栈上统一存储 `Value`，按 tag 区分类型。
   函数名。由外部库注册的内建函数载体；核心语言不预置任何内建函数
 - `List`：`llvm::SmallVector<Value, 0>` 定长元素数组 +
   长度。创建后长度不可变，元素可读写
+- `Module`：模块对象。`GcPtr<String>` 点号全名、`GcPtr<Function>`
+  script（nullable，命名空间占位符为 null）、`llvm::StringMap<Value>`
+  globals（统一承载顶层导出与子模块）。`import` 产物；`GET_PROPERTY` 读 globals
+  表
 
-上述 `llvm::SmallVector` 与 `llvm::SmallDenseMap` 的内联容量参数为实现期可调的 `constexpr`
-常量，当前暂定值如下：
+上述 `llvm::SmallVector` 与 `llvm::SmallDenseMap` 的内联容量参数为实现期可调的
+`constexpr` 常量，当前暂定值如下：
 
 #table(
   columns: (auto, auto, auto),
@@ -454,12 +469,15 @@ Closure ──→ Function（代码） └──→ Upvalue[]（捕获的变量�
 
 Instance ──→ Class └──→ fields（字段值表）
 
-Class ──-> superclass（父类） └──-> methods: llvm::SmallDenseMap\<GcPtr\<String\>,
-GcPtr\<Closure\>, kMethodTableInlineSize\>
+Class ──-> superclass（父类） └──-> methods:
+llvm::SmallDenseMap\<GcPtr\<String\>, GcPtr\<Closure\>, kMethodTableInlineSize\>
 
 BoundMethod ──→ Instance (this) └──→ Closure (method)
 
 List ──-> elements: llvm::SmallVector\<Value, 0\>（定长，创建后不可变）
+
+Module ──-> script（Function，占位符为 null） + globals:
+llvm::StringMap\<Value\>（导出 + 子模块）
 
 == 字符串驻留
 
@@ -477,8 +495,8 @@ List ──-> elements: llvm::SmallVector\<Value, 0\>（定长，创建后不可
 == 方法分发
 
 每个 `Class` 对象持有一个
-`llvm::SmallDenseMap<GcPtr<String>, GcPtr<Closure>, kMethodTableInlineSize>` 方法表。
-方法调用 `obj.method(args)` 的执行路径：
+`llvm::SmallDenseMap<GcPtr<String>, GcPtr<Closure>, kMethodTableInlineSize>`
+方法表。 方法调用 `obj.method(args)` 的执行路径：
 
 . 从 `obj` 取出 `Instance.class` . 以 `"method"`（驻留字符串）为键查找方法表 .
 命中：创建 `BoundMethod { this: obj, method: found_closure }` 并调用 .
@@ -489,16 +507,19 @@ List ──-> elements: llvm::SmallVector\<Value, 0\>（定长，创建后不可
 
 == 模块加载
 
-`import "path" as alias;` 的执行流程：
+`import a.b.c as alias;` 的执行流程（点号名 `a.b.c`）：
 
-. 按入口脚本的相对路径解析 `"path"` → 文件系统路径（尝试 `.lox` 后缀和目录） .
-查全局模块缓存 `llvm::StringMap<ModuleObject>`：
-- 命中 → 跳到步骤 6
-- 缓存中标记为 *加载中* → 循环导入，返回当前部分缓存（防止无限递归）
+. 从左到右解析每段累积路径（`a`、`a.b`、`a.b.c`），依次尝试
+`<p>.lox`（文件模块）与
+`<p>/__init__.lox`（目录包模块）；中间段命中则加载（执行其顶层），未命中则为命名空间占位符，末段必须命中
+. 查全局模块缓存 `llvm::StringMap<GcPtr<Module>>`：
+- 命中 -> 跳到步骤 6
+- 缓存中标记为 *加载中* -> 循环导入，返回当前部分缓存（防止无限递归）
 . 未命中：创建模块缓存条目（标记为加载中），启动模块编译流水线 . 创建独立的 VM
-调用帧（共享 GC 堆），执行模块的顶层语句 . 将模块顶层声明的标识符打包为
-`ModuleObject`，写入缓存 . 如果有 `as alias`，在当前作用域将 `ModuleObject`
-绑定到 `alias`
+调用帧（共享 GC 堆），执行模块的顶层语句 . 将模块顶层声明的标识符填入 `Module`
+的 `globals` 表（导出表），写入缓存；命名空间链中父模块的 `globals[子名]`
+指向子模块 . 如果有 `as alias`，在当前作用域将 `Module` 绑定到
+`alias`（绕过命名空间）；否则按命名空间分层绑定（单段直接绑定首段，多段将首段绑定为命名空间、末段模块挂为其子项）
 
 模块缓存由 GC 根集引用，确保已加载模块不被回收。
 
@@ -524,11 +545,13 @@ lox-cpp 的运行时错误采用 `llvm::Expected<T>` / `llvm::Error`
 - 错误沿调用栈向上传播：每层调用帧检测到错误后立即退出，将错误传递给上一层
 
 `RuntimeError` 继承自 `llvm::ErrorInfo<RuntimeError>`，通过
-`llvm::make_error<RuntimeError>(...)` 构造，封装于 `llvm::Error` / `llvm::Expected<T>`
-中传播。`llvm::Error` 为类型擦除的错误载体，可持有任意 `llvm::ErrorInfo` 子类；VM 中仅产生
-`RuntimeError`，可通过 `isA<RuntimeError>()` 进行类型检查。
+`llvm::make_error<RuntimeError>(...)` 构造，封装于 `llvm::Error` /
+`llvm::Expected<T>` 中传播。`llvm::Error` 为类型擦除的错误载体，可持有任意
+`llvm::ErrorInfo` 子类；VM 中仅产生 `RuntimeError`，可通过 `isA<RuntimeError>()`
+进行类型检查。
 
-`throw` 语句映射为 `llvm::make_error<RuntimeError>(...)`，其中包含抛出时栈上的实际值。
+`throw` 语句映射为
+`llvm::make_error<RuntimeError>(...)`，其中包含抛出时栈上的实际值。
 
 `try-catch` 的实现：
 
