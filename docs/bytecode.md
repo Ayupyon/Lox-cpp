@@ -306,18 +306,19 @@ L_end:
 
 **决策：import 采用点号命名空间语法；合并 `Module`（统一 globals 承载导出与子模块）；`__init__.lox` 包模型；`IMPORT`/`IMPORT_NS` opcode。**
 
-> 本节对应的语法修改见 `docs/lox-language.typ` 的 import 语法规则与模块系统/加载语义（已同步更新）。
+> 本节对应的语法修改见 `docs/lox-language.typ` 的 import 语法规则与模块系统/加载语义（已同步）；parser/AST 切换已落地（见 §13.1）。
 
-### 13.1 语法
+### 13.1 语法（已落地）
 
 ```
 importDecl  -> import dottedName (as IDENTIFIER)? ";" ;
 dottedName  -> IDENTIFIER ("." IDENTIFIER)* ;
 ```
 
-- Scanner 无需改动（`.` 与 IDENTIFIER 已是 token）。
-- Parser：`import` 后解析 `dottedName`（IDENTIFIER 链）而非 STRING。
-- AST：`ImportStmt.path: StringRef` -> `ImportStmt.segments: SmallVector<StringRef>`。
+- Scanner：无改动（`kImport`/`kDot`/`kIdentifier` 均为既有 token）。
+- Parser（`ParseImportDecl`）：消费 `import` 后 `Expect(kIdentifier)` 取首段，`while (Match(kDot)) Expect(kIdentifier)` 逐段追加到 `segments`；点号周围空白不敏感（不做 token 邻接性检查）。畸形名报错：`import ;`/`import .foo` -> "expected module name after 'import'"；`import foo.;`/`import foo..bar;` -> "expected module name segment after '.'"；关键字作段名（`import class.foo`）同首段报错。
+- AST：`ImportStmt.path: llvm::StringRef` -> `segments: llvm::SmallVector<llvm::StringRef, 4>`（每段零拷贝 lexeme，构造器按值 move 接入）；`alias` 不变。模块名拼接与文件解析留待编译器。
+- Dump：`ImportStmt module=<段点号拼接>` + 可选 ` alias=<name>`（段为标识符无需转义）；旧 `path=\22...\22` 转义形式已移除。
 
 ### 13.2 绑定语义
 
@@ -481,6 +482,7 @@ struct CallFrame { Closure* closure; const std::uint8_t* ip; Value* slot_base; }
 
 实现 bytecode 模块前须完成：
 
-1. **import 语法修改**（§13）：`docs/lox-language.typ` import 语法规则与模块系统/加载语义（已同步）；`ImportStmt.path: StringRef` -> `segments: SmallVector<StringRef>`；`parser.cpp` 解析 dottedName。
-2. **编译器访问 GC 堆 + 字符串驻留表**：bytecode 编译器依赖 vm 模块的 `String` 分配与驻留表，模块间依赖需在 CMake 接入（`lox_bytecode` link `lox_vm` 或抽出 value/gc 子库）。
-3. **`__init__.lox`、标准库错误/原语有名类**（§12/§13）：标准库注册表为后续任务，注册前 VM 错误不可捕获（向后兼容）。
+1. **编译器访问 GC 堆 + 字符串驻留表**：bytecode 编译器依赖 vm 模块的 `String` 分配与驻留表，模块间依赖需在 CMake 接入（`lox_bytecode` link `lox_vm` 或抽出 value/gc 子库）。
+2. **`__init__.lox`、标准库错误/原语有名类**（§12/§13）：标准库注册表为后续任务，注册前 VM 错误不可捕获（向后兼容）。
+
+> import 点号语法修改（§13.1）已落地并提交（`feat(parser): parse import as dotted namespace name`）：scanner 无改动，parser/AST/dump 已切到 `segments` + `module=` dump，测试与 golden 已同步。
