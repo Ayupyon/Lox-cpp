@@ -1,0 +1,8 @@
+1:1 fun fun
+1:5 identifier foo
+1:8 ( (
+1:9 ) )
+1:11 return return
+1:18 integer 1 [1]
+1:19 ; ;
+2:1 eof
