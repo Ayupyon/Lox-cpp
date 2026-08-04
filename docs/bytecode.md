@@ -1,10 +1,10 @@
 # Bytecode 模块设计决策
 
-本文档记录 bytecode 模块（AST -> 字节码）的设计决策，供后续实现（compiler 本体、opcode 定义、Chunk/Function/Module 数据结构、CMake 接入、测试）参考。设计基线来自 `docs/lox-language.typ` 的「执行模型」一节；本文档不重新讨论已由语法文档锁定的决策，仅记录 bytecode 模块范围内的开放决策及其结论。
+本文档记录 bytecode 模块（AST -> 字节码）的设计决策，供后续实现（compiler 本体、opcode 定义、Chunk/FunctionDesc/ModuleDesc 数据结构、CMake 接入、测试）参考。设计基线来自 `docs/lox-language.typ` 的「执行模型」一节；本文档不重新讨论已由语法文档锁定的决策，仅记录 bytecode 模块范围内的开放决策及其结论。
 
 ## 1. 模块定位
 
-Bytecode 模块是编译后端：消费 `lox::parser` 产出的 AST，单遍深度优先遍历，为每个函数生成字节码序列（`Chunk`），填充常量池，产出可由 VM 执行的 `Function` / `Module` 对象图。编译器运行时**已具备 GC 堆与字符串驻留表**（语法文档规定字符串字面量在编译阶段驻留），故常量池直接持有已物化的运行时 `Value`，无需序列化层。
+Bytecode 模块是编译后端：消费 `lox::parser` 产出的 AST，单遍深度优先遍历，为每个函数生成字节码序列（`Chunk`），填充常量池，产出纯数据描述符 `FunctionDesc` / `ModuleDesc`。**编译器不依赖 GC 堆**：常量池存储编译期描述符 `ConstVal`（Integer/Float 按值、String 存内容索引、Function 存函数表索引），不持有 `GcPtr`，不分配 GC 对象，不维护字符串驻留表。VM 在加载时经物化（materialize）步骤将描述符转为运行时 `Function : GcObject` / `Module : GcObject` 对象图，同时完成字符串驻留。此分离使 bytecode 模块仅依赖 `lox_parser` + `lox_scanner`，GC 全部集中在 VM 阶段（详见 §5/§16/§18）。
 
 ## 2. 设计基线（语法文档已锁定）
 
@@ -19,15 +19,15 @@ Bytecode 模块是编译后端：消费 `lox::parser` 产出的 AST，单遍深�
 - 值/引用类型拆分：值类型（Null/Boolean/Integer i64/Float f64）栈上；引用类型经 `GcPtr<T>` 引用。
 - 闭包经 `Upvalue` 引用捕获。
 - try-catch：catch 子句（偏移、捕获类型）记入调用帧元数据。
-- 字符串在编译期驻留。
-- `Function` = 字节码 + 常量池 + 形参数量 + 函数名。
+- 字符串在编译期驻留（编译器捕获字符串内容入描述符，实际 `GcPtr<String>` 驻留由 VM 物化时完成，运行时语义不变）。
+- `Function` = 字节码 + 常量池 + 形参数量 + 函数名（编译期产出 `FunctionDesc` 纯数据，VM 物化为 `Function : GcObject`）。
 - `Closure` = `GcPtr<Function>` + upvalue 数组；函数字面量求值时新建。
 
 ## 3. 编译单元结构
 
-**决策：逐函数 chunk，嵌套函数经父级常量池引用；顶层为 `<script>` Function；`Module` 包装 script + 模块元数据。**
+**决策：逐函数 chunk，嵌套函数经父级常量池引用；顶层为 `<script>` FunctionDesc；`ModuleDesc` 包装 script + 模块元数据。**
 
-每个源文件编译为一个 `Module`，其顶层代码是一个名为 `<script>`、arity 0 的 `Function`；函数字面量编译成子 `Function`，作为常量存入**父函数**的常量池。运行时由 `CLOSURE` 指令取出 Function 常量、捕获 upvalue、生成 `Closure`。每个 Function 独立拥有自己的 code / 常量池 / 行号 / upvalue 描述 / 异常表 / 最大栈深。
+每个源文件编译为一个 `ModuleDesc`，其顶层代码是一个名为 `<script>`、arity 0 的 `FunctionDesc`；函数字面量编译成子 `FunctionDesc`，作为常量（`ConstVal{kind=kFunction, func_idx}`）存入**父函数**的常量池。运行时由 `CLOSURE` 指令取出已物化的 Function 常量、捕获 upvalue、生成 `Closure`。每个 FunctionDesc 独立拥有自己的 code / 常量池 / 行号 / upvalue 描述 / 异常表 / 最大栈深。
 
 否决方案：
 
@@ -39,6 +39,8 @@ Bytecode 模块是编译后端：消费 `lox::parser` 产出的 AST，单遍深�
 ## 4. Value 表示
 
 **决策：tagged union `struct Value { ValueType tag; union {...} as; }`，值类型各占独立槽，引用类型共享 `GcPtr<GcObject>` 槽。**
+
+> 本节描述**运行时** `Value`（VM 侧，定义于 `lox_gc`/`lox_vm`）。编译器不使用 `Value`，使用编译期描述符 `ConstVal`（见 §5）。物化时 `ConstVal` 转为 `Value`。
 
 ```cpp
 enum class ValueType : std::uint8_t {
@@ -71,31 +73,48 @@ struct Value {
 
 ## 5. 常量池
 
-**决策：单一内存 `Value` 池，常量种类 = `{Integer, Float, String(驻留), Function}`；标识符名称与字面量共用同一池；Integer/Float/String 按值去重，Function 不去重；布尔/null 走 opcode。**
+**决策：描述符常量池（`ConstVal`），常量种类 = `{Integer, Float, String(内容), Function(索引)}`；标识符名称与字面量共用同一池；Integer/Float/String 按值/内容去重，Function 不去重；布尔/null 走 opcode。VM 物化时 `ConstVal` 转为运行时 `Value`。**
 
 ```cpp
+enum class ConstKind : std::uint8_t { kInteger, kFloat, kString, kFunction };
+struct ConstVal {
+  ConstKind kind;
+  union {
+    std::int64_t  integer;
+    double        floating;
+    std::uint32_t str_idx;     // Chunk::strings_ 索引
+    std::uint32_t func_idx;    // Chunk::functions_ 索引
+  } as;
+};
 class Chunk {
-  llvm::SmallVector<Value, 0> constants_;          // 常量池
-  llvm::SmallVector<std::uint8_t, 0> code_;        // 字节码
-  llvm::SmallVector<LineEntry, 0> lines_;          // 行号（见 §11）
-  std::uint16_t AddConstant(Value v);              // 去重后返回索引
+  llvm::SmallVector<ConstVal, 0>      constants_;
+  llvm::SmallVector<std::string, 0>   strings_;     // 字符串内容表（非 GcPtr）
+  llvm::SmallVector<FunctionDesc, 0>  functions_;   // 嵌套函数描述符（非 GcPtr）
+  llvm::SmallVector<std::uint8_t, 0>  code_;
+  llvm::SmallVector<LineEntry, 0>     lines_;       // 行号（见 §11）
+  std::uint16_t AddInteger(std::int64_t);            // 按值去重
+  std::uint16_t AddFloat(double);                    // 按值去重
+  std::uint16_t AddString(llvm::StringRef);          // 按内容去重（StringMap）
+  std::uint16_t AddFunction(FunctionDesc&& desc);    // move 入 functions_，不去重
 };
 ```
 
-| 常量种类 | Value tag | 去重 | 用途 |
+| 常量种类 | ConstVal kind | 去重 | 用途 |
 |---|---|---|---|
 | Integer | kInteger | 按值 | 整数字面量 |
 | Float | kFloat | 按值 | 浮点字面量 |
-| String | kString | 指针（驻留） | 字符串字面量 + 所有标识符名称 |
+| String | kString | 按内容 | 字符串字面量 + 所有标识符名称 |
 | Function | kFunction | 不去重 | 嵌套函数字面量（供 `CLOSURE` 引用） |
 
 - 名称与字面量共用池 = 单一索引空间，需要名称的指令（`DEFINE_GLOBAL`/`GET_PROPERTY`/`METHOD` 等）与需要字面量的指令（`CONSTANT`）用同一种「常量池索引」操作数。
-- 去重几乎免费：驻留字符串内容唯一 -> 指针比较即去重；i64/f64 按值比较；Function 每个字面量语义独立不去重。
+- 去重：i64/f64 按值比较；String 经 `StringMap<uint16_t>` 按内容去重（编译期无驻留表，故按内容而非指针）；Function 每个字面量语义独立不去重，`func_idx` 指向同 Chunk 的 `functions_` 表（嵌套函数由父 Chunk 持有，与原设计父常量池持有 `GcPtr<Function>` 的所有权模型一致）。
+- 字符串内容存 `Chunk::strings_`（`std::string`），物化时经 VM 驻留表转为 `GcPtr<String>`；同一内容在不同 Chunk 中可能各存一份，物化后经驻留表统一去重。
 - 布尔/null 高频，单字节 `PUSH_TRUE`/`PUSH_FALSE`/`PUSH_NULL` 比「CONSTANT + 池索引」更短更快且不占池容量。
+- 物化（VM 侧）：遍历 `ConstVal`，Integer/Float 直接构造 `Value`，String 经驻留表得 `GcPtr<String>`，Function 递归物化 `functions_[func_idx]` 得 `GcPtr<Function>`。`code_`/`lines_`/`upvalue_descs`/`handlers` 为纯数据，直接 `std::move`。
 
 否决方案：
 
-- **可序列化描述符池**：与 §4 tagged union `Value`（带 `GcPtr`，不可平坦序列化）不一致，需额外 schema + 反序列化器；语法文档未要求 bytecode 落盘，`import` 命中失败时从源码重编。
+- **直接存 `Value` 池（编译器依赖 GC 堆）**：常量池持有 `GcPtr` 迫使编译器依赖 GC 基础设施（堆分配器 + 驻留表 + `GcObject` header），GC 须分两阶段实现（bytecode 阶段基础设施 + vm 阶段 collector），阶段间任务划分困难且 Phase 1 须为 Phase 2 预设 header/allocator 接口。描述符方案将 GC 完全推迟到 VM，编译器零 GC 依赖。
 - **分池（按类型独立索引空间）**：opcode 多一维「哪个池」，复杂度高、省一个 tag 字节对教学语言无意义。
 
 ## 6. 指令编码
@@ -139,7 +158,7 @@ class Chunk {
 | 块结束 | 释放该块槽位，弹出作用域 | `POP` N 次 |
 
 - **作用域栈**：编译器维护词法作用域栈，每层记录 `{name -> (slot, is_const)}`；遮蔽 = 内层同名新槽；块退出弹栈并 `POP` 释放。
-- **模块级表 = 模块导出表**：主脚本与被导入模块各有自己的 `StringMap<Value>` 顶层表；`DEFINE_GLOBAL` 写入当前模块表。`import` 绑定整个模块对象、`bar.x` 读其表（见 §13）。
+- **模块级表 = 模块导出表**：主脚本与被导入模块各有自己的 `StringMap<Value>` 顶层表（VM 侧）；`DEFINE_GLOBAL` 写入当前模块表。`import` 绑定整个模块对象、`bar.x` 读其表（见 §13）。
 - **upvalue 透传**：内层函数引用的变量若不在直接外层局部、而在更外层，则沿 upvalue 链 `is_local=false` 逐层透传，运行时 `CLOSURE` 按描述串联 `Upvalue`。
 - **const 编译期标记 = 零运行时开销**：`STORE_LOCAL` 到 const 槽在编译期即报错、永不发射。「const 仅保护绑定本身、不保护复合内部状态」自动满足--只拦截对绑定槽的 STORE，不拦截经其引用的变异。
 
@@ -152,7 +171,7 @@ class Chunk {
 
 ## 8. 函数 / 闭包调用约定
 
-**决策：`CLOSURE u16 func_idx` 统一宽度，upvalue 捕获描述存 `Function.upvalue_descs`；`CALL u8 arity` 运行期校验 arity；`RETURN` + `CLOSE_UPVALUE`；函数尾隐式 `PUSH_NULL; RETURN`。**
+**决策：`CLOSURE u16 func_idx` 统一宽度，upvalue 捕获描述存 `FunctionDesc.upvalue_descs`（物化后移至 `Function.upvalue_descs`）；`CALL u8 arity` 运行期校验 arity；`RETURN` + `CLOSE_UPVALUE`；函数尾隐式 `PUSH_NULL; RETURN`。**
 
 ```cpp
 struct UpvalueDesc { bool is_local; std::uint8_t index; };
@@ -196,7 +215,7 @@ struct UpvalueDesc { bool is_local; std::uint8_t index; };
 ```
 GET_GLOBAL "Bar"          ; 父类（extends 时）
 CLASS "Foo"               ; 建 Class{Foo, superclass=Bar}
-<编译 m 为 Function, CLOSURE> ; 方法闭包压栈
+<编译 m 为 FunctionDesc, CLOSURE> ; 方法闭包压栈
 METHOD "m"                ; 装入 Foo 方法表
 ... (其余方法)
 DEFINE_GLOBAL "Foo"       ; 绑定类名
@@ -239,14 +258,14 @@ DEFINE_GLOBAL "Foo"       ; 绑定类名
 
 ```cpp
 struct LineEntry { std::uint16_t offset; std::uint32_t line; };
-// Function.lines : SmallVector<LineEntry, 0>
+// FunctionDesc.chunk.lines_ : SmallVector<LineEntry, 0>
 // 发射指令时：若 line != 上一条记录的 line，追加 {code_.size(), line}
 // 查询：二分 lines，返回最大 offset <= pc 的 entry.line
 ```
 
 - 紧凑：lox 源码典型一行对应多条指令，RLE 仅在行变化时记一条。
 - 行号足够：错误信息含栈轨迹（函数名+行号），column 不入 bytecode（AST 仍有）。
-- 每 Function 独立，与 §3 per-function chunk 一致。
+- 每 FunctionDesc 独立，与 §3 per-function chunk 一致。
 
 否决方案：每指令一行号（内存重）、每字节一行号（内存最重）。
 
@@ -263,7 +282,7 @@ enum class ErrorKind : std::uint8_t {
 struct HandlerEntry {
   std::uint16_t try_start, try_end, catch_offset, type_idx;  // type_idx = 常量池名索引
 };
-// Function.handlers : SmallVector<HandlerEntry, 0>，内层优先序
+// FunctionDesc.handlers : SmallVector<HandlerEntry, 0>，内层优先序（物化后移至 Function.handlers）
 // RuntimeError 载荷：variant<lox::Value /*throw*/, struct{ErrorKind; std::string message;} /*VM*/>
 ```
 
@@ -306,7 +325,7 @@ L_end:
 
 **决策：import 采用点号命名空间语法；合并 `Module`（统一 globals 承载导出与子模块）；`__init__.lox` 包模型；`IMPORT`/`IMPORT_NS` opcode。**
 
-> 本节对应的语法修改见 `docs/lox-language.typ` 的 import 语法规则与模块系统/加载语义（已同步）；parser/AST 切换已落地（见 §13.1）。
+> 本节对应的语法修改见 `docs/lox-language.typ` 的 import 语法规则与模块系统/加载语义（已同步）；parser/AST 切换已落地（见 §13.1）。编译器产出 `ModuleDesc`；VM 物化为 `Module : GcObject`（见 §16）。
 
 ### 13.1 语法（已落地）
 
@@ -332,6 +351,8 @@ dottedName  -> IDENTIFIER ("." IDENTIFIER)* ;
 模块名 = 点号形式（`lib.utils`），兼作缓存键与诊断名。文件解析：每段累积路径 `p`，按序尝试 `p.lox`（文件模块）-> `p/__init__.lox`（目录包模块）。命中 -> 该段为 Module（加载其 .lox，执行顶层）；都不命中：末段 -> 解析错误，中间段 -> 占位符（`script=null`）。`import a.b.c` 从左到右解析 a、a.b、a.b.c；有文件的段加载（含 `__init__.lox` 顶层执行），无文件的中间段为占位符；末段必须命中。命名空间链：父 `globals[子名] = 子 Module`。
 
 ### 13.4 合并 Module 类型
+
+> 以下为 VM 侧运行时类型（`lox_gc`/`lox_vm`），由 `ModuleDesc`（§16.1）物化而来。
 
 ```cpp
 class Module : public GcObject {
@@ -418,37 +439,73 @@ import lib.utils as u; -> IMPORT "lib.utils"; DEFINE_GLOBAL "u"
 
 ## 16. 关键数据结构汇总
 
+### 16.1 编译期（lox_bytecode，纯数据，无 GC 依赖）
+
 ```cpp
-// 值（§4）
+// 编译期常量（§5）
+enum class ConstKind : std::uint8_t { kInteger, kFloat, kString, kFunction };
+struct ConstVal {
+  ConstKind kind;
+  union {
+    std::int64_t  integer;
+    double        floating;
+    std::uint32_t str_idx;     // Chunk::strings_ 索引
+    std::uint32_t func_idx;    // Chunk::functions_ 索引
+  } as;
+};
+
+class Chunk {
+  llvm::SmallVector<ConstVal, 0>      constants_;
+  llvm::SmallVector<std::string, 0>   strings_;
+  llvm::SmallVector<FunctionDesc, 0>  functions_;   // 嵌套函数描述符
+  llvm::SmallVector<std::uint8_t, 0>  code_;
+  llvm::SmallVector<LineEntry, 0>     lines_;
+};
+
+// 函数描述符（§3/§7/§8/§9/§12）
+struct UpvalueDesc { bool is_local; std::uint8_t index; };
+struct HandlerEntry { std::uint16_t try_start, try_end, catch_offset, type_idx; };
+struct FunctionDesc {
+  llvm::StringRef                          name;
+  std::uint8_t                             arity;
+  Chunk                                    chunk;
+  llvm::SmallVector<UpvalueDesc, 0>        upvalue_descs;
+  llvm::SmallVector<HandlerEntry, 0>       handlers;    // 内层优先序
+  std::uint16_t                            max_stack;
+  bool                                     is_init;
+};
+
+struct ModuleDesc {
+  std::string     name;
+  FunctionDesc    script;   // 顶层 <script> 函数，嵌套函数经其 chunk.functions_ 递归持有
+};
+```
+
+### 16.2 运行时（lox_gc / lox_vm，GC 管理对象）
+
+```cpp
+// 运行时值（§4）
 enum class ValueType : std::uint8_t { /* 见 §4 */ };
 struct Value { ValueType tag; union { bool boolean; std::int64_t integer; double floating; GcPtr<GcObject> obj; } as; };
 
-// 代码容器（§3/§5/§11）
-struct LineEntry { std::uint16_t offset; std::uint32_t line; };
-class Chunk {
-  llvm::SmallVector<Value, 0> constants_;
-  llvm::SmallVector<std::uint8_t, 0> code_;
-  llvm::SmallVector<LineEntry, 0> lines_;
-};
-
-// 函数（§3/§7/§8/§9/§12）
-struct UpvalueDesc { bool is_local; std::uint8_t index; };
-struct HandlerEntry { std::uint16_t try_start, try_end, catch_offset, type_idx; };
+// 运行时函数（物化自 FunctionDesc）
 class Function : public GcObject {
-  GcPtr<String> name;
-  std::uint8_t arity;
-  Chunk chunk;
-  llvm::SmallVector<UpvalueDesc, 0> upvalue_descs;
-  llvm::SmallVector<HandlerEntry, 0> handlers;   // 内层优先序
-  std::uint16_t max_stack;
-  bool is_init;
+  GcPtr<String>                            name;
+  std::uint8_t                             arity;
+  llvm::SmallVector<Value, 0>              constants_;     // 物化自 ConstVal
+  llvm::SmallVector<std::uint8_t, 0>       code_;           // moved from desc
+  llvm::SmallVector<LineEntry, 0>          lines_;          // moved from desc
+  llvm::SmallVector<UpvalueDesc, 0>        upvalue_descs_;  // moved from desc
+  llvm::SmallVector<HandlerEntry, 0>       handlers_;       // moved from desc
+  std::uint16_t                            max_stack;
+  bool                                     is_init;
 };
 
-// 模块（§13）
+// 运行时模块（物化自 ModuleDesc）
 class Module : public GcObject {
-  GcPtr<String> name;
-  GcPtr<Function> script;             // nullable
-  llvm::StringMap<Value> globals;     // 导出 + 子模块
+  GcPtr<String>           name;
+  GcPtr<Function>         script;             // nullable
+  llvm::StringMap<Value>  globals;            // 导出 + 子模块
 };
 
 // 异常（§12）
@@ -461,28 +518,211 @@ class RuntimeError : public llvm::ErrorInfo<RuntimeError> {
 struct CallFrame { Closure* closure; const std::uint8_t* ip; Value* slot_base; };
 ```
 
+### 16.3 物化接口（VM 侧）
+```cpp
+// 递归物化：从 ModuleDesc.script 出发，深度优先分配 Function 空壳并填充常量。
+// 嵌套函数经 Chunk::functions_ 递归引用（严格树形，无环），与原设计父常量池持有
+// GcPtr<Function> 的结构一致。物化期间禁用 GC，避免 collector 遇到半成品对象。
+GcPtr<Module> Materialize(const bytecode::ModuleDesc& desc, Heap& heap, InternTable& intern);
+```
+
 ## 17. 决策汇总
 
 | # | 决策 | 选择 |
 |---|---|---|
-| 1 | 编译单元 | 逐函数 chunk，嵌套入父常量池，顶层 `<script>` Function |
-| 2 | Value 表示 | tagged union（值类型独立槽/引用共享 GcPtr） |
-| 3 | 常量池 | 单一内存 Value 池，名称与字面量共用，Bool/Null 走 opcode |
+| 1 | 编译单元 | 逐函数 chunk，嵌套入父常量池，顶层 `<script>` FunctionDesc |
+| 2 | Value 表示 | tagged union（VM 侧，值类型独立槽/引用共享 GcPtr）；编译期用 ConstVal 描述符（§5） |
+| 3 | 常量池 | 描述符池（ConstVal），名称与字面量共用，Bool/Null 走 opcode，VM 物化为 Value |
 | 4 | 指令编码 | 统一宽度 + 相对跳转，无 long 变体 |
 | 5 | 变量解析 | 局部栈槽 + upvalue + 全局命名表 late-bind，const 编译期，this=slot0 |
 | 6 | 控制流 | 显式 LOOP 回边 + pop 式条件跳转，类型检查与求值耦合 |
-| 7 | 函数/闭包 | CLOSURE 统一宽度，描述入 Function 元数据，CALL u8 运行期校验 |
+| 7 | 函数/闭包 | CLOSURE 统一宽度，描述入 FunctionDesc 元数据，CALL u8 运行期校验 |
 | 8 | 类/方法 | GET_PROPERTY+CALL，SUPER_GET/SUPER_INVOKE，Class 只存自身方法+链式查找，init 返回 this |
 | 9 | 列表/下标 | NEW_LIST/LIST_WITH_SIZE + GET_INDEX/SET_INDEX，定长 |
 | 10 | 异常 | 每函数 handler 表 + ErrorKind 类型化 + 全错误可捕获（标准库注册后） |
 | 11 | 行号 | 游程编码 offset+line，二分查 |
 | 12 | 模块/import | 点号命名空间语法，合并 Module + `__init__.lox` 包，文件唯一解析 |
+| 13 | 导出格式 | 可读反汇编（clox 式逐指令 + 递归展开），不序列化 |
+| 14 | 测试策略 | 仅 unit test，源码全链路 + 只读访问器 + 语义不变量断言 |
+| 15 | GC 归属 | 编译器零 GC 依赖；GC 全在 VM（lox_gc），物化时 ConstVal->Value |
 
 ## 18. 跨模块前置改动
 
-实现 bytecode 模块前须完成：
+实现 bytecode 模块**无须**任何 GC 前置改动。编译器产出纯数据描述符（`ConstVal`/`FunctionDesc`/`ModuleDesc`），不依赖 `lox_gc`。
 
-1. **编译器访问 GC 堆 + 字符串驻留表**：bytecode 编译器依赖 vm 模块的 `String` 分配与驻留表，模块间依赖需在 CMake 接入（`lox_bytecode` link `lox_vm` 或抽出 value/gc 子库）。
-2. **`__init__.lox`、标准库错误/原语有名类**（§12/§13）：标准库注册表为后续任务，注册前 VM 错误不可捕获（向后兼容）。
+模块依赖：
+
+```
+lox_scanner -> lox_parser -> lox_bytecode ↘
+                                      lox_vm（未来）
+lox_gc ──────────────────────────────↗
+```
+
+- `lox_bytecode`：仅 link `lox_parser` + `lox_scanner`。产出 `ModuleDesc`（纯数据，无 `GcPtr`）。
+- `lox_gc`：`Value`/`ValueType`/`GcObject`（基类 + GC header）/`GcPtr<T>`/`String`/堆分配器/collector/字符串驻留表，全部在 VM 阶段一次性实现。
+- `lox_vm`（未来）：link `lox_bytecode`（读 `ModuleDesc` 类型）+ `lox_gc`。实现 `Materialize(ModuleDesc -> Module)` 物化步骤 + VM 执行循环 + GC collector。
+
+GC 不再分两阶段：`lox_gc` 的全部内容（基础设施 + collector）在 VM 阶段统一设计和实现，无须为编译器预设最小基础层。
+
+后续任务：
+
+- **`__init__.lox`、标准库错误/原语有名类**（§12/§13）：标准库注册表为 VM 阶段任务，注册前 VM 错误不可捕获（向后兼容）。
 
 > import 点号语法修改（§13.1）已落地并提交（`feat(parser): parse import as dotted namespace name`）：scanner 无改动，parser/AST/dump 已切到 `segments` + `module=` dump，测试与 golden 已同步。
+
+## 19. 导出格式（`--run-stage bytecode`）
+
+**决策：可读反汇编（clox 式逐指令 + 递归展开嵌套函数），输出到 stdout；不采用二进制序列化。**
+
+- 与 `--run-stage scanner`（token 流）/ `--run-stage parser`（AST dump）的「可读文本到 stdout」模式一致。
+- §5 采用描述符常量池（`ConstVal`），编译器不产出 `GcPtr`，反汇编直接读描述符；`--run-stage bytecode` 无需初始化 GC 堆。
+- 反汇编仅用于开发调试与 CLI 输出，不作为测试契约（见 §20）。
+
+### 19.1 格式规范
+
+每个 `FunctionDesc` 输出一个完整块，块间以 `---` 分隔：
+
+```
+== <function: NAME> arity=N max_stack=N upvalues=N handlers=N ==
+constants:
+  0000: <Kind> <value>
+  ...
+code:
+  0000  OPCODE         operands      ; comment  @line N
+  ...
+upvalues:
+  0000: {is_local=BOOL, index=N}    ; comment
+  ...
+handlers:
+  0000: try=[XXXX,XXXX) catch=XXXX type=XXXX  ; comment
+  ...
+---
+```
+
+- **header**：函数名、arity、max_stack、upvalue 数、handler 数。
+- **constants**：按索引列出常量池条目。Integer/Float 显示值；String 显示带引号内容；Function 显示 `<function: NAME> arity=N` 摘要（完整反汇编在后续 `---` 块中递归展开）。
+- **code**：逐指令，4 位 hex 偏移 + 左对齐 opcode 名 + 操作数。u16 常量索引显示 4 位 hex + 语义注释（`; "name"`）；u8 槽位/arity 裸值；int16 跳转显示 `-> XXXX`（绝对目标地址，便于人眼验证）。行号 `@line N` 仅在行变化时追加（与 §11 RLE 一致）。
+- **upvalues**：按索引列出 `{is_local, index}` + 语义注释（捕获的变量名/来源）。无条目时显示 `(none)`。
+- **handlers**：按索引列出 `try=[start,end) catch=offset type=idx` + 类型名注释。无条目时显示 `(none)`。
+
+### 19.2 递归展开规则
+
+深度优先遍历常量池中的 Function 条目（`ConstVal{kind=kFunction}`），按索引顺序递归输出。每完成一个函数的完整反汇编，输出 `---` 分隔符后输出下一个函数。最后一个函数之后不输出 `---`。
+
+`---` 数量 = 常量池中 Function 条目的总数（递归计入所有层级）。无函数时输出仅含 `<script>` 一个块、无 `---`。
+
+### 19.3 示例
+
+单层函数（`fun add(a, b) { return a + b; }`）：
+
+```
+== <function: <script>> arity=0 max_stack=2 upvalues=0 handlers=0 ==
+constants:
+  0000: Function <function: add> arity=2
+  0001: String "add"
+code:
+  0000  CLOSURE        0000          ; <function: add>  @line 1
+  0003  DEFINE_GLOBAL  0001          ; "add"  @line 1
+  0006  PUSH_NULL
+  0007  RETURN
+---
+== <function: add> arity=2 max_stack=2 upvalues=0 handlers=0 ==
+constants:
+  (none)
+code:
+  0000  LOAD_LOCAL     0             ; a  @line 2
+  0002  LOAD_LOCAL     1             ; b  @line 2
+  0004  ADD                          @line 2
+  0005  RETURN                       @line 2
+```
+
+三层嵌套 + upvalue 透传链（`fun a() { let x = 1; fun b() { fun c() { return x; } return c; } return b; }`）：
+
+```
+== <function: <script>> arity=0 max_stack=1 upvalues=0 handlers=0 ==
+constants:
+  0000: Function <function: a> arity=0
+  0001: String "a"
+code:
+  0000  CLOSURE        0000          ; <function: a>  @line 1
+  0003  DEFINE_GLOBAL  0001          ; "a"  @line 1
+  0006  PUSH_NULL
+  0007  RETURN
+---
+== <function: a> arity=0 max_stack=2 upvalues=0 handlers=0 ==
+constants:
+  0000: Integer 1
+  0001: Function <function: b> arity=0
+code:
+  0000  CONSTANT       0000          ; 1  @line 2
+  0003  CLOSURE        0001          ; <function: b>  @line 3
+  0006  LOAD_LOCAL     1             ; b  @line 7
+  0008  RETURN                       @line 7
+---
+== <function: b> arity=0 max_stack=1 upvalues=1 handlers=0 ==
+constants:
+  0000: Function <function: c> arity=0
+upvalues:
+  0000: {is_local=true,  index=0}    ; x (a's slot 0)
+code:
+  0000  CLOSURE        0000          ; <function: c>  @line 4
+  0003  LOAD_LOCAL     0             ; c  @line 6
+  0005  RETURN                       @line 6
+---
+== <function: c> arity=0 max_stack=1 upvalues=1 handlers=0 ==
+constants:
+  (none)
+upvalues:
+  0000: {is_local=false, index=0}    ; x (via b's upvalue 0)
+code:
+  0000  GET_UPVALUE    0             ; x  @line 5
+  0002  RETURN                       @line 5
+```
+
+`b` 自身不使用 `x`，但仍声明 upvalue 描述 `{is_local=true, index=0}` 供 `c` 透传；`c` 的 `{is_local=false, index=0}` 表示从 `b` 的 upvalue[0] 获取。
+
+### 19.4 否决方案
+
+- **二进制序列化**：描述符虽可序列化，但语法文档不要求 bytecode 落盘，`import` 命中失败时从源码重编；序列化层为纯额外复杂度。
+- **扁平不递归**：嵌套函数字节码不可见，开发调试覆盖不完整。
+- **结构化 dump（类似 AST dump）**：不直观展示指令序列，不利于验证编译器指令发射顺序。
+
+### 19.5 反汇编器归属
+
+反汇编器实现为 `lox::bytecode::Disassemble(ModuleDesc&, llvm::raw_ostream&)`，放在 `lox_bytecode` 库中（与 `lox::parser::Dump` 归属 `lox_parser` 一致）。`main.cpp` 的 `--run-stage bytecode` 调用之。
+
+## 20. 测试策略
+
+**决策：仅 unit test（源码字符串全链路 + 只读访问器 + 语义不变量断言）；不做 golden test；语义测试延后到 VM 实现。**
+
+教学解释器的 bytecode 正确性应由 VM 执行结果判断，而非输出文本比对。现阶段 VM 未实现，unit test 验证编译器的结构正确性；语义测试（指令执行）延后到 VM 实现后。
+
+### 20.1 测试输入
+
+源码字符串走 scanner -> parser -> compiler 全链路，检查编译产物。不手工构造 AST（lox AST 节点众多，手工构造不现实）。
+
+### 20.2 检查方式
+
+在 `Chunk`/`FunctionDesc` 上暴露只读访问器（`code()`, `constants()`, `upvalue_descs()`, `handlers()`, `arity()`, `max_stack()` 等），测试中用辅助函数解码指令并断言。不依赖反汇编文本格式。
+
+### 20.3 断言粒度
+
+语义不变量断言，非精确指令序列。验证编译产物满足语义性质，如：
+
+- 「存在加载 Integer 1 和 Integer 2 的 CONSTANT，其后有 ADD」（算术）
+- 「闭包的 upvalue 描述正确：`{is_local=true, index=0}` 捕获外层 slot 0」（闭包）
+- 「handler 表覆盖 try 区间 `[try_start, try_end)`，catch_offset 指向 catch 块」（异常）
+- 「函数以 RETURN 结尾」（结构不变量）
+
+不断言精确字节序列或完整指令列表--编译策略调整不应导致测试碎裂。
+
+### 20.4 否决方案
+
+- **Golden test**：与 scanner/parser 一致但会锁死反汇编输出格式（非语义契约）；bytecode 正确性应由 VM 执行结果判断，而非输出文本比对。
+- **手工构造 AST**：lox AST 节点种类多，手工构造极其冗长且不现实。
+- **精确指令序列断言**：脆弱，编译策略调整即碎；与「按语义判断正误」理念矛盾。
+- **反汇编器 + 文本断言**：文本解析脆弱，依赖反汇编格式细节，与不锁死输出格式的目标矛盾。
+
+### 20.5 CMake 接入
+
+新增 `tests/bytecode_test.cpp`，link `lox_bytecode` + `lox_parser` + `lox_scanner` + `llvm_libs`。不走 golden test 路径（不跑真实 binary），直接在进程内编译并检查。
