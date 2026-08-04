@@ -218,10 +218,9 @@ TEST(AstDumpTest, BasicStmts) {
           {1, 1},
           std::make_unique<CallExpr>(
               SourceLocation{1, 7}, MakeVar("E", {1, 7}), llvm::SmallVector<ExprPtr, 4>{}))));
-  EXPECT_EQ("1:1 ImportStmt path=\\22foo.lox\\22\n",
-            DumpStmtToString(ImportStmt({1, 1}, "\"foo.lox\"")));
-  EXPECT_EQ("1:1 ImportStmt path=\\22foo.lox\\22 alias=bar\n",
-            DumpStmtToString(ImportStmt({1, 1}, "\"foo.lox\"", "bar")));
+  EXPECT_EQ("1:1 ImportStmt module=foo\n", DumpStmtToString(ImportStmt({1, 1}, {"foo"})));
+  EXPECT_EQ("1:1 ImportStmt module=foo.bar alias=baz\n",
+            DumpStmtToString(ImportStmt({1, 1}, {"foo", "bar"}, "baz")));
 }
 
 TEST(AstDumpTest, FunctionAndClass) {

@@ -1,1 +1,1 @@
-1:1 ImportStmt path=\22does_not_exist\22 alias=m
+1:1 ImportStmt module=does_not_exist alias=m

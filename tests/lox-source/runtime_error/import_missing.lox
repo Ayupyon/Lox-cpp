@@ -1,1 +1,1 @@
-import "does_not_exist" as m;
+import does_not_exist as m;

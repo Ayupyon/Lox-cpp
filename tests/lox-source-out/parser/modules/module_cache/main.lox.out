@@ -1,6 +1,6 @@
-1:1 ImportStmt path=\22helper\22 alias=h1
-1:24 ImportStmt path=\22helper\22 alias=h2
-1:47 VarDeclStmt name=same
-  1:58 BinaryExpr Equal
-    1:58 VarExpr name=h1
-    1:64 VarExpr name=h2
+1:1 ImportStmt module=helper alias=h1
+1:22 ImportStmt module=helper alias=h2
+1:43 VarDeclStmt name=same
+  1:54 BinaryExpr Equal
+    1:54 VarExpr name=h1
+    1:60 VarExpr name=h2

@@ -1,1 +1,1 @@
-import "helper" as mod; let v = mod.value;
+import helper as mod; let v = mod.value;

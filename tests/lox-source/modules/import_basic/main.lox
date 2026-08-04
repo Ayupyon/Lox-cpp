@@ -1,1 +1,1 @@
-import "helper" as h; let v = h.value;
+import helper as h; let v = h.value;

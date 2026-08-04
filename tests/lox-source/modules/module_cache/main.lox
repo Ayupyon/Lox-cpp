@@ -1,1 +1,1 @@
-import "helper" as h1; import "helper" as h2; let same = h1 == h2;
+import helper as h1; import helper as h2; let same = h1 == h2;

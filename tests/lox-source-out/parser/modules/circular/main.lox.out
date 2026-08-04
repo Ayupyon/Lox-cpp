@@ -1,1 +1,1 @@
-1:1 ImportStmt path=\22a\22 alias=a
+1:1 ImportStmt module=a alias=a

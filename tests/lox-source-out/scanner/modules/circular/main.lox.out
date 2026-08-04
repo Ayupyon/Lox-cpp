@@ -1,6 +1,6 @@
 1:1 import import
-1:8 string \22a\22
-1:12 as as
-1:15 identifier a
-1:16 ; ;
+1:8 identifier a
+1:10 as as
+1:13 identifier a
+1:14 ; ;
 2:1 eof

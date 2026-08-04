@@ -1,6 +1,6 @@
 1:1 import import
-1:8 string \22does_not_exist\22
-1:25 as as
-1:28 identifier m
-1:29 ; ;
+1:8 identifier does_not_exist
+1:23 as as
+1:26 identifier m
+1:27 ; ;
 2:1 eof
