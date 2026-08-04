@@ -308,8 +308,12 @@ void DumpStmt(const Stmt &s, llvm::raw_ostream &os, unsigned depth) {
     case StmtKind::kImport: {
       const auto *import = llvm::cast<ImportStmt>(&s);
       PrintLocation(os, import->loc);
-      os << "ImportStmt path=";
-      llvm::printEscapedString(import->path, os);
+      os << "ImportStmt module=";
+      for (std::size_t i = 0; i < import->segments.size(); ++i) {
+        if (i != 0)
+          os << '.';
+        os << import->segments[i];
+      }
       if (!import->alias.empty())
         os << " alias=" << import->alias;
       os << '\n';

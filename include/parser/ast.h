@@ -401,16 +401,19 @@ class ClassStmt final : public Stmt {
   static bool classof(const Stmt *s) { return s->kind == StmtKind::kClass; }
 };
 
-// "import \"path\" as alias;". path is the raw string lexeme (quotes and
-// escapes included, decoding and module resolution are compiler concerns);
-// alias is empty when there is no "as" clause.
+// "import dottedName (as IDENTIFIER)? ;". segments are the zero-copy lexemes
+// of each dotted-name segment (e.g. "lib.utils" -> {"lib","utils"}); alias is
+// empty when there is no "as" clause. Joining segments into a module name and
+// file resolution are compiler concerns.
 class ImportStmt final : public Stmt {
  public:
-  llvm::StringRef path;
+  llvm::SmallVector<llvm::StringRef, 4> segments;
   llvm::StringRef alias;  // empty when there is no "as" clause
 
-  ImportStmt(SourceLocation loc, llvm::StringRef path, llvm::StringRef alias = {})
-      : Stmt(StmtKind::kImport, loc), path(path), alias(alias) {}
+  ImportStmt(SourceLocation loc,
+             llvm::SmallVector<llvm::StringRef, 4> segments,
+             llvm::StringRef alias = {})
+      : Stmt(StmtKind::kImport, loc), segments(std::move(segments)), alias(alias) {}
 
   static bool classof(const Stmt *s) { return s->kind == StmtKind::kImport; }
 };

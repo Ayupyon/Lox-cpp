@@ -368,10 +368,19 @@ auto Parser::ParseImportDecl() -> llvm::Expected<StmtPtr> {
   const Token &import_tok = Advance();  // consume 'import'
   SourceLocation loc = {import_tok.line, import_tok.column};
 
-  if (auto err = Expect(TokenType::kString, "expected string path after 'import'")) {
+  // dottedName -> IDENTIFIER ("." IDENTIFIER)*
+  if (auto err = Expect(TokenType::kIdentifier, "expected module name after 'import'")) {
     return std::move(err);
   }
-  const Token &path = Previous();
+  llvm::SmallVector<llvm::StringRef, 4> segments;
+  segments.push_back(Previous().lexeme);
+
+  while (Match(TokenType::kDot)) {
+    if (auto err = Expect(TokenType::kIdentifier, "expected module name segment after '.'")) {
+      return std::move(err);
+    }
+    segments.push_back(Previous().lexeme);
+  }
 
   llvm::StringRef alias;
   if (Match(TokenType::kAs)) {
@@ -385,7 +394,7 @@ auto Parser::ParseImportDecl() -> llvm::Expected<StmtPtr> {
     return std::move(err);
   }
 
-  return std::make_unique<ImportStmt>(loc, path.lexeme, alias);
+  return std::make_unique<ImportStmt>(loc, std::move(segments), alias);
 }
 
 // --- Statements --------------------------------------------------------------
